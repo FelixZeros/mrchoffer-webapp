@@ -29,6 +29,10 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
       </SessionContextProvider>
     </main>
     </body>
+    <script async defer
+    src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_KEY}&libraries=places&callback=initMap`}>
+  </script>
+
     </html>
   )
 }
