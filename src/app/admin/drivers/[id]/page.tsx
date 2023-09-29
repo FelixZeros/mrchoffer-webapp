@@ -283,8 +283,8 @@ const DriverPage: FC<Props> = ({ params }) => {
             <div className='px-4 py-5 sm:p-6'>
               <h3 className='text-lg leading-6 font-medium text-gray-900'>
                 Vehículo{' '}
-                {driver?.vehicles !== null
-                  ? `Placa(${driver?.vehicles.license_plate ?? ''}) Marca(${
+                { driver.vehicles && driver?.vehicles !== null
+                  ? `Placa(${driver?.vehicles?.license_plate ?? ''}) Marca(${
                       driver?.vehicles.brand ?? ''
                     }) Línea(${driver?.vehicles.line ?? ''}) Modelo(${
                       driver?.vehicles.model ?? ''
