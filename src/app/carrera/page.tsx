@@ -6,7 +6,6 @@ import {
   useJsApiLoader,
   GoogleMap,
   Autocomplete,
-  Marker,
   DirectionsRenderer
 } from '@react-google-maps/api'
 import { useForm } from 'react-hook-form'
@@ -18,7 +17,6 @@ const requestTravel = () => {
   const [longitude, setLongitude] = useState<any>()
   const [directionResponse, setDirectionResponse] =
     useState<google.maps.DirectionsResult | null>(null)
-  const [routeTraced, setRouteTraced] = useState<boolean>(false)
 
   const [errors, setErrors] = useState<Error[] | unknown | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -39,6 +37,9 @@ const requestTravel = () => {
   })
 
   const schema = z.object({
+    name: z.string(),
+    email: z.string(),
+    cellphone: z.string(),
     pickUpLocation: z.string(),
     destinationLocation: z.string(),
     gender: z.string(),
@@ -46,12 +47,14 @@ const requestTravel = () => {
     comments: z.string()
   })
 
-  const { handleSubmit, register, setValue } = useForm<z.infer<typeof schema>>({
+  const { handleSubmit, register, setValue, getValues } = useForm<
+    z.infer<typeof schema>
+  >({
     resolver: zodResolver(schema)
   })
 
   function onSubmit(values: z.infer<typeof schema>) {
-    const {offeredPrice, ...rest} = values
+    const { offeredPrice, ...rest } = values
     const dtoRequestRide = {
       offeredPrice: Number(values.offeredPrice),
       ...rest
@@ -59,23 +62,24 @@ const requestTravel = () => {
     console.log(dtoRequestRide)
   }
 
-  const calculateRoute = async (
-    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    evt.preventDefault()
-    if (!originRef.current?.value || !destinationRef.current?.value) return
+  const [route, setRoute] = useState<any>()
+
+  useEffect(() => {
+    setDirectionResponse(route)
+  }, [route])
+
+  const calculateRoute = async () => {
+    if (!getValues('pickUpLocation') || !getValues('destinationLocation'))
+      return
     const directionsService = new google.maps.DirectionsService()
     try {
       setIsLoading(true)
-      const results = await directionsService.route({
-        origin: originRef.current.value,
-        destination: destinationRef.current.value,
+      const route = await directionsService.route({
+        origin: getValues('pickUpLocation'),
+        destination: getValues('destinationLocation'),
         travelMode: google.maps.TravelMode.DRIVING
       })
-      setDirectionResponse(results)
-      setValue('pickUpLocation', originRef.current.value)
-      setValue('destinationLocation', destinationRef.current.value)
-      setRouteTraced(true)
+      setRoute(route)
     } catch (err) {
       setErrors(err)
     } finally {
@@ -87,21 +91,45 @@ const requestTravel = () => {
     setTimeout(() => setErrors(null), 3000)
   }, [errors])
 
-  if (!isLoaded) return <h1> Cargando... </h1>
+  if (!isLoaded || !geoLocation) return <h1> Cargando... </h1>
   return (
     <main>
       <section className='flex flex-col'>
         <h1 className='text-2xl text-center font-bold'>Solicitud de Carrera</h1>
-
         <form
           onSubmit={handleSubmit(onSubmit)}
           className='flex flex-col pt-4 gap-4'
         >
           <div className='flex flex-col gap-2'>
+            <label htmlFor='nombre'>Nombre completo</label>
+            <input
+              {...register('name')}
+              className='w-full border rounded p-1 outline-none'
+            />
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label htmlFor='nombre'>Correo</label>
+            <input
+              {...register('email')}
+              className='w-full border rounded p-1 outline-none'
+            />
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label htmlFor='nombre'>Teléfono</label>
+            <input
+              {...register('cellphone')}
+              className='w-full border rounded p-1 outline-none'
+            />
+          </div>
+          <div className='flex flex-col gap-2'>
             <label htmlFor='nombre'>Lugar de recogida</label>
             <Autocomplete>
               <input
                 {...register('pickUpLocation')}
+                onChange={evt => {
+                  setValue('pickUpLocation', evt.target.value)
+                  calculateRoute()
+                }}
                 ref={originRef}
                 className='w-full border rounded p-1 outline-none'
                 type='text'
@@ -113,6 +141,10 @@ const requestTravel = () => {
             <Autocomplete>
               <input
                 {...register('destinationLocation')}
+                onChange={evt => {
+                  setValue('destinationLocation', evt.target.value)
+                  calculateRoute()
+                }}
                 ref={destinationRef}
                 className='w-full border rounded p-1 outline-none'
                 type='text'
@@ -136,53 +168,38 @@ const requestTravel = () => {
             )}
           </GoogleMap>
           <div className='flex gap-10 justify-center'>
-            <button
-              className='bg-amber-400 rounded font-bold p-1'
-              type='button'
-              onClick={calculateRoute}
-            >
-              {isLoading && 'Cargando'}
-              {!isLoading && !errors && 'Visualizar ruta'}
-            </button>
             <span className={!errors ? 'hidden' : ''}>Ocurrió un error</span>
           </div>
-          {routeTraced && (
-            <>
-              <div className='flex flex-row gap-2 items-center'>
-                <div className='flex flex-row-reverse items-center gap-2'>
-                  <label htmlFor='male'>Hombre</label>
-                  <input {...register('gender')} type='radio' value='male' />
-                </div>
-                <div className='flex flex-row-reverse items-center gap-2'>
-                  <label htmlFor='female'>Mujer</label>
-                  <input {...register('gender')} type='radio' value='famale' />
-                </div>
-              </div>
-              <div className='flex flex-col gap-2'>
-                <label htmlFor='nombre'>Precio ofrecido</label>
-                <input
-                  type='number'
-                  {...register('offeredPrice')}
-                  className='w-full border rounded p-1 outline-none'
-                />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <label htmlFor='nombre'>Comentarios</label>
-                <textarea
-                  {...register('comments')}
-                  className='w-full border rounded p-1 outline-none resize-none'
-                  cols={30}
-                  rows={10}
-                />
-              </div>
-              <button
-                type='submit'
-                className='bg-amber-400 rounded font-bold p-1'
-              >
-                Solicitar carrera
-              </button>
-            </>
-          )}
+          <div className='flex flex-row gap-2 items-center'>
+            <div className='flex flex-row-reverse items-center gap-2'>
+              <label htmlFor='male'>Hombre</label>
+              <input {...register('gender')} type='radio' value='male' />
+            </div>
+            <div className='flex flex-row-reverse items-center gap-2'>
+              <label htmlFor='female'>Mujer</label>
+              <input {...register('gender')} type='radio' value='famale' />
+            </div>
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label htmlFor='nombre'>Precio ofrecido</label>
+            <input
+              type='number'
+              {...register('offeredPrice')}
+              className='w-full border rounded p-1 outline-none'
+            />
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label htmlFor='nombre'>Comentarios</label>
+            <textarea
+              {...register('comments')}
+              className='w-full border rounded p-1 outline-none resize-none'
+              cols={30}
+              rows={10}
+            />
+          </div>
+          <button type='submit' className='bg-amber-400 rounded font-bold p-1'>
+            Solicitar carrera
+          </button>
         </form>
       </section>
     </main>
