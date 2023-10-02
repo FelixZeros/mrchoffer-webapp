@@ -1,7 +1,49 @@
 'use client'
 import { useEffect, useState } from 'react'
+import {
+  useJsApiLoader,
+  GoogleMap,
+  Autocomplete,
+  DirectionsRenderer
+} from '@react-google-maps/api'
+import { useRequestTravel } from '@/hooks/useRequestTravel'
 
 const DriverInformationPage = ({ params }: { params: { id: string } }) => {
+  const { geoLocation } = useRequestTravel()
+  const [regresiveCount, setRegresiveCount] = useState<number>(10)
+  const [isAccept, setIsAccept] = useState<boolean | null>(null)
+  const [latitude, setLatitude] = useState<any>()
+  const [longitude, setLongitude] = useState<any>()
+  const center = { lat: latitude || null, lng: longitude || null }
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.GOOGLE_MAPS_KEY as string
+  })
+
+  useEffect(() => {
+    if (!geoLocation) return
+    setLatitude(geoLocation.latitude)
+    setLongitude(geoLocation.longitude)
+  }, [geoLocation])
+
+  useEffect(() => {
+    if (isAccept === false) return
+    const interval = setInterval(() => {
+      setRegresiveCount(prev => Math.max(prev - 1, 0))
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [regresiveCount])
+
+  useEffect(() => {
+    if (regresiveCount === 0 && !isAccept) setIsAccept(true)
+  }, [regresiveCount, isAccept])
+
+  const handleDecline = () => {
+    setIsAccept(false)
+  }
+
+  if(!isLoaded) return <h2>Cargando...</h2>
+
   return (
     <div className='col-span-2 h-full w-full'>
       <div className='bg-white overflow-hidden shadow rounded-lg border'>
@@ -56,10 +98,42 @@ const DriverInformationPage = ({ params }: { params: { id: string } }) => {
           </dl>
         </div>
       </div>
-
-      <button className='px-3 py-2 text-sm font-medium mt-2 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:bg-red-700 focus:ring-0 outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'>
-        Rechazar
-      </button>
+      {isAccept || isAccept === false ? (
+        <div className={`py-5 w-full mt-2 rounded-lg text-center`}>
+          Conductor {isAccept ? 'aceptado' : 'rechazado'}
+        </div>
+      ) : (
+        <button
+          className='px-3 py-2 text-sm font-medium mt-2 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:bg-red-700 focus:ring-0 outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
+          onClick={() => handleDecline()}
+        >
+          Rechazar
+        </button>
+      )}
+      <div
+        className={`${
+          regresiveCount === 0 || isAccept === false
+            ? 'hidden'
+            : 'py-2 bg-[--main-yellow] w-full rounded-lg mt-2 font-bold text-center'
+        }`}
+      >
+        Tienes {regresiveCount} para rechazar
+      </div>
+      {isLoaded && isAccept === true && geoLocation && (
+        <div className='mt-2 mb-10 rounded-lg overflow-hidden'>
+          <GoogleMap
+            center={center}
+            zoom={15}
+            mapContainerStyle={{ width: '100%', height: '250px' }}
+            options={{
+              zoomControl: false,
+              streetViewControl: false,
+              mapTypeControl: false,
+              fullscreenControl: false
+            }}
+          ></GoogleMap>
+        </div>
+      )}
     </div>
   )
 }
