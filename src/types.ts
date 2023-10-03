@@ -132,3 +132,16 @@ export type PassengerRideHistory = {
 
   status: string
 }
+
+export type RequestRide = {
+  date: Date
+  status: number
+  origin: string
+  destination: string
+  distance: string
+  price: number
+  genderPassenger: string
+  comment: string
+  paymentMethod: string
+  startTime: any
+}
