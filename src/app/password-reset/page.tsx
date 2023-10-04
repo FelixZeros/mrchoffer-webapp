@@ -55,12 +55,13 @@ const PasswordResetPage: FC = () => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center w-full h-full'>
-      <div className='w-full max-w-lg'>
+    <div className='h-screen w-full flex justify-center items-center drop-shadow-md'>
+      <div className='w-full max-w-lg flex border h-1/2'>
         <div className='flex flex-col items-center justify-center w-full space-y-7'>
           <h1 className='text-4xl font-bold'>Restablecer contraseña</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='w-full'>
+          <form onSubmit={handleSubmit(onSubmit)} className=''>
+
+            <div className='grid'>
               <span className='block font-medium'>Nueva contraseña</span>
               <input
                 type='password'
@@ -76,7 +77,7 @@ const PasswordResetPage: FC = () => {
                 )
               }
             </div>
-            <div className='w-full'>
+            <div className='mb-5 '>
               <span className='block font-medium'>Confirmar contraseña</span>
               <input
                 type='password'
@@ -93,13 +94,13 @@ const PasswordResetPage: FC = () => {
                 )
               }
             </div>
-            <div className='w-full'>
+            <div className='flex justify-center'>
               <button
                 type='submit'
-                className='block bg-blue-600 text-white text-lg px-4 py-3 mt-2 rounded-lg focus:bg-blue-700 focus:ring-0 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
+                className='block bg-yellow-400 text-sm text-black px-4 py-3 mt-2 rounded-lg focus:bg-blue-700 focus:ring-0 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
                 disabled={formState.isSubmitting}
               >
-                Restablecer contraseña
+               <strong>RESTABLECER CONTRASEÑA</strong>
               </button>
             </div>
           </form>
