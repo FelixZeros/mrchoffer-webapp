@@ -1,10 +1,11 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FC, type PropsWithChildren, useEffect } from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { AsideBar } from './components/asidebar'
+import { HeaderAdmin } from './components/header'
 
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   const supabase = useSupabaseClient()
@@ -36,49 +37,18 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   }, [session, supabase])
 
   return (
-    <main className='lg:overflow-x-hidden'>
-      <nav className='bg-transparent'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-end h-16'>
-            <div className='flex items-center'>
-              <div className='block'>
-                <div className='flex items-baseline space-x-4'>
-                  <NextLink
-                    href='/admin/passengers'
-                    className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
-                  >
-                    Pasajeros
-                  </NextLink>
+    <section>
 
-                  <NextLink
-                    href='/admin/rides'
-                    className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
-                  >
-                    Solicitudes
-                  </NextLink>
+      <AsideBar />
 
-                  <NextLink
-                    href='/admin'
-                    className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
-                  >
-                    Conductores
-                  </NextLink>
+      <div className="p-4 sm:ml-64">
 
-                  <button
-                    onClick={signOut}
-                    className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
-                  >
-                    Cerrar sesión
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <HeaderAdmin/>
+        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+          {children}
         </div>
-      </nav>
-
-      {children}
-    </main>
+      </div>
+    </section>
   )
 }
 

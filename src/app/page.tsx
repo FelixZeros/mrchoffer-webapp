@@ -17,7 +17,7 @@ const Home: FC = () => {
         <h2 className="text-4xl font-bold dark:text-gray-200">
           Iniciar sesión
         </h2>
-
+    
         <SignInForm/>
       </div>
     </main>
