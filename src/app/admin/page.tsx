@@ -1,6 +1,9 @@
 'use client'
 
-import PhoneIcon from '@/components/icons/phone'
+import { EyeIcon } from '@/components/icons/eye'
+import { LeftArrow } from '@/components/icons/left-arrow'
+import { PhoneIcon } from '@/components/icons/phone'
+import { RightArrow } from '@/components/icons/right-arrow'
 import WhatsappIcon from '@/components/icons/whatsapp'
 import { type Driver, DriverStatus } from '@/types'
 import { Tab } from '@headlessui/react'
@@ -17,10 +20,11 @@ import {
 import axios from 'axios'
 import NextLink from 'next/link'
 import { type FC, useMemo, useState } from 'react'
+import { Filters } from './components/filter'
 
 const inter = Inter({ subsets: ['latin'] })
 
-function classNames (...classes: Array<string | boolean>) {
+function classNames(...classes: Array<string | boolean>) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -56,7 +60,7 @@ const AdminPage: FC = () => {
       {
         header: 'Acciones',
         cell: info => (
-          <div className='flex items-center space-x-3'>
+          <div className='flex items-center justify-center space-x-3'>
             <a
               href={`https://wa.me/+57${info.row.original.phone}`}
               target='_blank'
@@ -76,9 +80,7 @@ const AdminPage: FC = () => {
             </a>
 
             <NextLink href={`/admin/drivers/${info.row.original.id}`}>
-              <span className='text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg px-3.5 py-3 text-md text-center dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600'>
-                Ver
-              </span>
+              <EyeIcon />
             </NextLink>
           </div>
         )
@@ -157,21 +159,18 @@ const AdminPage: FC = () => {
   })
 
   return (
-    <main className={inter.className}>
-      <h1 className='text-4xl font-bold dark:text-gray-200 mb-10'>
-        Conductores
-      </h1>
-
+    <main className='grid'>
       <Tab.Group>
-        <Tab.List className='text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700'>
+        <Tab.List className='text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
           <Tab
             onClick={() => {
               setFilter(DriverStatus.pending)
             }}
             className={({ selected }) =>
               classNames(
-                'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
-                selected && 'text-blue-600 border-b-2 border-blue-600'
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -183,8 +182,9 @@ const AdminPage: FC = () => {
             }}
             className={({ selected }) =>
               classNames(
-                'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
-                selected && 'text-blue-600 border-b-2 border-blue-600'
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -196,8 +196,9 @@ const AdminPage: FC = () => {
             }}
             className={({ selected }) =>
               classNames(
-                'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
-                selected && 'text-blue-600 border-b-2 border-blue-600'
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -209,12 +210,41 @@ const AdminPage: FC = () => {
             }}
             className={({ selected }) =>
               classNames(
-                'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
-                selected && 'text-blue-600 border-b-2 border-blue-600'
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
             Archivados
+          </Tab>
+          <Tab
+            onClick={() => {
+              setFilter(DriverStatus.archived)
+            }}
+            className={({ selected }) =>
+              classNames(
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+              )
+            }
+          >
+            Inhabilitados
+          </Tab>
+          <Tab
+            onClick={() => {
+              setFilter(DriverStatus.archived)
+            }}
+            className={({ selected }) =>
+              classNames(
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+              )
+            }
+          >
+            Bloqueados
           </Tab>
         </Tab.List>
         <Tab.Panels>
@@ -223,13 +253,13 @@ const AdminPage: FC = () => {
           <Tab.Panel className='p-3'></Tab.Panel>
           <Tab.Panel className='p-3'></Tab.Panel>
         </Tab.Panels>
-
+        <Filters />
         {isLoading && <div>Cargando...</div>}
         {!isLoading && data !== undefined && (
           <>
-            <div className='relative overflow-x-auto'>
-              <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+            <div className='relative overflow-x-auto rounded-xl shadow'>
+              <table className='w-full text-sm text-center '>
+                <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                       {headerGroup.headers.map(header => (
@@ -247,12 +277,12 @@ const AdminPage: FC = () => {
                   {table.getRowModel().rows.map(row => (
                     <tr
                       key={row.id}
-                      className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
+                      className='bg-white border- hover:bg-gray-50'
                     >
                       {row.getVisibleCells().map(cell => (
                         <td
                           key={cell.id}
-                          className='px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white'
+                          className='px-4 py-2 font-medium text-gray-900 whitespace-nowrap'
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
@@ -266,55 +296,31 @@ const AdminPage: FC = () => {
               </table>
             </div>
 
-            <div className='h-2' />
+          <div className='h-2' />
 
-            <nav aria-label='Page navigation example'>
-              <ul className='inline-flex items-center -space-x-px'>
+            <nav className='flex justify-end'>
+              <ul className='inline-flex  items-center -space-x-px'>
                 <li>
                   <button
                     onClick={() => {
                       table.previousPage()
                     }}
-                    className='block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+                    className='flex items-center gap-1 px-3 py-2 ml-0 leading-tight rounded-l-lg text-black bg-[--main-yellow]'
                   >
-                    <span className='sr-only'>Anterior</span>
-                    <svg
-                      aria-hidden='true'
-                      className='w-5 h-5'
-                      fill='currentColor'
-                      viewBox='0 0 20 20'
-                      xmlns='http://www.w3.org/2000/svg'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        d='M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z'
-                        clipRule='evenodd'
-                      ></path>
-                    </svg>
+                    <LeftArrow />
+                    Anterior
                   </button>
                 </li>
-                {}
+
                 <li>
                   <button
                     onClick={() => {
                       table.nextPage()
                     }}
-                    className='block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+                    className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
                   >
-                    <span className='sr-only'>Siguiente</span>
-                    <svg
-                      aria-hidden='true'
-                      className='w-5 h-5'
-                      fill='currentColor'
-                      viewBox='0 0 20 20'
-                      xmlns='http://www.w3.org/2000/svg'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        d='M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z'
-                        clipRule='evenodd'
-                      ></path>
-                    </svg>
+                    Siguiente
+                    <RightArrow />
                   </button>
                 </li>
               </ul>
