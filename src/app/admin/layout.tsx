@@ -38,13 +38,12 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <section>
-
       <AsideBar />
-
       <div className="p-4 sm:ml-64">
 
-        <HeaderAdmin/>
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+        <HeaderAdmin />
+
+        <div className="p-4 shadow rounded-lg">
           {children}
         </div>
       </div>
