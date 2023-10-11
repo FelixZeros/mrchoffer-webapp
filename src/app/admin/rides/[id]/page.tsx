@@ -48,19 +48,19 @@ const RideDetails = (props: Props) => {
           <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
             <div className='col-span-2 h-full w-full'>
               <div
-                className='bg-white overflow-hidden shadow rounded-lg border'>
-                <div className='px-4 py-5 sm:p-6'>
-                  <h3 className='text-lg leading-6 font-medium text-gray-900'>
-                    Datos básicos
+                className='bg-white overflow-hidden shadow rounded-3xl border drop-shadow'>
+                <div className='px-4 py-5 sm:p-6 bg-gray-300'>
+                  <h3 className='text-lg leading-6 font-medium text-black'>
+                    <strong>INFORMAICON GENERAL</strong>
                   </h3>
                 </div>
 
                 <div className='border-t border-gray-200'>
                   <dl>
                     <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>
-                        Pasajero
+                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 '>
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>PASAJERO</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -77,8 +77,8 @@ const RideDetails = (props: Props) => {
                   <dl>
                     <div
                       className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>
-                        Origen
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>ORIGEN</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -92,8 +92,8 @@ const RideDetails = (props: Props) => {
                   <dl>
                     <div
                       className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>
-                        Destino
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>DESTINO</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -107,7 +107,8 @@ const RideDetails = (props: Props) => {
                   <dl>
                     <div
                       className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>Valor
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>VALOR</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -125,8 +126,8 @@ const RideDetails = (props: Props) => {
                     <dl>
                       <div
                         className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                        <dt className='text-sm font-medium text-gray-500'>
-                          Comentario
+                        <dt className='text-sm font-medium text-black'>
+                          <strong>COMENTARIO</strong>
                         </dt>
                         <dd
                           className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -141,8 +142,8 @@ const RideDetails = (props: Props) => {
                   <dl>
                     <div
                       className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>
-                        Acciones
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>ACCIONES</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -234,10 +235,10 @@ const RideDetails = (props: Props) => {
               </div>
 
               <div
-                className='bg-white overflow-hidden shadow rounded-lg border mt-3'>
-                <div className='px-4 py-5 sm:p-6'>
-                  <h3 className='text-lg leading-6 font-medium text-gray-900'>
-                    Conductor
+                className='bg-white overflow-hidden shadow rounded-3xl border mt-3 drop-shadow'>
+                <div className='px-4 py-5 sm:p-6 bg-gray-300 '>
+                  <h3 className='text-lg leading-6 font-medium text-black'>
+                    <strong>INFORMAICON CONDUCTOR</strong>
                   </h3>
                 </div>
 
@@ -245,8 +246,8 @@ const RideDetails = (props: Props) => {
                   <dl>
                     <div
                       className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>
-                        Nombre
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>NOMBRE</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -260,8 +261,8 @@ const RideDetails = (props: Props) => {
                   <dl>
                     <div
                       className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>
-                        Vehículo
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>VEHICULO</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -283,8 +284,8 @@ const RideDetails = (props: Props) => {
                   <dl>
                     <div
                       className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-gray-500'>
-                        Acciones
+                      <dt className='text-sm font-medium text-black'>
+                        <strong>ACCIONES</strong>
                       </dt>
                       <dd
                         className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -376,10 +377,10 @@ const RideDetails = (props: Props) => {
               </div>
             </div>
             <div
-              className='bg-white overflow-hidden shadow rounded-lg col-span-2 border h-full w-full'>
-              <div className='px-4 py-5 sm:p-6'>
-                <h3 className='text-lg leading-6 font-medium text-gray-900'>
-                  Información del viaje
+              className='bg-white overflow-hidden shadow rounded-3xl col-span-2 border h-full w-full drop-shadow'>
+              <div className='px-4 py-5 sm:p-6 bg-gray-300'>
+                <h3 className='text-lg leading-6 font-medium text-black'>
+                  <strong>INFORMAICON DEL VIAJE</strong>
                 </h3>
               </div>
 
@@ -387,7 +388,7 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>#</dt>
+                    <dt className='text-sm font-medium text-gray-500'><strong>#</strong></dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
                       {id}
@@ -400,8 +401,8 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>
-                      Hora de solicitud
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>HORA DE SOLICITUD</strong>
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -419,7 +420,8 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>Estado
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>ESTADO</strong>
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -433,7 +435,8 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>Aliado
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>ALIADO</strong>
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -447,8 +450,8 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>
-                      Tiempo de espera
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>TIEMPO DE ESPERA</strong>
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -464,8 +467,8 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>
-                      Duración del viaje
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>DURACION DE VIAJE</strong>
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -481,8 +484,8 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>
-                      Puntuación del viaje
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>PUNTUACION DE VIAJE</strong>
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -498,8 +501,8 @@ const RideDetails = (props: Props) => {
                 <dl>
                   <div
                     className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'>
-                      Valor del viaje
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>VALOR DE VIAJE</strong>
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
@@ -510,8 +513,12 @@ const RideDetails = (props: Props) => {
                         }).format(data?.final_price ?? 0)
                       }
                     </dd>
+
                   </div>
                 </dl>
+              </div>
+              <div className='flex h-12 w-2/5 text-center m-3'>
+              <button className=' bg-yellow-400 rounded-xl p-1 text-xs'> <strong>VER RECORRIDO</strong> </button>
               </div>
             </div>
           </div>
