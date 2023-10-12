@@ -1,36 +1,45 @@
-
-import { PowerIcon } from '@/components/icons/power'
+import {PowerIcon} from '@/components/icons/power'
 import NextLink from 'next/link'
-import { Routes } from '../utils/aside-items'
+import {Routes} from '../utils/aside-items'
+import {useState} from "react";
 
-export const AsideBar = () => {
+interface Props {
+  isVisible: boolean;
+}
 
+export const AsideBar = ({isVisible}: Props) => {
 
-    return <aside className="fixed bg-[#181818] top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-        <div className="h-full px-3 py-4">
-            <div className="flex-col text-center font-medium my-2 h-fit">
-                {Routes.map(({ href, name, Icon }) => (
+  return <aside
+    className={` fixed bg-[#181818] top-0 left-0 z-40 h-screen transition-transform ${
+      isVisible ? 'w-1/5 -translate-x-full sm:translate-x-0' : 'hidden translate-x-0'
+    }`}
+    aria-label="Sidebar"
+  >
+    <div className="h-full px-3 py-4">
+      <div className="flex-col text-center font-medium my-2 h-fit">
+        {Routes.map(({href, name, Icon}) => (
 
-                    <div className='py-5 rounded-lg  my-1 transition-all cursor-pointer hover:bg-[--main-yellow]'>  
-                        <NextLink
-                            href={href}
-                            className='flex justify-center items-center gap-1'
-                        >
-                            <Icon/>
-                            {name}
-                        </NextLink>
-                    </div>
-                ))}
+          <div
+            className='py-5 rounded-lg  my-1 transition-all cursor-pointer hover:bg-[--main-yellow]'>
+            <NextLink
+              href={href}
+              className='flex justify-center items-center gap-1'
+            >
+              <Icon/>
+              {name}
+            </NextLink>
+          </div>
+        ))}
 
-            </div>
+      </div>
 
-            <div className='grid justify-center left-0 right-0 bottom-20 fixed'>
-                <div className='flex justify-center'>
+      <div className='grid justify-center left-0 right-0 bottom-20 fixed'>
+        <div className='flex justify-center'>
 
-                    <PowerIcon />
-                </div>
-                Cerrar sesión
-            </div>
+          <PowerIcon/>
         </div>
-    </aside>
+        Cerrar sesión
+      </div>
+    </div>
+  </aside>
 }
