@@ -11,8 +11,10 @@ import {
   type PaginationState
 } from '@tanstack/react-table'
 import axios from 'axios'
+import { Tab } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, type FC } from 'react'
+import { FiltersRides } from './components/filters'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -121,51 +123,96 @@ const RidesPage: FC = () => {
     debugTable: true
   })
 
+  function classNames(...classes: Array<string | boolean>) {
+    return classes.filter(Boolean).join(' ')
+  }
+  
+
   return (
-    <main className={inter.className}>
-      <h1 className='text-4xl font-bold dark:text-gray-200 mb-10'>
-        Solicitudes del día
-      </h1>
+    <main className='grid'>
+      <Tab.Group>
+        <Tab.List className='text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
+          <Tab
+            className={({ selected }) =>
+              classNames(
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+              )
+            }
+          >
+           Entradas
+          </Tab>
+          <Tab
+            className={({ selected }) =>
+              classNames(
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+              )
+            }
+          >
+            Cerradas
+          </Tab>
+          <Tab
+            className={({ selected }) =>
+              classNames(
+                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                selected &&
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+              )
+            }
+          >
+            Historial
+          </Tab>
+        </Tab.List>
+        <Tab.Panels>
+          <Tab.Panel className='p-3'></Tab.Panel>
+          <Tab.Panel className='p-3'></Tab.Panel>
+          <Tab.Panel className='p-3'></Tab.Panel>
+          <Tab.Panel className='p-3'></Tab.Panel>
+        </Tab.Panels>
+      </Tab.Group>
+
+        <FiltersRides/>
 
       <div className='relative overflow-x-auto'>
-        <table
-          className='w-full text-sm text-left text-gray-500 dark:text-gray-400 overflow-auto'>
-          <thead
-            className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th scope='col' className='px-6 py-3' key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
+        <table className='w-full text-sm text-center text-black overflow-auto'>
+          <thead className='text-x bg-gray-50 '>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th scope='col' className='px-6 py-3' key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
           <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr
-              key={row.id}
-              className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
-            >
-              {row.getVisibleCells().map(cell => (
-                <td
-                  key={cell.id}
-                  className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+            {table.getRowModel().rows.map(row => (
+              <tr
+                key={row.id}
+                className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
+              >
+                {row.getVisibleCells().map(cell => (
+                  <td
+                    key={cell.id}
+                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
-      <div className='h-2'/>
+      <div className='h-2' />
 
       <nav aria-label='Page navigation example'>
         <ul className='inline-flex items-center -space-x-px'>
