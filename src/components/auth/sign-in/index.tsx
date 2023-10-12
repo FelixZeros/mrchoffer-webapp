@@ -13,6 +13,7 @@ import logo from '@/assets/logo.png'
 import {CloseEye, Eyes} from "@/components/icons/eyes";
 import Link from "next/link";
 
+const SignInForm: FC = () => {
 const SignInSchema = z.object({
     email: z.string().email('El email no es válido'),
     password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres')
@@ -20,7 +21,6 @@ const SignInSchema = z.object({
 
 type SignInFormValues = z.infer<typeof SignInSchema>
 
-const SignInForm: FC = () => {
     const router = useRouter();
 
     const [password, setPassword] = useState('');
