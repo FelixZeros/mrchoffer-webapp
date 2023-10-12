@@ -13,7 +13,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   const [supabase] = useState(() => createBrowserSupabaseClient())
-
+  const { pathname } = location
+  console.log(pathname)
   return (
     <html lang='en'>
       <head />
@@ -21,16 +22,20 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
         <main className={inter.className}>
           <SessionContextProvider supabaseClient={supabase}>
             <QueryClientProvider client={queryClient}>
-              <div className='grid grid-cols-2'>
-                <div className='grid-cols-1'>
-                  <Image
-                    src={heroimg}
-                    alt='Imagen'
-                    className='h-full w-full object-cover'
-                  />
+              {pathname === ('/' || 'password-reset') ? (
+                <div className='grid grid-cols-2'>
+                  <div className='grid-cols-1'>
+                    <Image
+                      src={heroimg}
+                      alt='Imagen'
+                      className='h-full w-full object-cover'
+                    />
+                  </div>
+                  <div className='grid-cols-1 w-full'>{children}</div>
                 </div>
-                <div className='grid-cols-1 w-full'>{children}</div>
-              </div>
+              ) : (
+                <div>{children}</div>
+              )}
             </QueryClientProvider>
           </SessionContextProvider>
         </main>

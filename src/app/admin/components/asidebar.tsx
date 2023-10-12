@@ -17,7 +17,7 @@ export const AsideBar = () => {
                     <div className='py-5 rounded-lg  my-1 transition-all cursor-pointer hover:bg-[--main-yellow]'>
                         <NextLink
                             href={href}
-                            className='flex justify-center items-center gap-1'
+                            className='flex justify-center items-center gap-1 text-white'
                         >
                             <Icon />
                             {name}
