@@ -175,7 +175,7 @@ const DriverPage: FC<Props> = ({ params }) => {
                       Nombre
                     </dt>
                     <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {driver.name}
+                      {driver?.name}
                     </dd>
                   </div>
                 </dl>
@@ -188,7 +188,7 @@ const DriverPage: FC<Props> = ({ params }) => {
                       Ciudad
                     </dt>
                     <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {driver.city}
+                      {driver?.city}
                     </dd>
                   </div>
                 </dl>
@@ -201,7 +201,7 @@ const DriverPage: FC<Props> = ({ params }) => {
                       Calificación
                     </dt>
                     <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {driver.rating}
+                      {driver?.rating}
                     </dd>
                   </div>
                 </dl>
@@ -212,7 +212,7 @@ const DriverPage: FC<Props> = ({ params }) => {
                   <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                     <dt className='text-sm font-medium text-gray-500'>
                       <a
-                        href={signedUrls.at(0) ?? ''}
+                        href={signedUrls?.at(0) ?? ''}
                         target='_blank'
                         rel='noreferrer'
                       >
@@ -222,7 +222,7 @@ const DriverPage: FC<Props> = ({ params }) => {
 
                     <dt className='text-sm font-medium text-gray-500'>
                       <a
-                        href={signedUrls.at(1) ?? ''}
+                        href={signedUrls?.at(1) ?? ''}
                         target='_blank'
                         rel='noreferrer'
                       >
@@ -232,7 +232,7 @@ const DriverPage: FC<Props> = ({ params }) => {
 
                     <dt className='text-sm font-medium text-gray-500'>
                       <a
-                        href={signedUrls.at(2) ?? ''}
+                        href={signedUrls?.at(2) ?? ''}
                         target='_blank'
                         rel='noreferrer'
                       >
@@ -242,7 +242,7 @@ const DriverPage: FC<Props> = ({ params }) => {
 
                     <dt className='text-sm font-medium text-gray-500'>
                       <a
-                        href={signedUrls.at(3) ?? ''}
+                        href={signedUrls?.at(3) ?? ''}
                         target='_blank'
                         rel='noreferrer'
                       >
@@ -250,10 +250,10 @@ const DriverPage: FC<Props> = ({ params }) => {
                       </a>
                     </dt>
 
-                    {driver.contract_url !== null && (
+                    {driver?.contract_url !== null && (
                       <dt className='text-sm font-medium text-gray-500'>
                         <a
-                          href={signedUrls.at(6) ?? ''}
+                          href={signedUrls?.at(6) ?? ''}
                           target='_blank'
                           rel='noreferrer'
                         >
@@ -262,10 +262,10 @@ const DriverPage: FC<Props> = ({ params }) => {
                       </dt>
                     )}
 
-                    {driver.notary_power_url !== null && (
+                    {driver?.notary_power_url !== null && (
                       <dt className='text-sm font-medium text-gray-500'>
                         <a
-                          href={signedUrls.at(7) ?? ''}
+                          href={signedUrls?.at(7) ?? ''}
                           target='_blank'
                           rel='noreferrer'
                         >
@@ -283,7 +283,7 @@ const DriverPage: FC<Props> = ({ params }) => {
             <div className='px-4 py-5 sm:p-6'>
               <h3 className='text-lg leading-6 font-medium text-gray-900'>
                 Vehículo{' '}
-                {driver?.vehicles !== null
+                {driver && driver?.vehicles !== null
                   ? `Placa(${driver?.vehicles.license_plate ?? ''}) Marca(${
                       driver?.vehicles.brand ?? ''
                     }) Línea(${driver?.vehicles.line ?? ''}) Modelo(${
