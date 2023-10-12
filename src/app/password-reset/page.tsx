@@ -3,9 +3,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useMutation } from '@tanstack/react-query'
-import { type FC } from 'react'
+import React, { type FC } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
+import Image from "next/image";
+import logo from "@/assets/logo.png";
+import Link from "next/link";
 
 const schema = z
   .object({
@@ -24,16 +27,16 @@ const schema = z
 type PasswordResetFormValues = z.infer<typeof schema>
 
 const PasswordResetPage: FC = () => {
-  const { register, handleSubmit, formState } =
+  const {register, handleSubmit, formState} =
     useForm<PasswordResetFormValues>({
       resolver: zodResolver(schema)
     })
 
   const client = useSupabaseClient()
 
-  const { mutate } = useMutation(
+  const {mutate} = useMutation(
     async (data: PasswordResetFormValues) => {
-      const { data: result, error } = await client.auth.updateUser({
+      const {data: result, error} = await client.auth.updateUser({
         password: data.password
       })
 
@@ -55,59 +58,69 @@ const PasswordResetPage: FC = () => {
   }
 
   return (
-    <div className='h-screen w-full flex justify-center items-center drop-shadow-md'>
-      <div className='w-full max-w-lg flex border h-1/2'>
-        <div className='flex flex-col items-center justify-center w-full space-y-7'>
-          <h1 className='text-4xl font-bold'>Restablecer contraseña</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className=''>
-
-            <div className='grid'>
-              <span className='block font-medium'>Nueva contraseña</span>
-              <input
-                type='password'
-                className='block border text-lg px-4 py-3 mt-2 rounded-lg border-gray-200 dark:border-neutral-600 focus:bg-white dark:focus:bg-neutral-700 text-gray-900 dark:text-gray-100 focus:border-blue-600 dark:focus:border-blue-300 focus:ring-0 outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
-                {...register('password')}
-                disabled={formState.isSubmitting}
-              />
-              {
-                (formState.errors.password != null) && (
-                  <span className='block text-red-500 text-sm mt-1'>
-                    {formState.errors.password.message}
-                  </span>
-                )
-              }
-            </div>
-            <div className='mb-5 '>
-              <span className='block font-medium'>Confirmar contraseña</span>
-              <input
-                type='password'
-                className='block border text-lg px-4 py-3 mt-2 rounded-lg border-gray-200 dark:border-neutral-600 focus:bg-white dark:focus:bg-neutral-700 text-gray-900 dark:text-gray-100 focus:border-blue-600 dark:focus:border-blue-300 focus:ring-0 outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
-                {...register('confirmPassword')}
-                disabled={formState.isSubmitting}
-              />
-
-              {
-                (formState.errors.confirmPassword != null) && (
-                  <span className='block text-red-500 text-sm mt-1'>
-                    {formState.errors.confirmPassword.message}
-                  </span>
-                )
-              }
-            </div>
-            <div className='flex justify-center'>
-              <button
-                type='submit'
-                className='block bg-yellow-400 text-sm text-black px-4 py-3 mt-2 rounded-lg focus:bg-blue-700 focus:ring-0 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
-                disabled={formState.isSubmitting}
-              >
-               <strong>RESTABLECER CONTRASEÑA</strong>
-              </button>
-            </div>
-          </form>
+    <div className='min-h-screen flex justify-center items-center'>
+      <div className='w-full max-w-lg p-6 bg-white rounded-lg '>
+        <div className='flex justify-center mb-5'>
+          <Image src={logo} alt='logo'/>
         </div>
+        <h1 className='w-full font-bold text-center mb-5 text-3xl'>RESTABLECER CONTRASEÑA</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+
+          <div className=''>
+            <label htmlFor='password' className='block text-gray-700'></label>
+            <input
+              type='password'
+              id='password'
+              className='input-style w-full px-4 py-2 border rounded-xl drop-shadow outline-none text-xl'
+              {...register('password')}
+              disabled={formState.isSubmitting}
+              placeholder='NUEVA CONTRASEÑA'
+            />
+            {formState.errors.password && (
+              <span className='text-red-500 text-sm mt-1'>
+              {formState.errors.password.message}
+            </span>
+            )}
+          </div>
+
+          <div className=''>
+            <label htmlFor='confirmPassword' className='block text-gray-700'></label>
+            <input
+              type='password'
+              id='confirmPassword'
+              className='input-style w-full px-4 py-2 border rounded-xl drop-shadow outline-none text-xl'
+              {...register('confirmPassword')}
+              disabled={formState.isSubmitting}
+              placeholder='CONFIRMAR CONTRASEÑA'
+            />
+            {formState.errors.confirmPassword && (
+              <span className='text-red-500 text-sm mt-1'>
+              {formState.errors.confirmPassword.message}
+            </span>
+            )}
+          </div>
+
+          <div className='mb-5'>
+            <Link href=''>
+              <strong>
+              <p>INICIAR SESSION</p>
+              </strong>
+            </Link>
+          </div>
+
+          <div className='text-center flex justify-center'>
+            <button
+              type='submit'
+              className='w-full block bg-yellow-400 text-sm text-black px-4 py-3 mt-2 rounded-lg focus:bg-blue-700 focus:ring-0 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-neutral-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
+              disabled={formState.isSubmitting}
+            >
+              <strong>RESTABLECER CONTRASEÑA</strong>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  )
+  );
 }
 
 export default PasswordResetPage

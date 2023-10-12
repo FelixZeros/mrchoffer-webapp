@@ -78,8 +78,8 @@ const HomePage: FC = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex h-screen w-full'>
-        <div className='w-1/2  max-lg:px-8 px-28 flex flex-col justify-center '>
+      <form onSubmit={handleSubmit(onSubmit)} className='flex h-screen w-full justify-center'>
+        <div className='w-2/3 flex flex-col justify-center '>
           <div className='mb-4'>
             <div className='flex justify-center mb-11'>
               <Image src={logo} alt='logo' />
@@ -90,7 +90,7 @@ const HomePage: FC = () => {
             <span className='block font-medium'></span>
             <input
               type='text'
-              className='w-full px-4 py-2 border rounded-xl drop-shadow outline-none'
+              className='w-full px-4 py-2 border rounded-xl drop-shadow outline-none text-xl'
               {...register('email')}
               disabled={isDisabled}
               placeholder='EMAIL'
@@ -105,7 +105,7 @@ const HomePage: FC = () => {
           <div className='mb-4 relative flex'>
             <span className='block font-medium'></span>
             <input
-              className='w-full pr-12 pl-3 py-2 border rounded-xl drop-shadow outline-none'
+              className='w-full pr-12 pl-3 py-2 border rounded-xl drop-shadow outline-none text-lg'
               {...register('password')}
               disabled={isDisabled}
               placeholder='CONTRASEÑA'
