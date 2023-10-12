@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { z } from 'zod'
+import axios from 'axios'
 import {
   useJsApiLoader,
   GoogleMap,
@@ -12,6 +12,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRoute } from '../hooks/useRoute'
 import { useRequestTravel } from '@/hooks/useRequestTravel'
+import { z } from 'zod'
+import { RequestRide } from '@/types'
 
 const schema = z.object({
   name: z.string(),
@@ -19,6 +21,7 @@ const schema = z.object({
   cellphone: z.string(),
   pickUpLocation: z.string(),
   destinationLocation: z.string(),
+  paymentMethod: z.string(),
   gender: z.string(),
   offeredPrice: z.string(),
   comments: z.string()
@@ -28,6 +31,9 @@ export const RequestRideForm = () => {
   const { geoLocation } = useRequestTravel()
   const [latitude, setLatitude] = useState<any>()
   const [longitude, setLongitude] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [errors, setErrors] = useState<boolean>(false)
+  const [requestMade, setRequestMade] = useState<boolean>(false)
   const center = { lat: latitude || null, lng: longitude || null }
   const [position, setPosition] = useState<{
     origin: string
@@ -45,7 +51,7 @@ export const RequestRideForm = () => {
     libraries: ['places']
   })
 
-  const { directionResponse, error, loading } = useRoute({
+  const { directionResponse, distance, duration, error } = useRoute({
     origin: position?.origin,
     destination: position?.destination
   })
@@ -56,13 +62,28 @@ export const RequestRideForm = () => {
     resolver: zodResolver(schema)
   })
 
-  function onSubmit(values: z.infer<typeof schema>) {
-    const { offeredPrice, ...rest } = values
-    const dtoRequestRide = {
-      offeredPrice: Number(values.offeredPrice),
-      ...rest
-    }
-    console.log(dtoRequestRide)
+  async function onSubmit(values: z.infer<typeof schema>) {
+    setLoading(true)
+    await axios
+      .post<RequestRide>(process.env.NEXT_PUBLIC_API + '/api/request-trip', {
+        date: new Date(),
+        status: 1,
+        origin: values.pickUpLocation,
+        destination: values.destinationLocation,
+        distance: distance || 1000,
+        phoneNumber: values.cellphone,
+        price: Number(values.offeredPrice),
+        genderPassenger: values.gender,
+        comment: values.comments,
+        paymentMethod: values.paymentMethod,
+        startTime: '14:19:53'
+      })
+      .then(res => {
+        if (res) setLoading(false)
+        if (res.statusText === 'OK') setRequestMade(true)
+        console.log(res)
+      })
+      .catch(err => setErrors(err))
   }
 
   return (
@@ -118,6 +139,16 @@ export const RequestRideForm = () => {
                   className='py-3 rounded-xl bg-white shadow-lg border pl-3 '
                 />
               </div>
+
+              <select
+                required
+                {...register('paymentMethod')}
+                className='py-3 rounded-xl bg-white shadow-lg border px-3 '
+              >
+                <option value=''>Método de pago</option>
+                <option value='nequi'>Nequi</option>
+                <option value='daviplata'>Daviplata</option>
+              </select>
 
               <select
                 required
@@ -184,12 +215,18 @@ export const RequestRideForm = () => {
                 rows={10}
               />
             </div>
-            <button
-              type='submit'
-              className='bg-amber-400 rounded font-bold text-white p-1 h-14'
-            >
-              Solicitar carrera
-            </button>
+            {!requestMade && (
+              <button
+                disabled={loading}
+                type='submit'
+                className={`bg-amber-400 rounded font-bold text-white p-1 h-14`}
+              >
+                {loading ? 'Solicitando carrera...' : 'Solicitar carrera'}
+              </button>
+            )}
+            {
+              requestMade && ( <span className='text-black'> Tu carrera ha sido solicitada, espera instrucciones en tu télefono</span> )
+            }
           </form>
         </section>
       )}
