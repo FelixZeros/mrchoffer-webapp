@@ -10,9 +10,8 @@ interface Props {
 export const AsideBar = ({isVisible}: Props) => {
 
   return <aside
-    className={` fixed bg-[#181818] top-0 left-0 z-40 h-screen transition-transform ${
-      isVisible ? 'w-1/5 -translate-x-full sm:translate-x-0' : 'hidden translate-x-0'
-    }`}
+    className={"w-full h-screen bg-[#181818] "}
+
     aria-label="Sidebar"
   >
     <div className="h-full px-3 py-4">

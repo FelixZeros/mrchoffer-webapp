@@ -126,7 +126,7 @@ const RidesPage: FC = () => {
   function classNames(...classes: Array<string | boolean>) {
     return classes.filter(Boolean).join(' ')
   }
-  
+
 
   return (
     <main className='grid'>
@@ -196,12 +196,12 @@ const RidesPage: FC = () => {
             {table.getRowModel().rows.map(row => (
               <tr
                 key={row.id}
-                className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
+                className='bg-white border-b  hover:bg-gray-50'
               >
                 {row.getVisibleCells().map(cell => (
                   <td
                     key={cell.id}
-                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
+                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap '
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

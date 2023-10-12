@@ -6,8 +6,8 @@ import {type FC, type PropsWithChildren, useEffect, useState} from 'react'
 import {useSession, useSupabaseClient} from '@supabase/auth-helpers-react'
 import {AsideBar} from './components/asidebar'
 import {HeaderAdmin} from './components/header'
-import Footer from "@/app/admin/components/footer";
 import {Arow} from "@/components/icons/arow";
+import Footer from "@/app/admin/components/footer";
 
 const RootLayout: FC<PropsWithChildren> = ({children}) => {
   const supabase = useSupabaseClient()
@@ -43,16 +43,20 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
   return (
     <div className="flex flex-row">
       <div
-        className={`${isVisible ? "w-1/5" : "hidden"} container content-center`}>
+        className={isVisible ? "w-1/5 transition-transform duration-300 ease-in-out" : "transform -translate-x-full transition-transform duration-300 ease-in-out"}>
         <AsideBar isVisible={isVisible}/>
       </div>
       <div style={isVisible ? {left: "20%"} : {}}
-           className="h-full absolute flex flex-col top-0 left-0  justify-center items-center">
+           className="h-full  absolute flex flex-col top-0 p-2 left-0  justify-center items-center">
         <button
-          className="w-6 h-1/6 bg-[#181818] rounded-tr-full rounded-br-full self-center"
+          className="w-6 h-1/6 bg-[#181818] rounded-tr-full fixed rounded-br-full self-center"
           onClick={toggleAside}
         >
-          <Arow/>
+          <div
+            className={isVisible ? "rotate-0 transition-all duration-500" : ` rotate-180 transition-all duration-500`}>
+
+            <Arow/>
+          </div>
         </button>
       </div>
       <div className={`${isVisible ? "w-4/5" : "w-full"}`}>
@@ -64,7 +68,7 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
               {children}
             </div>
           </div>
-            <Footer></Footer>
+          <Footer width={`${isVisible ? "w-4/5" : "w-full"}`}></Footer>
         </section>
       </div>
     </div>
