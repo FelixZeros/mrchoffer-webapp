@@ -1,6 +1,5 @@
 import { FC, PropsWithChildren } from 'react'
 import { HeadBar } from './components/head'
-import { RequestRideForm } from './components/form'
 import { Footer } from './components/footer'
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {

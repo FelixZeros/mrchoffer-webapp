@@ -15,6 +15,7 @@ import { useRequestTravel } from '@/hooks/useRequestTravel'
 import { z } from 'zod'
 import { RequestRide } from '@/types'
 import { SearchIcon } from '@/components/icons/magnifyng-glass'
+import { CheckIcon } from '@/components/icons/check'
 const schema = z.object({
   name: z.string(),
   email: z.string(),
@@ -28,42 +29,18 @@ const schema = z.object({
 })
 
 export const RequestRideForm = () => {
-  /*
   const { geoLocation } = useRequestTravel()
+
   useEffect(() => {
     if (!geoLocation) return
     setLatitude(geoLocation.latitude)
     setLongitude(geoLocation.longitude)
   }, [geoLocation])
+
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.GOOGLE_MAPS_KEY as string,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
     libraries: ['places']
-    const { directionResponse, distance, duration, error } = useRoute({
-      origin: position?.origin,
-      destination: position?.destination
-    })
   })
-  await axios
-    .post<RequestRide>(process.env.NEXT_PUBLIC_API + '/api/request-trip', {
-      date: new Date(),
-      status: 1,
-      origin: values.pickUpLocation,
-      destination: values.destinationLocation,
-      distance: distance || 1000,
-      phoneNumber: values.cellphone,
-      price: Number(values.offeredPrice),
-      genderPassenger: values.gender,
-      comment: values.comments,
-      paymentMethod: values.paymentMethod,
-      startTime: '14:19:53'
-    })
-    .then(res => {
-      if (res) setLoading(false)
-      if (res.statusText === 'OK') setRequestMade(true)
-      console.log(res)
-    })
-    .catch(err => setErrors(err))
-*/
 
   const [latitude, setLatitude] = useState<any>()
   const [longitude, setLongitude] = useState<any>()
@@ -71,12 +48,18 @@ export const RequestRideForm = () => {
   const [errors, setErrors] = useState<boolean>(false)
   const [requestMade, setRequestMade] = useState<boolean>(false)
   const center = { lat: latitude || null, lng: longitude || null }
+
   const [position, setPosition] = useState<{
     origin: string
     destination: string
   } | null>(null)
 
-  const { handleSubmit, register, setValue, getValues } = useForm<
+  const { directionResponse, distance, duration, error } = useRoute({
+    origin: position?.origin,
+    destination: position?.destination
+  })
+
+  const { handleSubmit, register, setValue, getValues, control } = useForm<
     z.infer<typeof schema>
   >({
     resolver: zodResolver(schema)
@@ -84,123 +67,240 @@ export const RequestRideForm = () => {
 
   async function onSubmit(values: z.infer<typeof schema>) {
     setLoading(true)
+    await axios
+      .post<RequestRide>(process.env.NEXT_PUBLIC_API + '/api/request-trip', {
+        date: new Date(),
+        status: 1,
+        origin: values.pickUpLocation,
+        destination: values.destinationLocation,
+        distance: distance || 1000,
+        phoneNumber: values.cellphone,
+        price: Number(values.offeredPrice),
+        genderPassenger: values.gender,
+        comment: values.comments,
+        paymentMethod: values.paymentMethod,
+        startTime: '14:19:53'
+      })
+      .then(res => {
+        if (res) setLoading(false)
+        if (res.statusText === 'OK') setRequestMade(true)
+        console.log(res)
+      })
+      .catch(err => setErrors(err))
   }
+
+  const [selectOrigin, setSelectOrigin] = useState<boolean>(false)
+  const [selectDestination, setSelectDestination] = useState<boolean>(false)
+
   return (
     <>
-      <section className='flex flex-col pt-[80px] w-full items-center'>
-        {/*
-          {geoLocation && (
-            <GoogleMap
-              center={center}
-              zoom={15}
-              mapContainerStyle={{ width: '100%', height: '450px' }}
-              options={{
-                zoomControl: false,
-                streetViewControl: false,
-                mapTypeControl: false,
-                fullscreenControl: false
-              }}
-            >
-              {directionResponse && (
-                <DirectionsRenderer directions={directionResponse} />
-              )}
-            </GoogleMap>
+      <main>
+        <section className='h-screen absolute top-0 left-0 w-screen'>
+          {isLoaded && (
+            <>
+              <GoogleMap
+                center={center}
+                zoom={15}
+                mapContainerStyle={{
+                  width: '100%',
+                  height: '70vh',
+                  transition: '0.3s ease all',
+                  transform:
+                    selectOrigin || selectDestination
+                      ? 'translateY(0)'
+                      : 'translateY(-100%)',
+                  position: 'absolute'
+                }}
+                options={{
+                  zoomControl: false,
+                  streetViewControl: false,
+                  mapTypeControl: false,
+                  fullscreenControl: false
+                }}
+              >
+                {directionResponse && (
+                  <DirectionsRenderer directions={directionResponse} />
+                )}
+              </GoogleMap>
+              <div className='mt-[70vh] h-[30vh] grid place-content-center'>
+                {selectOrigin && (
+                  <>
+                    <div className='relative'>
+                      <div className='absolute h-full grid place-content-center'>
+                        <div className='flex items-center gap-2 pl-[10px]'>
+                          <SearchIcon />
+                          {!position?.origin && <div>Origen</div>}
+                        </div>
+                      </div>
+                      <div className='flex gap-3'>
+                        <Autocomplete>
+                          <input
+                            {...control}
+                            {...register('pickUpLocation')}
+                            placeholder=''
+                            onChange={evt => {
+                              setValue('pickUpLocation', evt.target.value)
+                              setPosition({
+                                destination: getValues('destinationLocation'),
+                                origin: evt.target.value
+                              })
+                            }}
+                            className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
+                          />
+                        </Autocomplete>
+                        <div
+                          onClick={() => {
+                            setSelectOrigin(false)
+                          }}
+                          className='cursor-pointer rounded-xl shadow-lg grid place-content-center px-5 border bg-[--main-yellow]'
+                        >
+                          <CheckIcon />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+                {selectDestination && (
+                  <>
+                    <div className='relative'>
+                      <div className='absolute h-full grid place-content-center'>
+                        <div className='flex items-center pl-[10px]'>
+                          <SearchIcon />
+                          {!position?.destination && <div>Destino</div>}
+                        </div>
+                      </div>
+                      <div className='flex gap-3'>
+                        <Autocomplete>
+                          <input
+                            {...control}
+                            {...register('destinationLocation')}
+                            placeholder=''
+                            onChange={evt => {
+                              setValue('destinationLocation', evt.target.value)
+                              setPosition({
+                                destination: evt.target.value,
+                                origin: getValues('pickUpLocation')
+                              })
+                            }}
+                            className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
+                          />
+                        </Autocomplete>
+                        <div
+                          onClick={() => {
+                            setSelectDestination(false)
+                          }}
+                          className='cursor-pointer rounded-xl shadow-lg grid place-content-center px-5 border bg-[--main-yellow]'
+                        >
+                          <CheckIcon />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
           )}
-              */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className='flex flex-col pt-4 gap-4 text-black text-center justify-center items-center mb-10 max-w-[90vw]'
+        </section>
+        <section
+          className={`flex flex-col pt-[80px] transition-transform w-screen items-center ${
+            selectOrigin && '-translate-x-full'
+          } ${selectDestination && '-translate-x-full'}`}
         >
-          <h1 className='font-bold text-2xl'> Solicitar conductor </h1>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className='flex flex-col pt-4 gap-4 text-black text-center justify-center items-center  z-50 mb-10 max-w-[95vw]'
+          >
+            <h1 className='font-bold text-2xl'> Solicitar conductor </h1>
 
-          <div className='grid gap-4'>
-            <div className='flex flex-col'>
-              <input
-                {...register('name')}
-                placeholder='Nombre'
+            <div className='grid gap-4 w-full'>
+              <div className='flex flex-col'>
+                <input
+                  {...register('name')}
+                  placeholder='Nombre'
+                  required
+                  className='py-3 rounded-xl bg-white shadow-lg border pl-3 '
+                />
+              </div>
+
+              <div className='flex flex-col'>
+                <input
+                  {...register('cellphone')}
+                  placeholder='Whatsapp'
+                  required
+                  className='py-3 rounded-xl bg-white shadow-lg border pl-3 '
+                />
+              </div>
+
+              <select
                 required
-                className='py-3 rounded-xl bg-white shadow-lg border pl-3 '
-              />
-            </div>
+                {...register('gender')}
+                className='py-3 rounded-xl bg-white shadow-lg border px-3 '
+              >
+                <option value=''>Género</option>
+                <option value='male'>Hombre</option>
+                <option value='female'>Mujer</option>
+                <option value='other'>otro</option>
+              </select>
 
-            <div className='flex flex-col'>
-              <input
-                {...register('cellphone')}
-                placeholder='Whatsapp'
+              <div
+                onClick={() => setSelectOrigin(true)}
+                className='py-3 cursor-pointer z-50 rounded-xl w-full bg-white border shadow-lg borde px-3 flex gap-3 truncate '
+              >
+                <SearchIcon /> {!position?.origin ? 'Origen' : position.origin}
+              </div>
+              <div
+                onClick={() => setSelectDestination(true)}
+                className='py-3 cursor-pointer  rounded-xl w-full bg-white border shadow-lg borde px-3 flex gap-3 truncate '
+              >
+                <SearchIcon />{' '}
+                {!position?.destination ? 'Destino' : position.destination}
+              </div>
+
+              <select
                 required
-                className='py-3 rounded-xl bg-white shadow-lg border pl-3 '
+                {...register('paymentMethod')}
+                className='py-3 rounded-xl bg-white shadow-lg border px-3 w-full '
+              >
+                <option value=''>Método de pago</option>
+                <option value='nequi'>Nequi</option>
+                <option value='daviplata'>Daviplata</option>
+              </select>
+
+              <input
+                required
+                {...register('offeredPrice')}
+                placeholder='$ Valor'
+                min='0'
+                type='number'
+                className='py-3 rounded-xl bg-white shadow-lg border pl-3'
               />
+              <div className='max-w-full'>
+                <textarea
+                  {...register('comments')}
+                  placeholder='Comentarios'
+                  className='py-3 rounded-xl bg-white shadow-lg border pl-3'
+                />
+              </div>
             </div>
-
-            <select
-              required
-              {...register('gender')}
-              className='py-3 rounded-xl bg-white shadow-lg border px-3 '
-            >
-              <option value=''>Género</option>
-              <option value='male'>Hombre</option>
-              <option value='female'>Mujer</option>
-              <option value='other'>otro</option>
-            </select>
-          </div>
-
-          <button
-            type='button'
-            className='py-3 rounded-xl w-full bg-white border shadow-lg borde pl-3 flex gap-3 '
-          >
-            {' '}
-            <SearchIcon /> Origen{' '}
-          </button>
-          <button
-            type='button'
-            className='py-3 rounded-xl w-full bg-white border shadow-lg borde pl-3 flex gap-3 '
-          >
-            {' '}
-            <SearchIcon /> Destino{' '}
-          </button>
-
-          <select
-            required
-            {...register('paymentMethod')}
-            className='py-3 rounded-xl bg-white shadow-lg border px-3 w-full '
-          >
-            <option value=''>Método de pago</option>
-            <option value='nequi'>Nequi</option>
-            <option value='daviplata'>Daviplata</option>
-          </select>
-
-          <input
-            required
-            {...register('offeredPrice')}
-            placeholder='$ Valor'
-            min='0'
-            type='number'
-            className='py-3 rounded-xl bg-white shadow-lg border pl-3'
-          />
-          <div className='max-w-full'>
-            <textarea
-              {...register('comments')}
-              placeholder='Comentarios'
-              className='py-3 rounded-xl bg-white shadow-lg border pl-3'
-            />
-          </div>
-          {!requestMade && (
-            <button
-              disabled={loading}
-              type='submit'
-              className={`bg-amber-400 rounded-2xl max-w-fit font-bold text-black px-3 py-2`}
-            >
-              {loading ? 'Solicitando...' : 'Solicitar servicio'}
-            </button>
-          )}
-          {requestMade && (
-            <span className='text-black'>
-              {' '}
-              Tu carrera ha sido solicitada, espera instrucciones en tu télefono
-            </span>
-          )}
-        </form>
-      </section>
+            {!requestMade && (
+              <button
+                disabled={loading}
+                type='submit'
+                className={`bg-amber-400 rounded-2xl shadow-lg max-w-fit font-bold text-black px-3 py-2`}
+              >
+                {loading ? 'Solicitando...' : 'Solicitar servicio'}
+              </button>
+            )}
+            {requestMade && (
+              <span className='text-black'>
+                {' '}
+                Tu carrera ha sido solicitada, espera instrucciones en tu
+                télefono
+              </span>
+            )}
+          </form>
+        </section>
+      </main>
     </>
   )
 }
