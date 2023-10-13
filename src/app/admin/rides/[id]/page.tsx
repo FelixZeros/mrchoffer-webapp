@@ -37,8 +37,8 @@ const RideDetails = (props: Props) => {
 
   return (
     <main className={inter.className}>
-      <h1 className='text-4xl font-bold dark:text-gray-200 mb-10'>
-        Solicitud de viaje #{id}
+      <h1 className='text-4xl font-bold text-black mb-10'>
+        Solicitud #{id}
       </h1>
       {isLoading
         ? (
@@ -51,7 +51,7 @@ const RideDetails = (props: Props) => {
                 className='bg-white overflow-hidden shadow rounded-3xl border drop-shadow'>
                 <div className='px-4 py-5 sm:p-6 bg-gray-300'>
                   <h3 className='text-lg leading-6 font-medium text-black'>
-                    <strong>INFORMAICON GENERAL</strong>
+                    <strong>INFORMACIÓN GENERAL</strong>
                   </h3>
                 </div>
 
@@ -238,7 +238,7 @@ const RideDetails = (props: Props) => {
                 className='bg-white overflow-hidden shadow rounded-3xl border mt-3 drop-shadow'>
                 <div className='px-4 py-5 sm:p-6 bg-gray-300 '>
                   <h3 className='text-lg leading-6 font-medium text-black'>
-                    <strong>INFORMAICON CONDUCTOR</strong>
+                    <strong>INFORMACIÓN CONDUCTOR</strong>
                   </h3>
                 </div>
 
@@ -380,7 +380,7 @@ const RideDetails = (props: Props) => {
               className='bg-white overflow-hidden shadow rounded-3xl col-span-2 border h-full w-full drop-shadow'>
               <div className='px-4 py-5 sm:p-6 bg-gray-300'>
                 <h3 className='text-lg leading-6 font-medium text-black'>
-                  <strong>INFORMAICON DEL VIAJE</strong>
+                  <strong>INFORMACIÓN DEL VIAJE</strong>
                 </h3>
               </div>
 
@@ -406,11 +406,7 @@ const RideDetails = (props: Props) => {
                     </dt>
                     <dd
                       className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {Intl.DateTimeFormat('es-CO', {
-                        dateStyle: 'short',
-                        timeStyle: 'short',
-                        timeZone: 'America/Bogota'
-                      }).format(new Date(data?.request_time as string))}
+
                     </dd>
                   </div>
                 </dl>
