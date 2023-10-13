@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ['latin'] })
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   const [supabase] = useState(() => createBrowserSupabaseClient())
   const { pathname } = location
-  console.log(pathname)
+  
   return (
     <html lang='en'>
       <head />
