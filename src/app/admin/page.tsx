@@ -20,7 +20,7 @@ import {
 import axios from 'axios'
 import NextLink from 'next/link'
 import { type FC, useMemo, useState } from 'react'
-import { Filters } from './components/filter'
+import { BlockedFilters, FiltersGenerics } from './components/filters'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -248,12 +248,25 @@ const AdminPage: FC = () => {
           </Tab>
         </Tab.List>
         <Tab.Panels>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <BlockedFilters />
+          </Tab.Panel>
         </Tab.Panels>
-        <Filters />
         {isLoading && <div>Cargando...</div>}
         {!isLoading && data !== undefined && (
           <>
@@ -296,7 +309,7 @@ const AdminPage: FC = () => {
               </table>
             </div>
 
-          <div className='h-2' />
+            <div className='h-2' />
 
             <nav className='flex justify-end'>
               <ul className='inline-flex  items-center -space-x-px'>

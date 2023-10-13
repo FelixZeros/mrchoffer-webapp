@@ -1,6 +1,6 @@
 import { AvatarIcon } from "@/components/icons/avatar";
 import { BillIcon } from "@/components/icons/bill";
-import { CarIcon } from "@/components/icons/car";
+import { GroupIcon } from "@/components/icons/group";
 import { DocumentCheckIcon } from "@/components/icons/document-check";
 
 
@@ -24,7 +24,7 @@ export const Routes: Route[] = [
     {
         href: 'admin/',
         name: 'Conductores',
-        Icon: CarIcon
+        Icon: GroupIcon
     },
     {
         href: 'admin/facturacion',

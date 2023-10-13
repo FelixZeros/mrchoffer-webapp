@@ -14,7 +14,11 @@ import axios from 'axios'
 import { Tab } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, type FC } from 'react'
-import { FiltersRides } from './components/filters'
+import {
+  ClosedFilters,
+  HistoryFilters,
+  InputFilters
+} from './components/filters'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -126,7 +130,6 @@ const RidesPage: FC = () => {
   function classNames(...classes: Array<string | boolean>) {
     return classes.filter(Boolean).join(' ')
   }
-  
 
   return (
     <main className='grid'>
@@ -141,7 +144,7 @@ const RidesPage: FC = () => {
               )
             }
           >
-           Entradas
+            Entradas
           </Tab>
           <Tab
             className={({ selected }) =>
@@ -167,14 +170,17 @@ const RidesPage: FC = () => {
           </Tab>
         </Tab.List>
         <Tab.Panels>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <InputFilters />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <ClosedFilters />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <HistoryFilters />
+          </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-
-        <FiltersRides/>
 
       <div className='relative overflow-x-auto'>
         <table className='w-full text-sm text-center text-black overflow-auto'>
