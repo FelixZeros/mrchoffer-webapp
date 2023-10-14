@@ -41,25 +41,32 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
   }
   const [isVisible, setIsVisible] = useState(true);
   return (
-    <div className="flex flex-row">
+    <div className="flex justify-end">
       <div
-        className={isVisible ? "w-1/5 transition-transform duration-300 ease-in-out" : "transform -translate-x-full transition-transform duration-300 ease-in-out"}>
-        <AsideBar isVisible={isVisible}/>
-      </div>
-      <div style={isVisible ? {left: "20%"} : {}}
-           className="h-full  absolute flex flex-col top-0 p-2 left-0  justify-center items-center">
+      >
+        <div
+
+          className={isVisible ? " fixed w-1/4 h-screen transform -translate-x-full transition-transform duration-500 ease-in-out" : "fixed w-1/4 h-screen transform -translate-x-full transition-transform duration-500 ease-in-out"}>
+          <AsideBar isVisible={isVisible}/>
+
+        </div>
         <button
-          className="w-6 h-1/6 bg-[#181818] rounded-tr-full fixed rounded-br-full self-center"
-          onClick={toggleAside}
+          className={`transition-all w-6 h-1/5 bg-[#181818] rounded-tr-full fixed rounded-br-full  bottom-1/2 ${isVisible ? "  self-center transition-transform duration-500 ease-in-out" : " transform -translate-x-1/4  transition-transform duration-500 ease-in-out"}`}
+          onClick={() => {
+            setIsVisible(!isVisible)
+          }}
         >
           <div
-            className={isVisible ? "rotate-0 transition-all duration-500" : ` rotate-180 transition-all duration-500`}>
+            className={isVisible ? "rotate-0 transition-all duration-500 text-white" : `text-white rotate-180 transition-all duration-500`}>
 
             <Arow/>
           </div>
         </button>
       </div>
-      <div className={`${isVisible ? "w-4/5" : "w-full"}`}>
+
+
+      <div
+        className={`${isVisible ? " w-3/4 transform-origin: right duration-500 ease-in-out " : "w-full transform-origin: left duration-500 ease-in-out "}`}>
         <section className="w-full h-full">
           <div className="p-4 pl-8 ">
             <HeaderAdmin/>
@@ -68,7 +75,8 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
               {children}
             </div>
           </div>
-          <Footer width={`${isVisible ? "w-4/5" : "w-full"}`}></Footer>
+          <Footer
+            width={`${isVisible ? "w-4/5 transition-all" : "w-full transition-all"}`}></Footer>
         </section>
       </div>
     </div>
