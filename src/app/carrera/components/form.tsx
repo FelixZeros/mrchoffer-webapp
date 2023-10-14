@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import {
   useJsApiLoader,
@@ -18,7 +18,6 @@ import { SearchIcon } from '@/components/icons/magnifyng-glass'
 import { CheckIcon } from '@/components/icons/check'
 const schema = z.object({
   name: z.string(),
-  email: z.string(),
   cellphone: z.string(),
   pickUpLocation: z.string(),
   destinationLocation: z.string(),
@@ -30,7 +29,6 @@ const schema = z.object({
 
 export const RequestRideForm = () => {
   const { geoLocation } = useRequestTravel()
-
   useEffect(() => {
     if (!geoLocation) return
     setLatitude(geoLocation.latitude)
@@ -42,17 +40,21 @@ export const RequestRideForm = () => {
     libraries: ['places']
   })
 
+  const [position, setPosition] = useState<{
+    origin: string
+    destination: string
+  } | null>(null)
+
   const [latitude, setLatitude] = useState<any>()
   const [longitude, setLongitude] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
   const [errors, setErrors] = useState<boolean>(false)
   const [requestMade, setRequestMade] = useState<boolean>(false)
   const center = { lat: latitude || null, lng: longitude || null }
-
-  const [position, setPosition] = useState<{
-    origin: string
-    destination: string
-  } | null>(null)
+  const [selectOrigin, setSelectOrigin] = useState<boolean>(false)
+  const [selectDestination, setSelectDestination] = useState<boolean>(false)
+  const inputOriginRef = useRef<HTMLInputElement | null>(null)
+  const inputDestinationRef = useRef<HTMLInputElement | null>(null)
 
   const { directionResponse, distance, duration, error } = useRoute({
     origin: position?.origin,
@@ -73,7 +75,7 @@ export const RequestRideForm = () => {
         status: 1,
         origin: values.pickUpLocation,
         destination: values.destinationLocation,
-        distance: distance || 1000,
+        distance: distance || 0,
         phoneNumber: values.cellphone,
         price: Number(values.offeredPrice),
         genderPassenger: values.gender,
@@ -81,16 +83,20 @@ export const RequestRideForm = () => {
         paymentMethod: values.paymentMethod,
         startTime: '14:19:53'
       })
-      .then(res => {
-        if (res) setLoading(false)
-        if (res.statusText === 'OK') setRequestMade(true)
-        console.log(res)
-      })
+      .then(res => res.statusText === 'OK' && setRequestMade(true))
       .catch(err => setErrors(err))
+      .finally(() => {
+        setLoading(false)
+        control._reset()
+        setPosition({ origin: '', destination: ''})
+      })
   }
 
-  const [selectOrigin, setSelectOrigin] = useState<boolean>(false)
-  const [selectDestination, setSelectDestination] = useState<boolean>(false)
+  useEffect(() => {
+    setTimeout(()=>{
+      setRequestMade(false)
+    }, 10000)
+  }, [requestMade])
 
   return (
     <>
@@ -129,7 +135,9 @@ export const RequestRideForm = () => {
                       <div className='absolute h-full grid place-content-center'>
                         <div className='flex items-center gap-2 pl-[10px]'>
                           <SearchIcon />
-                          {!position?.origin && <div>Origen</div>}
+                          {!position?.origin && (
+                            <div className='pointer-events-none'>Origen</div>
+                          )}
                         </div>
                       </div>
                       <div className='flex gap-3'>
@@ -137,25 +145,35 @@ export const RequestRideForm = () => {
                           <input
                             {...control}
                             {...register('pickUpLocation')}
-                            placeholder=''
                             onChange={evt => {
                               setValue('pickUpLocation', evt.target.value)
                               setPosition({
                                 destination: getValues('destinationLocation'),
-                                origin: evt.target.value
+                                origin: inputOriginRef.current!.value
                               })
                             }}
+                            ref={inputOriginRef}
+                            placeholder=''
                             className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
                           />
                         </Autocomplete>
-                        <div
-                          onClick={() => {
+                        <button
+                          disabled={!inputOriginRef.current?.value}
+                          onClick={evt => {
                             setSelectOrigin(false)
+                            setValue(
+                              'pickUpLocation',
+                              inputOriginRef.current!.value
+                            )
+                            setPosition({
+                              destination: getValues('destinationLocation'),
+                              origin: inputOriginRef.current!.value
+                            })
                           }}
-                          className='cursor-pointer rounded-xl shadow-lg grid place-content-center px-5 border bg-[--main-yellow]'
+                          className='cursor-pointer rounded-xl shadow-lg grid place-content-center px-5 border bg-[--main-yellow] disabled:bg-gray-300'
                         >
                           <CheckIcon />
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </>
@@ -174,25 +192,35 @@ export const RequestRideForm = () => {
                           <input
                             {...control}
                             {...register('destinationLocation')}
-                            placeholder=''
                             onChange={evt => {
                               setValue('destinationLocation', evt.target.value)
                               setPosition({
-                                destination: evt.target.value,
+                                destination: inputDestinationRef.current!.value,
                                 origin: getValues('pickUpLocation')
                               })
                             }}
+                            ref={inputDestinationRef}
+                            placeholder=''
                             className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
                           />
                         </Autocomplete>
-                        <div
-                          onClick={() => {
+                        <button
+                          disabled={!inputDestinationRef.current?.value}
+                          onClick={evt => {
                             setSelectDestination(false)
+                            setValue(
+                              'destinationLocation',
+                              inputDestinationRef.current!.value
+                            )
+                            setPosition({
+                              destination: inputDestinationRef.current!.value,
+                              origin: getValues('pickUpLocation')
+                            })
                           }}
-                          className='cursor-pointer rounded-xl shadow-lg grid place-content-center px-5 border bg-[--main-yellow]'
+                          className='cursor-pointer rounded-xl shadow-lg grid place-content-center px-5 border bg-[--main-yellow] disabled:bg-gray-300'
                         >
                           <CheckIcon />
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </>
@@ -228,6 +256,16 @@ export const RequestRideForm = () => {
                   placeholder='Whatsapp'
                   required
                   className='py-3 rounded-xl bg-white shadow-lg border pl-3 '
+                />
+                <input
+                  type='hidden'
+                  {...register('pickUpLocation')}
+                  value={inputOriginRef.current?.value}
+                />
+                <input
+                  type='hidden'
+                  {...register('destinationLocation')}
+                  value={inputDestinationRef.current?.value}
                 />
               </div>
 
@@ -286,7 +324,7 @@ export const RequestRideForm = () => {
               <button
                 disabled={loading}
                 type='submit'
-                className={`bg-amber-400 rounded-2xl shadow-lg max-w-fit font-bold text-black px-3 py-2`}
+                className={`bg-amber-400 rounded-2xl shadow-lg max-w-fit font-bold text-black px-3 py-2 disabled:bg-gray-300`}
               >
                 {loading ? 'Solicitando...' : 'Solicitar servicio'}
               </button>
