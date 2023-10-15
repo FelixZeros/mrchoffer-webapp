@@ -312,7 +312,26 @@ const AdminPage: FC = () => {
                     Anterior
                   </button>
                 </li>
-
+                <li>
+                  <button
+                    onClick={() => {
+                      table.nextPage()
+                    }}
+                    className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
+                  >
+                    1
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      table.nextPage()
+                    }}
+                    className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
+                  >
+                    2
+                  </button>
+                </li>
                 <li>
                   <button
                     onClick={() => {
