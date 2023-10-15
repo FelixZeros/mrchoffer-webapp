@@ -320,7 +320,8 @@ const AdminPage: FC = () => {
 
                                             table.previousPage()
                                         }}
-                                        className='flex items-center gap-1 px-3 py-2 ml-0 leading-tight rounded-l-lg text-black bg-[--main-yellow]'
+                                        disabled={!table.getCanPreviousPage()}
+                                        className='flex items-center gap-1 px-3 py-2 disabled:bg-amber-50 disabled:border-2 border-2 disabled:border-[--main-yellow] border-[--main-yellow] ml-0 leading-tight rounded-l-lg text-black bg-[--main-yellow]'
                                     >
                                         <LeftArrow/>
                                         Anterior
@@ -331,7 +332,7 @@ const AdminPage: FC = () => {
                                         onClick={() => {
 
                                         }}
-                                        className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
+                                        className='flex items-center gap-1 px-3 py-2 leading-tight rounded-l-lg border-2  border-[--main-yellow] rounded-r-lg text-black bg-[--main-yellow]'
                                     >
                                         1
                                     </button>
@@ -341,7 +342,7 @@ const AdminPage: FC = () => {
                                         onClick={() => {
 
                                         }}
-                                        className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
+                                        className='flex items-center gap-1 px-3 py-2 leading-tight rounded-l-lg rounded-r-lg border-2  border-[--main-yellow] text-black bg-[--main-yellow]'
                                     >
                                         2
                                     </button>
@@ -349,10 +350,22 @@ const AdminPage: FC = () => {
                                 <li>
                                     <button
                                         onClick={() => {
+
+                                        }}
+                                        className='flex items-center gap-1 px-3 py-2 leading-tight rounded-l-lg rounded-r-lg border-2  border-[--main-yellow] text-black bg-[--main-yellow]'
+                                    >
+                                        3
+                                    </button>
+                                </li>
+                                <li>
+
+                                    <button
+                                        onClick={() => {
                                             table.nextPage()
 
                                         }}
-                                        className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
+                                        disabled={!table.getCanNextPage()}
+                                        className='flex disabled:bg-amber-50 disabled:border-2 disabled:border-[--main-yellow] items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
                                     >
                                         Siguiente
                                         <RightArrow/>

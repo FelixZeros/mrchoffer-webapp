@@ -6,11 +6,8 @@ import Logo from '../../../../public/logo.svg'
 import {Dispatch, SetStateAction, useState} from "react";
 import {Arow} from "@/components/icons/arow";
 
-interface Props {
-  isVisible: boolean;
-}
 
-export const AsideBar = ({isVisible}: Props) => {
+export const AsideBar = () => {
 
   return <aside
     className={"w-full h-screen bg-[#181818] "}
