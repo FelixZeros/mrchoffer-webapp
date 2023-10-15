@@ -1,10 +1,30 @@
-
-
 export const CarIcon = () => {
-
-
-    return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-  </svg>
-  
+  return (
+    <svg
+      version='1.0'
+      id='Layer_1'
+      xmlns='http://www.w3.org/2000/svg'
+      width='24px'
+      height='24px'
+      viewBox='0 0 64 64'
+      enable-background='new 0 0 64 64'
+      fill='#000000'
+    >
+      <g id='SVGRepo_bgCarrier' stroke-width='0'></g>
+      <g
+        id='SVGRepo_tracerCarrier'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='#CCCCCC'
+        stroke-width='0.128'
+      ></g>
+      <g id='SVGRepo_iconCarrier'>
+        {' '}
+        <path
+          fill='#231F20'
+          d='M60,28c0-8.301-5.016-24-24-24h-8C9.016,4,4,19.699,4,28c-2.211,0-4,1.789-4,4v16c0,2.211,1.789,4,4,4h4v4 c0,2.211,1.789,4,4,4h4c2.211,0,4-1.789,4-4v-4h24v4c0,2.211,1.789,4,4,4h4c2.211,0,4-1.789,4-4v-4h4c2.211,0,4-1.789,4-4V32 C64,29.789,62.211,28,60,28z M16,44c-2.211,0-4-1.789-4-4s1.789-4,4-4s4,1.789,4,4S18.211,44,16,44z M12,28c0-0.652,0.184-16,16-16 h8c15.41,0,15.984,14.379,16,16H12z M48,44c-2.211,0-4-1.789-4-4s1.789-4,4-4s4,1.789,4,4S50.211,44,48,44z'
+        ></path>{' '}
+      </g>
+    </svg>
+  )
 }

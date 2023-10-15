@@ -14,7 +14,11 @@ import axios from 'axios'
 import { Tab } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, type FC } from 'react'
-import { FiltersRides } from './components/filters'
+import {
+  ClosedFilters,
+  HistoryFilters,
+  InputFilters
+} from './components/filters'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -127,7 +131,6 @@ const RidesPage: FC = () => {
     return classes.filter(Boolean).join(' ')
   }
 
-
   return (
     <main className='grid'>
       <Tab.Group>
@@ -141,7 +144,7 @@ const RidesPage: FC = () => {
               )
             }
           >
-           Entradas
+            Entradas
           </Tab>
           <Tab
             className={({ selected }) =>
@@ -167,14 +170,17 @@ const RidesPage: FC = () => {
           </Tab>
         </Tab.List>
         <Tab.Panels>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <InputFilters />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <ClosedFilters />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <HistoryFilters />
+          </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-
-        <FiltersRides/>
 
       <div className='relative overflow-x-auto'>
         <table className='w-full text-sm text-center text-black overflow-auto'>
@@ -196,12 +202,12 @@ const RidesPage: FC = () => {
             {table.getRowModel().rows.map(row => (
               <tr
                 key={row.id}
-                className='bg-white border-b  hover:bg-gray-50'
+                className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
               >
                 {row.getVisibleCells().map(cell => (
                   <td
                     key={cell.id}
-                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap '
+                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

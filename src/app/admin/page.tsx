@@ -1,15 +1,15 @@
 'use client'
 
-import {EyeIcon} from '@/components/icons/eye'
-import {LeftArrow} from '@/components/icons/left-arrow'
-import {PhoneIcon} from '@/components/icons/phone'
-import {RightArrow} from '@/components/icons/right-arrow'
+import { EyeIcon } from '@/components/icons/eye'
+import { LeftArrow } from '@/components/icons/left-arrow'
+import { PhoneIcon } from '@/components/icons/phone'
+import { RightArrow } from '@/components/icons/right-arrow'
 import WhatsappIcon from '@/components/icons/whatsapp'
-import {type Driver, DriverStatus} from '@/types'
-import {Tab} from '@headlessui/react'
-import {Inter} from '@next/font/google'
-import {useSupabaseClient} from '@supabase/auth-helpers-react'
-import {useQuery} from '@tanstack/react-query'
+import { type Driver, DriverStatus } from '@/types'
+import { Tab } from '@headlessui/react'
+import { Inter } from '@next/font/google'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useQuery } from '@tanstack/react-query'
 import {
   type ColumnDef,
   flexRender,
@@ -19,10 +19,10 @@ import {
 } from '@tanstack/react-table'
 import axios from 'axios'
 import NextLink from 'next/link'
-import {type FC, useMemo, useState} from 'react'
-import {Filters} from './components/filter'
+import { type FC, useMemo, useState } from 'react'
+import { BlockedFilters, FiltersGenerics } from './components/filters'
 
-const inter = Inter({subsets: ['latin']})
+const inter = Inter({ subsets: ['latin'] })
 
 function classNames(...classes: Array<string | boolean>) {
   return classes.filter(Boolean).join(' ')
@@ -67,7 +67,7 @@ const AdminPage: FC = () => {
               className='px-2 py-1 text-sm font-medium leading-5 text-white hover:bg-slate-100 rounded-md'
               rel='noreferrer'
             >
-              <WhatsappIcon/>
+              <WhatsappIcon />
             </a>
 
             <a
@@ -76,11 +76,11 @@ const AdminPage: FC = () => {
               className='px-2 py-1 text-sm font-medium leading-5 text-white hover:bg-slate-100 rounded-md'
               rel='noreferrer'
             >
-              <PhoneIcon/>
+              <PhoneIcon />
             </a>
 
             <NextLink href={`/admin/drivers/${info.row.original.id}`}>
-              <EyeIcon/>
+              <EyeIcon />
             </NextLink>
           </div>
         )
@@ -89,7 +89,7 @@ const AdminPage: FC = () => {
     []
   )
 
-  const [{pageIndex, pageSize}, setPagination] = useState<PaginationState>({
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
   })
@@ -107,12 +107,12 @@ const AdminPage: FC = () => {
       pageSize: number
     }
   ) => {
-    const {data} = await axios.get<Driver[]>(
+    const { data } = await axios.get<Driver[]>(
       `/api/drivers?status=${filter}&page=${options.pageIndex}&pageSize=${options.pageSize}`
     )
 
     const transformedData = data.map(driver => {
-      const {data: photoUrl} = supabase.storage
+      const { data: photoUrl } = supabase.storage
         .from('avatars')
         .getPublicUrl(driver.photo_url)
       return {
@@ -125,7 +125,7 @@ const AdminPage: FC = () => {
   }
 
   const [filter, setFilter] = useState<DriverStatus>(DriverStatus.pending)
-  const {data, isLoading} = useQuery(
+  const { data, isLoading } = useQuery(
     ['drivers', filter, fetchDataOptions],
     async () => await fetchDrivers(filter, fetchDataOptions),
     {
@@ -161,17 +161,16 @@ const AdminPage: FC = () => {
   return (
     <main className='grid'>
       <Tab.Group>
-        <Tab.List
-          className='text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
+        <Tab.List className='text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
           <Tab
             onClick={() => {
               setFilter(DriverStatus.pending)
             }}
-            className={({selected}) =>
+            className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -181,11 +180,11 @@ const AdminPage: FC = () => {
             onClick={() => {
               setFilter(DriverStatus.accepted)
             }}
-            className={({selected}) =>
+            className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -195,11 +194,11 @@ const AdminPage: FC = () => {
             onClick={() => {
               setFilter(DriverStatus.rejected)
             }}
-            className={({selected}) =>
+            className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -209,11 +208,11 @@ const AdminPage: FC = () => {
             onClick={() => {
               setFilter(DriverStatus.archived)
             }}
-            className={({selected}) =>
+            className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -223,11 +222,11 @@ const AdminPage: FC = () => {
             onClick={() => {
               setFilter(DriverStatus.archived)
             }}
-            className={({selected}) =>
+            className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -237,11 +236,11 @@ const AdminPage: FC = () => {
             onClick={() => {
               setFilter(DriverStatus.archived)
             }}
-            className={({selected}) =>
+            className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -249,55 +248,68 @@ const AdminPage: FC = () => {
           </Tab>
         </Tab.List>
         <Tab.Panels>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
-          <Tab.Panel className='p-3'></Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <FiltersGenerics />
+          </Tab.Panel>
+          <Tab.Panel className='p-3'>
+            <BlockedFilters />
+          </Tab.Panel>
         </Tab.Panels>
-        <Filters/>
         {isLoading && <div>Cargando...</div>}
         {!isLoading && data !== undefined && (
           <>
             <div className='relative overflow-x-auto rounded-xl shadow'>
               <table className='w-full text-sm text-center '>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
-                {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map(header => (
-                      <th scope='col' className='px-6 py-3' key={header.id}>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
+                  {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map(header => (
+                        <th scope='col' className='px-6 py-3' key={header.id}>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
                 </thead>
                 <tbody>
-                {table.getRowModel().rows.map(row => (
-                  <tr
-                    key={row.id}
-                    className='bg-white border- hover:bg-gray-50'
-                  >
-                    {row.getVisibleCells().map(cell => (
-                      <td
-                        key={cell.id}
-                        className='px-4 py-2 font-medium text-gray-900 whitespace-nowrap'
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                  {table.getRowModel().rows.map(row => (
+                    <tr
+                      key={row.id}
+                      className='bg-white border- hover:bg-gray-50'
+                    >
+                      {row.getVisibleCells().map(cell => (
+                        <td
+                          key={cell.id}
+                          className='px-4 py-2 font-medium text-gray-900 whitespace-nowrap'
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
 
-            <div className='h-2'/>
+            <div className='h-2' />
 
             <nav className='flex justify-end'>
               <ul className='inline-flex  items-center -space-x-px'>
@@ -308,30 +320,11 @@ const AdminPage: FC = () => {
                     }}
                     className='flex items-center gap-1 px-3 py-2 ml-0 leading-tight rounded-l-lg text-black bg-[--main-yellow]'
                   >
-                    <LeftArrow/>
+                    <LeftArrow />
                     Anterior
                   </button>
                 </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      table.nextPage()
-                    }}
-                    className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
-                  >
-                    1
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      table.nextPage()
-                    }}
-                    className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
-                  >
-                    2
-                  </button>
-                </li>
+
                 <li>
                   <button
                     onClick={() => {
@@ -340,7 +333,7 @@ const AdminPage: FC = () => {
                     className='flex items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
                   >
                     Siguiente
-                    <RightArrow/>
+                    <RightArrow />
                   </button>
                 </li>
               </ul>
