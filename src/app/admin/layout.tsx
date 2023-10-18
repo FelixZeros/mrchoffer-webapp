@@ -36,6 +36,11 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
         })
     }, [session, supabase])
 
+    const [asideBarState, setAsideBarState] = useState("")
+    const toggleState = (literal: string) => {
+        setAsideBarState(literal)
+    }
+
     const toggleAside = () => {
         setIsVisible(!isVisible);
     }
@@ -47,7 +52,7 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
                 <div
 
                     className={isVisible ? " fixed w-[20vw] h-screen transform -translate-x-full transition-transform duration-500 ease-in-out" : "fixed w-[20vw] h-screen transform -translate-x-full transition-transform duration-500 ease-in-out"}>
-                    <AsideBar/>
+                    <AsideBar asideBarState={asideBarState} setAsideBarState={toggleState}/>
 
                 </div>
                 <button
