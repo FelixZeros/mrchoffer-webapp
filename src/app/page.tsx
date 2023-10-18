@@ -1,47 +1,32 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import React, { type FC, useEffect, useState } from 'react'
+import React, { type FC, useEffect, useState, useContext } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Image from 'next/image'
-import heroimg from '@/assets/hero-img.png'
 import logo from '@/assets/logo.png'
 import { CloseEye, Eyes } from '@/components/icons/eyes'
 import Link from 'next/link'
-
+import { AuthContext } from '@/auth/Auth-context'
 const HomePage: FC = () => {
+  const router = useRouter()
   const SignInSchema = z.object({
     email: z.string().email('El email no es válido'),
     password: z
       .string()
-      .min(8, 'La contraseña debe tener al menos 8 caracteres')
+      .min(5, 'La contraseña debe tener al menos 5 caracteres')
   })
 
   type SignInFormValues = z.infer<typeof SignInSchema>
-
-  const router = useRouter()
-
-  const [password, setPassword] = useState('')
+  
+  const { loginUser } = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false)
-
-  const handlePasswordChange = (event: any) => {
-    setPassword(event.target.value)
-  }
-
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
-
-  const session = useSession()
-  useEffect(() => {
-    if (session !== null) {
-      router.replace('/admin')
-    }
-  }, [session])
 
   const {
     register,
@@ -51,34 +36,28 @@ const HomePage: FC = () => {
     resolver: zodResolver(SignInSchema)
   })
 
-  const supabase = useSupabaseClient()
-  const { mutate, isLoading } = useMutation(
-    async (data: SignInFormValues) => {
-      const { data: response } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password
-      })
-
-      return response
-    },
-    {
-      onSuccess: () => {
-        router.replace('/admin')
-        router.refresh()
-        window.location.reload()
-      }
+  const onSubmit: SubmitHandler<SignInFormValues> = async data => {
+    try {
+      setIsLoading(true)
+      const IsValidLogin = await loginUser(data.email, data.password)
+      console.log(IsValidLogin)
+      if (!IsValidLogin!) return
+      router.replace('/admin')
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
     }
-  )
-
-  const onSubmit: SubmitHandler<SignInFormValues> = data => {
-    mutate(data)
   }
 
   const isDisabled = isSubmitting || isLoading
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex h-screen w-full justify-center'>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='flex h-screen w-full justify-center'
+      >
         <div className='w-2/3 flex flex-col justify-center '>
           <div className='mb-4'>
             <div className='flex justify-center mb-11'>
@@ -111,8 +90,6 @@ const HomePage: FC = () => {
               placeholder='CONTRASEÑA'
               type={showPassword ? 'text' : 'password'}
               id='password'
-              value={password}
-              onChange={handlePasswordChange}
             />
             <button
               type='button'
