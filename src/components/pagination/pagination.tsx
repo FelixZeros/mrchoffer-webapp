@@ -23,7 +23,7 @@ export const Pagination = ({table, totalPages, currentPage}: Props) => {
       <li key={page}>
         <button
           onClick={() => table.setPageIndex(page)}
-          className={` flex items-center px-3 py-2 w-full h-full border-2 transition-all border-l-0 border-[--main-yellow] hover:bg-[--main-yellow] text-black  bg-[--main-yellow] ${isCurrentPage ? 'bg-[--main-yellow]' : 'bg-white'}`}
+          className={` flex items-center px-2 py-1 w-full h-full border-2 transition-all border-l-0 border-[--main-yellow] hover:bg-[--main-yellow] text-black  bg-[--main-yellow] ${isCurrentPage ? 'bg-[--main-yellow]' : 'bg-white'}`}
         >
           {page + 1}
         </button>
@@ -45,7 +45,7 @@ export const Pagination = ({table, totalPages, currentPage}: Props) => {
                 table.previousPage()
               }}
               disabled={!table.getCanPreviousPage()}
-              className='flex items-center px-3 py-2 border-2  border-[--main-yellow] disabled:bg-white h-full rounded-l-lg text-black bg-[--main-yellow]'
+              className='flex items-center px-2 py-1 border-2  border-[--main-yellow] disabled:bg-white h-full rounded-l-lg text-black bg-[--main-yellow]'
             >
               <LeftArrow/>
               Anterior
@@ -60,7 +60,7 @@ export const Pagination = ({table, totalPages, currentPage}: Props) => {
 
               }}
               disabled={!table.getCanNextPage()}
-              className='flex items-center  px-3 py-2 disabled:bg-white h-full  border-2  border-[--main-yellow] rounded-r-lg  text-black bg-[--main-yellow]'
+              className='flex items-center  px-2 py-1 disabled:bg-white h-full  border-2  border-[--main-yellow] rounded-r-lg  text-black bg-[--main-yellow]'
             >
               Siguiente
               <RightArrow/>

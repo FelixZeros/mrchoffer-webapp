@@ -76,7 +76,7 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
                     <div className="p-4 pl-8 ">
                         <HeaderAdmin/>
                         <div
-                            className="w-full p-4 shadow rounded-lg flex items-center justify-center">
+                            className="w-full h-[80vh] max-h-[80vh] min-h-[80vh] p-4 shadow rounded-lg flex items-center justify-center overflow-auto">
                             {children}
                         </div>
                     </div>

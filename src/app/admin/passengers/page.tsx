@@ -153,15 +153,20 @@ const PassengersPage: FC = () => {
 
     }
     return (
-        <main className='grid'>
+        <main className='items-center w-full h-full '>
+            <div className="p-1 h-[10%]  justify-center items-center">
             <FiltersPassengers/>
-            <div className='relative overflow-x-auto'>
+            </div>
+
+
+
+            <div className='  w-full h-[90%] p-0 items-center justify-center overflow-y-auto overflow-x-auto'>
                 <table className='w-full text-sm text-center'>
                     <thead className='text-xs  bg-gray-50 text-black '>
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map(header => (
-                                <th scope='col' className='px-6 py-3' key={header.id}>
+                                <th scope='col' className='px-2 py-2' key={header.id}>
                                     {flexRender(
                                         header.column.columnDef.header,
                                         header.getContext()
@@ -180,7 +185,7 @@ const PassengersPage: FC = () => {
                             {row.getVisibleCells().map(cell => (
                                 <td
                                     key={cell.id}
-                                    className='px-3 py-2 font-medium  whitespace-nowrap'
+                                    className='px-2 py-2 font-medium  whitespace-nowrap'
                                 >
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
@@ -191,7 +196,6 @@ const PassengersPage: FC = () => {
                 </table>
             </div>
 
-            <div className='h-2'/>
 
             <Pagination totalPages={totalPages} currentPage={currentPage}
                         table={table}/>
