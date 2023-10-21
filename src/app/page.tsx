@@ -20,10 +20,11 @@ const HomePage: FC = () => {
   })
 
   type SignInFormValues = z.infer<typeof SignInSchema>
-  
+
   const { loginUser } = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<any>(null)
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
@@ -40,15 +41,21 @@ const HomePage: FC = () => {
     try {
       setIsLoading(true)
       const IsValidLogin = await loginUser(data.email, data.password)
-      console.log(IsValidLogin)
-      if (!IsValidLogin!) return
+
+      if (!IsValidLogin) {
+        setError('Correo y/o contraseña incorrectos')
+        return
+      }
       router.replace('/admin')
     } catch (err) {
-      console.log(err)
+      setError(err)
     } finally {
       setIsLoading(false)
     }
   }
+  useEffect(() => {
+    setTimeout(()=>setError(null), 5000)
+  }, [error])
 
   const isDisabled = isSubmitting || isLoading
 
@@ -57,7 +64,7 @@ const HomePage: FC = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex h-screen w-full justify-center'
-      >
+        >
         <div className='w-2/3 flex flex-col justify-center '>
           <div className='mb-4'>
             <div className='flex justify-center mb-11'>
@@ -66,7 +73,9 @@ const HomePage: FC = () => {
             <h1 className='flex justify-center text-4xl mb-4'>
               <strong>INICIAR SESION</strong>
             </h1>
-            <span className='block font-medium'></span>
+            <div className='text-center mb-3'>
+            {error !== null && <span className='text-red-600'>{error}</span>}
+            </div>
             <input
               type='text'
               className='w-full px-4 py-2 border rounded-xl drop-shadow outline-none text-xl'
@@ -115,9 +124,9 @@ const HomePage: FC = () => {
             <button
               type='submit'
               disabled={isDisabled}
-              className='block text-lg px-4 py-3 mt-2 rounded-lg bg-yellow-400 text-black hover:bg-blue-700 focus:bg-blue-700 focus:ring-0 outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed w-4/12'
+              className='block text-lg px-4 py-3 mt-2 rounded-lg bg-yellow-400 text-black hover:bg-blue-700 focus:bg-blue-700 focus:ring-0 outline-none disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed w-4/12'
             >
-              <strong>INGRESAR</strong>
+              <strong>{!isLoading ? 'Ingresar' : 'Ingresando...'}</strong>
             </button>
           </div>
         </div>
