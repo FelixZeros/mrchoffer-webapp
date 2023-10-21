@@ -18,7 +18,7 @@ const HomePage: FC = () => {
     email: z.string().email('El email no es válido'),
     password: z
       .string()
-      .min(8, 'La contraseña debe tener al menos 8 caracteres')
+      .min(5, 'La contraseña debe tener al menos 5 caracteres')
   })
 
   type SignInFormValues = z.infer<typeof SignInSchema>
@@ -138,7 +138,7 @@ const HomePage: FC = () => {
             <button
               type='submit'
               disabled={isDisabled}
-              className='block text-lg px-4 py-3 mt-2 rounded-lg bg-yellow-400 text-black hover:bg-blue-700 focus:bg-blue-700 focus:ring-0 outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed w-4/12'
+              className='block text-lg px-4 py-3 mt-2 rounded-lg bg-yellow-400 text-black hover:bg-blue-700 focus:bg-blue-700 focus:ring-0 outline-none disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed w-4/12'
             >
               <strong>INGRESAR</strong>
             </button>
