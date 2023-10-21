@@ -36,6 +36,11 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
         })
     }, [session, supabase])
 
+    const [asideBarState, setAsideBarState] = useState("")
+    const toggleState = (literal: string) => {
+        setAsideBarState(literal)
+    }
+
     const toggleAside = () => {
         setIsVisible(!isVisible);
     }
@@ -47,7 +52,7 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
                 <div
 
                     className={isVisible ? " fixed w-[20vw] h-screen transform -translate-x-full transition-transform duration-500 ease-in-out" : "fixed w-[20vw] h-screen transform -translate-x-full transition-transform duration-500 ease-in-out"}>
-                    <AsideBar/>
+                    <AsideBar asideBarState={asideBarState} setAsideBarState={toggleState}/>
 
                 </div>
                 <button
@@ -71,7 +76,7 @@ const RootLayout: FC<PropsWithChildren> = ({children}) => {
                     <div className="p-4 pl-8 ">
                         <HeaderAdmin/>
                         <div
-                            className="w-full p-4 shadow rounded-lg flex items-center justify-center">
+                            className="w-full h-[80vh] max-h-[80vh] min-h-[80vh] p-4 shadow rounded-lg flex items-center justify-center overflow-auto">
                             {children}
                         </div>
                     </div>

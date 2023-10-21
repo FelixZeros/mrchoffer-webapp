@@ -20,6 +20,7 @@ import {
 } from "@/app/admin/rides/components/filters";
 import {LeftArrow} from "@/components/icons/left-arrow";
 import {RightArrow} from "@/components/icons/right-arrow";
+import {Pagination} from "@/components/pagination/pagination";
 
 
 const inter = Inter({subsets: ['latin']})
@@ -154,127 +155,114 @@ const RidesPage: FC = () => {
         );
     }
     return (
-        <main className='grid'>
+        <main className='items-center w-full h-full '>
             <Tab.Group>
-                <Tab.List
-                    className='text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
-                    <Tab
-                        className={({selected}) =>
-                            classNames(
-                                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
-                                selected &&
-                                'text-[--main-yellow] border-[--main-yellow] border-b-3'
-                            )
-                        }
-                    >
-                        Entradas
-                    </Tab>
-                    <Tab
-                        className={({selected}) =>
-                            classNames(
-                                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
-                                selected &&
-                                'text-[--main-yellow] border-[--main-yellow] border-b-3'
-                            )
-                        }
-                    >
-                        Cerradas
-                    </Tab>
-                    <Tab
-                        className={({selected}) =>
-                            classNames(
-                                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
-                                selected &&
-                                'text-[--main-yellow] border-[--main-yellow] border-b-3'
-                            )
-                        }
-                    >
-                        Historial
-                    </Tab>
-                </Tab.List>
-                <Tab.Panels>
-                    <Tab.Panel className='p-3'>
-                        <InputFilters/>
-                    </Tab.Panel>
-                    <Tab.Panel className='p-3'>
-                        <ClosedFilters/>
-                    </Tab.Panel>
-                    <Tab.Panel className='p-3'>
-                        <HistoryFilters/>
-                    </Tab.Panel>
+                <div className="w-full h-[12%] flex  justify-center items-center">
+                    <Tab.List
+                        className='relative left-0 right-0 text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
+                        <Tab
+                            className={({selected}) =>
+                                classNames(
+                                    'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                                    selected &&
+                                    'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                                )
+                            }
+                        >
+                            Entradas
+                        </Tab>
+                        <Tab
+                            className={({selected}) =>
+                                classNames(
+                                    'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                                    selected &&
+                                    'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                                )
+                            }
+                        >
+                            Cerradas
+                        </Tab>
+                        <Tab
+                            className={({selected}) =>
+                                classNames(
+                                    'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
+                                    selected &&
+                                    'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                                )
+                            }
+                        >
+                            Historial
+                        </Tab>
+                    </Tab.List>
+                </div>
+                <Tab.Panels className=" w-full h-[10%] p-0 items-center justify-center">
+                    <div className="   justify-center  items-center">
+                        <Tab.Panel className=''>
+                            <InputFilters/>
+                        </Tab.Panel>
+                        <Tab.Panel className=''>
+                            <ClosedFilters/>
+                        </Tab.Panel>
+                        <Tab.Panel className=''>
+                            <HistoryFilters/>
+                        </Tab.Panel>
+                    </div>
                 </Tab.Panels>
+
+
             </Tab.Group>
 
-            <div className='relative overflow-x-auto'>
-                <table className='w-full text-sm text-center text-black overflow-auto'>
-                    <thead className='text-x bg-gray-50 '>
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map(header => (
-                                <th scope='col' className='px-6 py-3' key={header.id}>
-                                    {flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                    )}
-                                </th>
-                            ))}
-                        </tr>
+<div className="h-[70%] max-h-[67%] overflow-x-auto overflow-y-auto">
+    <div className='relative '>
+        <table className='text-sm text-center text-black '>
+
+            <thead className='text-x bg-gray-50 '>
+            {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                        <th scope='col' className='px-2 py-2' key={header.id}>
+                            {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                            )}
+                        </th>
                     ))}
-                    </thead>
-                    <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr
-                            key={row.id}
-                            className='bg-white border-b hover:bg-gray-50 '
+                </tr>
+            ))}
+            </thead>
+
+
+            <tbody>
+            {table.getRowModel().rows.map(row => (
+                <tr
+                    key={row.id}
+                    className='bg-white border-b hover:bg-gray-50 '
+                >
+                    {row.getVisibleCells().map(cell => (
+                        <td
+                            key={cell.id}
+                            className='px-2 py-2 w-full font-medium text-gray-900 whitespace-nowrap '
                         >
-                            {row.getVisibleCells().map(cell => (
-                                <td
-                                    key={cell.id}
-                                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap '
-                                >
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
-                        </tr>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
                     ))}
-                    </tbody>
-                </table>
-            </div>
+                </tr>
+            ))}
+            </tbody>
 
-            <div className='h-2'/>
+        </table>
+    </div>
 
-            <nav className='flex justify-end'>
-                <ul className='inline-flex  items-center -space-x-px'>
-                    <li>
-                        <button
-                            onClick={() => {
 
-                                table.previousPage()
-                            }}
-                            disabled={!table.getCanPreviousPage()}
-                            className='flex items-center gap-1 px-3 py-2 disabled:bg-amber-50 disabled:border-2 border-2 disabled:border-[--main-yellow] border-[--main-yellow] ml-0 leading-tight rounded-l-lg text-black bg-[--main-yellow]'
-                        >
-                            <LeftArrow/>
-                            Anterior
-                        </button>
-                    </li>
-                    {pageButtons}
-                    <li>
 
-                        <button
-                            onClick={() => {
-                                table.nextPage()
+</div>
 
-                            }}
-                            disabled={!table.getCanNextPage()}
-                            className='flex disabled:bg-amber-50 disabled:border-2 disabled:border-[--main-yellow] items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
-                        >
-                            Siguiente
-                            <RightArrow/>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+
+<div className="p-1 pt-3">
+
+            <Pagination totalPages={totalPages} currentPage={currentPage}
+                        table={table}/>
+</div>
         </main>
     )
 }
