@@ -19,18 +19,20 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
   const [isVisible, setIsVisible] = useState(true)
 
-  const { isLoggedIn } = useContext(AuthContext)
-  useEffect(() => {
-    if (!isLoggedIn) router.replace('/')
-  }, [isLoggedIn])
+  const { isLoggedIn, user } = useContext(AuthContext)
 
   useEffect(() => {
+    if (!isLoggedIn || user?.type !== 'company' && user?.type !== 'admin' ) router.replace('/')
+    return;
+  }, [isLoggedIn])
+
+  useEffect(()=>{
     router.refresh()
-  }, [])
+  },[])
 
   return (
     <div className='flex justify-end'>
-      {isLoggedIn && (
+      {isLoggedIn && user?.type ==='company' && (
         <>
           <div>
             <div

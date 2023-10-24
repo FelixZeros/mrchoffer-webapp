@@ -10,22 +10,26 @@ const AUTH_INITIAL_STATE: AuthState = {
 };
 
 export const AuthProvider: FC<any> = ({ children }) => {
-    
+
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
 
-  const loginUser = async ( email: string, password: string ): Promise<boolean> => {
+  const loginUser = async (email: string, password: string): Promise<boolean> => {
     try {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_API_AUTH!,
         {
-            email,
-            password,
+          email,
+          password,
         }
       );
-      if ( !response ) return false;
-      dispatch({ type: '[Auth] - Login', payload: response.data.user as IUserSession});
-      return true;
+      if (!response) return false;
+      if (response.data.user.type === 'company') {
+        
+        dispatch({ type: '[Auth] - Login', payload: response.data.user as IUserSession 
       
+      });}
+      return true;
+
     } catch (error) {
       console.error('Error during login:', error);
       return false;
