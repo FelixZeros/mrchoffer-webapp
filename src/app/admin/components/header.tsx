@@ -1,7 +1,8 @@
 'use client'
 
+import { AuthContext } from "@/auth/Auth-context"
 import { AvatarIcon } from "@/components/icons/avatar"
-import { useState } from "react"
+import { useContext, useState } from "react"
 
 export const HeaderAdmin = () => {
 

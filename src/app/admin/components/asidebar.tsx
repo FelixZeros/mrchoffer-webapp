@@ -1,6 +1,7 @@
-import {PowerIcon} from '@/components/icons/power'
+'use State'
+import { PowerIcon } from '@/components/icons/power'
 import NextLink from 'next/link'
-import {Routes} from '../utils/aside-items'
+import { Routes } from '../utils/aside-items'
 import Image from 'next/image'
 import Logo from '../../../../public/logo.svg'
 import {Dispatch, SetStateAction, useEffect, useState} from "react";

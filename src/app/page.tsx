@@ -1,19 +1,17 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import React, { type FC, useEffect, useState } from 'react'
+import React, { type FC, useEffect, useState, useContext } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import Image from 'next/image'
-import heroimg from '@/assets/hero-img.png'
 import logo from '@/assets/logo.png'
 import { CloseEye, Eyes } from '@/components/icons/eyes'
 import Link from 'next/link'
-
+import { AuthContext } from '@/auth/Auth-context'
 const HomePage: FC = () => {
+  const router = useRouter()
   const SignInSchema = z.object({
     email: z.string().email('El email no es válido'),
     password: z
@@ -23,25 +21,13 @@ const HomePage: FC = () => {
 
   type SignInFormValues = z.infer<typeof SignInSchema>
 
-  const router = useRouter()
-
-  const [password, setPassword] = useState('')
+  const { loginUser } = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false)
-
-  const handlePasswordChange = (event: any) => {
-    setPassword(event.target.value)
-  }
-
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<any>(null)
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
-
-  const session = useSession()
-  useEffect(() => {
-    if (session !== null) {
-      router.replace('/admin')
-    }
-  }, [session])
 
   const {
     register,
@@ -51,34 +37,34 @@ const HomePage: FC = () => {
     resolver: zodResolver(SignInSchema)
   })
 
-  const supabase = useSupabaseClient()
-  const { mutate, isLoading } = useMutation(
-    async (data: SignInFormValues) => {
-      const { data: response } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password
-      })
+  const onSubmit: SubmitHandler<SignInFormValues> = async data => {
+    try {
+      setIsLoading(true)
+      const IsValidLogin = await loginUser(data.email, data.password)
 
-      return response
-    },
-    {
-      onSuccess: () => {
-        router.replace('/admin')
-        router.refresh()
-        window.location.reload()
+      if (!IsValidLogin) {
+        setError('Correo y/o contraseña incorrectos')
+        return
       }
+      router.replace('/admin')
+    } catch (err) {
+      setError(err)
+    } finally {
+      setIsLoading(false)
     }
-  )
-
-  const onSubmit: SubmitHandler<SignInFormValues> = data => {
-    mutate(data)
   }
+  useEffect(() => {
+    setTimeout(()=>setError(null), 5000)
+  }, [error])
 
   const isDisabled = isSubmitting || isLoading
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex h-screen w-full justify-center'>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='flex h-screen w-full justify-center'
+        >
         <div className='w-2/3 flex flex-col justify-center '>
           <div className='mb-4'>
             <div className='flex justify-center mb-11'>
@@ -87,7 +73,9 @@ const HomePage: FC = () => {
             <h1 className='flex justify-center text-4xl mb-4'>
               <strong>INICIAR SESION</strong>
             </h1>
-            <span className='block font-medium'></span>
+            <div className='text-center mb-3'>
+            {error !== null && <span className='text-red-600'>{error}</span>}
+            </div>
             <input
               type='text'
               className='w-full px-4 py-2 border rounded-xl drop-shadow outline-none text-xl'
@@ -111,8 +99,6 @@ const HomePage: FC = () => {
               placeholder='CONTRASEÑA'
               type={showPassword ? 'text' : 'password'}
               id='password'
-              value={password}
-              onChange={handlePasswordChange}
             />
             <button
               type='button'
@@ -140,7 +126,7 @@ const HomePage: FC = () => {
               disabled={isDisabled}
               className='block text-lg px-4 py-3 mt-2 rounded-lg bg-yellow-400 text-black hover:bg-blue-700 focus:bg-blue-700 focus:ring-0 outline-none disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed w-4/12'
             >
-              <strong>INGRESAR</strong>
+              <strong>{!isLoading ? 'Ingresar' : 'Ingresando...'}</strong>
             </button>
           </div>
         </div>
