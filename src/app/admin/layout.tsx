@@ -22,17 +22,27 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   const { isLoggedIn, user } = useContext(AuthContext)
 
   useEffect(() => {
-    if (!isLoggedIn || user?.type !== 'company' && user?.type !== 'admin' ) router.replace('/')
-    return;
+    if (!isLoggedIn || (user?.type !== 'company' && user?.type !== 'admin'))
+      router.replace('/')
+    return
   }, [isLoggedIn])
 
-  useEffect(()=>{
+  useEffect(() => {
     router.refresh()
-  },[])
+  }, [])
+
+  const [asideBarState, setAsideBarState] = useState('')
+  const toggleState = (literal: string) => {
+    setAsideBarState(literal)
+  }
+
+  const toggleAside = () => {
+    setIsVisible(!isVisible)
+  }
 
   return (
     <div className='flex justify-end'>
-      {isLoggedIn && user?.type ==='company' && (
+      {isLoggedIn && user?.type === 'company' && (
         <>
           <div>
             <div
@@ -42,7 +52,10 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
                   : 'fixed w-[20vw] h-screen transform -translate-x-full transition-transform duration-500 ease-in-out'
               }
             >
-              <AsideBar />
+              <AsideBar
+                asideBarState={asideBarState}
+                setAsideBarState={toggleState}
+              />
             </div>
             <button
               className={`transition-all w-6 h-1/5 bg-[#181818] rounded-tr-full fixed rounded-br-full  bottom-1/2 ${
@@ -76,7 +89,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
             <section className='w-full h-full'>
               <div className='p-4 pl-8 '>
                 <HeaderAdmin />
-                <div className='w-full p-4 shadow rounded-lg flex items-center justify-center'>
+                <div className='w-full max-h-[80vh] p-4 shadow rounded-lg flex items-center justify-center overflow-auto'>
                   {children}
                 </div>
               </div>

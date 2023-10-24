@@ -22,6 +22,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FC, useMemo, useState } from 'react'
 import { BlockedFilters, FiltersGenerics } from './components/filters'
+import { Pagination } from '@/components/pagination/pagination'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,7 +31,6 @@ function classNames(...classes: Array<string | boolean>) {
 }
 
 const AdminPage: FC = () => {
-
   const columns = useMemo<Array<ColumnDef<Driver>>>(
     () => [
       {
@@ -195,7 +195,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -209,7 +209,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -223,7 +223,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -237,7 +237,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -251,7 +251,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -265,7 +265,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -335,36 +335,9 @@ const AdminPage: FC = () => {
             </div>
 
             <div className='h-2' />
+            <Pagination totalPages={totalPages} currentPage={currentPage}
+              table={table} />
 
-            <nav className='flex justify-end'>
-              <ul className='inline-flex  items-center -space-x-px'>
-                <li>
-                  <button
-                    onClick={() => {
-                      table.previousPage()
-                    }}
-                    disabled={!table.getCanPreviousPage()}
-                    className='flex items-center gap-1 px-3 py-2 disabled:bg-amber-50 disabled:border-2 border-2 disabled:border-[--main-yellow] border-[--main-yellow] ml-0 leading-tight rounded-l-lg text-black bg-[--main-yellow]'
-                  >
-                    <LeftArrow />
-                    Anterior
-                  </button>
-                </li>
-                {pageButtons}
-                <li>
-                  <button
-                    onClick={() => {
-                      table.nextPage()
-                    }}
-                    disabled={!table.getCanNextPage()}
-                    className='flex disabled:bg-amber-50 disabled:border-2 disabled:border-[--main-yellow] items-center gap-1 px-3 py-2 leading-tight rounded-r-lg text-black bg-[--main-yellow]'
-                  >
-                    Siguiente
-                    <RightArrow />
-                  </button>
-                </li>
-              </ul>
-            </nav>
           </>
         )}
       </Tab.Group>

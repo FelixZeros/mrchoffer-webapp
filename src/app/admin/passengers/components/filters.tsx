@@ -3,13 +3,13 @@
 export const FiltersPassengers = () => {
 
 
-    return <div className='flex justify-between my-4'>
+    return <div className='flex justify-between'>
 
-    <div className="flex items-center gap-2"> 
+    <div className="flex items-center gap-2">
 
-    <input id='selectAll' type="checkbox" />    
+    <input id='selectAll' type="checkbox" />
     <label htmlFor="#selectAll" className="text-black">Seleccionar todo</label>
-        
+
     </div>
 
     <div className='flex gap-1'>
