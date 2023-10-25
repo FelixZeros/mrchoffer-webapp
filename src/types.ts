@@ -53,6 +53,16 @@ export type Report = {
   rides: number
 }
 
+export interface Company {
+  id: number
+  userId: number
+  name: string
+  address: string
+  city: string
+  phone: string
+  photo: string
+}
+
 export type Passenger = {
   id: string
   name: string

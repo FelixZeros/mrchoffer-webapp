@@ -20,9 +20,10 @@ import {
 import axios from 'axios'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { type FC, useMemo, useState } from 'react'
+import { type FC, useMemo, useState, useEffect, useContext } from 'react'
 import { BlockedFilters, FiltersGenerics } from './components/filters'
 import { Pagination } from '@/components/pagination/pagination'
+import { AuthContext } from '@/auth/Auth-context'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -165,8 +166,12 @@ const AdminPage: FC = () => {
   const currentPage = table.getState().pagination.pageIndex // Obtiene la página actual
 
   const pageButtons = []
+  const router = useRouter()
+  const { user } = useContext(AuthContext)
+  useEffect(() => {
+    if (user?.type === 'admin') router.replace('admin/empresas')
+  }, [])
 
-  // Genera botones para cada número de página
   for (let page = 0; page < totalPages; page++) {
     const isCurrentPage = page === currentPage
 
@@ -195,7 +200,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -209,7 +214,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -223,7 +228,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -237,7 +242,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -251,7 +256,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -265,7 +270,7 @@ const AdminPage: FC = () => {
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
                 selected &&
-                'text-[--main-yellow] border-[--main-yellow] border-b-3'
+                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
               )
             }
           >
@@ -295,7 +300,6 @@ const AdminPage: FC = () => {
         {isLoading && <div>Cargando...</div>}
         {!isLoading && data !== undefined && (
           <>
-          <h1>AAAAAAAAAAAa</h1>
             <div className='relative overflow-x-auto rounded-xl shadow'>
               <table className='w-full text-sm text-center '>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
@@ -336,9 +340,11 @@ const AdminPage: FC = () => {
             </div>
 
             <div className='h-2' />
-            <Pagination totalPages={totalPages} currentPage={currentPage}
-              table={table} />
-
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              table={table}
+            />
           </>
         )}
       </Tab.Group>

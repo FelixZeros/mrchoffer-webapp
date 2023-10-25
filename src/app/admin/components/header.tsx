@@ -10,8 +10,12 @@ export const HeaderAdmin = () => {
 
   return (
     <div className='h-[60px] mb-4 rounded flex justify-end font-bold items-center gap-2 shadow bg-white text-black px-10'>
-      {user?.company.name}
+      {user?.type === "company" && user.company.name}
+      {user?.type === "admin" && user.admin.name}
+
       <div className='border bg-[--main-yellow] w-10 h-10 grid place-content-center rounded-full'>
+        <AvatarIcon />
+        {/*
         {!user?.company.photo ? (
           <AvatarIcon />
         ) : (
@@ -22,6 +26,7 @@ export const HeaderAdmin = () => {
             src={user.company.photo}
           />
         )}
+        */}
       </div>
     </div>
   )

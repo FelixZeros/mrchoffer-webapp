@@ -41,7 +41,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <div className='flex justify-end'>
-      {isLoggedIn && user?.type === 'company' && (
+      {isLoggedIn && (
         <>
           <div>
             <div
