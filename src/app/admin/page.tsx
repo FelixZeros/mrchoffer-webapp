@@ -295,6 +295,7 @@ const AdminPage: FC = () => {
         {isLoading && <div>Cargando...</div>}
         {!isLoading && data !== undefined && (
           <>
+          <h1>AAAAAAAAAAAa</h1>
             <div className='relative overflow-x-auto rounded-xl shadow'>
               <table className='w-full text-sm text-center '>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50'>

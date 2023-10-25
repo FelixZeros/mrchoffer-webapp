@@ -1,13 +1,9 @@
 'use client'
 
-import { DriverStatus, type Driver, type PassengerRideHistory } from '@/types'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { type Driver } from '@/types'
+import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import clsx from 'clsx'
-import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState, type FC } from 'react'
+import { useEffect, type FC } from 'react'
 import WhatsappIcon from '@/components/icons/whatsapp'
 import Image from 'next/image'
 import { StarIcon } from '@/components/icons/star'
@@ -18,17 +14,6 @@ type Props = {
     id: string
   }
 }
-
-const DriverPage: FC<Props> = ({ params }) => {
-  const { data: driver, isLoading } = useQuery<Driver>(
-    ['drivers', params.id],
-    async () => {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_API}/api/drivers/${params.id}`
-      )
-      return data
-    }
-  )
 
   return (
     <section>
