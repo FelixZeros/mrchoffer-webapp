@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export const FiltersAdmin = () => {
   return (
     <div className='flex justify-between my-4'>
@@ -18,9 +20,12 @@ export const FiltersAdmin = () => {
           Filtrar
         </button>
 
-        <button className='bg-white px-5 rounded-lg font-bold shadow text-black hover:bg-gray-200 transition-all'>
+        <Link
+          href='admin/empresas/crear'
+          className='bg-white px-5 items-center flex justify-center rounded-lg font-bold shadow text-black hover:bg-gray-200 transition-all'
+        >
           + Crear nueva
-        </button>
+        </Link>
       </div>
     </div>
   )

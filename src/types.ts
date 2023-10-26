@@ -57,6 +57,7 @@ export interface Company {
   id: number
   userId: number
   name: string
+  drivers: number
   address: string
   city: string
   phone: string

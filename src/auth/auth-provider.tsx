@@ -9,7 +9,7 @@ const AUTH_INITIAL_STATE: AuthState = {
   user: undefined
 }
 
-export const AuthProvider: FC<any> = ({ children }) => {
+export const AuthProvider: FC<any> = ({ children }: any) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE)
 
   const loginUser = async (
@@ -17,7 +17,7 @@ export const AuthProvider: FC<any> = ({ children }) => {
     password: string
   ): Promise<boolean> => {
     try {
-      const response = await axios.post(process.env.NEXT_PUBLIC_API_AUTH!, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API! + 'auth'}`, {
         email,
         password
       })

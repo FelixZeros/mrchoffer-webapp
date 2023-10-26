@@ -14,8 +14,6 @@ interface Props {
 
 export const AsideBar = ({ asideBarState, setAsideBarState }: Props) => {
   const { user, logout } = useContext(AuthContext)
-  console.log(user)
-
   return (
     <aside className={'w-full h-screen bg-[#181818] '} aria-label='Sidebar'>
       <div className='w-full grid place-content-center pt-5'>
@@ -58,7 +56,10 @@ export const AsideBar = ({ asideBarState, setAsideBarState }: Props) => {
               ))}
         </div>
 
-        <div onClick={() => logout()} className='grid justify-center hover:text-white text-[--main-yellow] cursor-pointer transition-all left-0 right-0 -bottom-60 relative'>
+        <div
+          onClick={() => logout()}
+          className='grid justify-center hover:text-white text-[--main-yellow] cursor-pointer transition-all left-0 right-0 -bottom-60 relative'
+        >
           <div className='flex  justify-center'>
             <PowerIcon />
           </div>

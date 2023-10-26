@@ -48,15 +48,17 @@ export default function EnterprisePage() {
         header: 'Conductores',
         accessorKey: 'drivers',
         cell: info => info.getValue()
-      },
+      }
+      /*
       {
         header: 'Acciones',
         cell: info => (
           <div className='flex items-center space-x-3'>
-            <Link href={`/admin/company/${info.row.original.id}`}></Link>
+          <Link href={`/admin/company/${info.row.original.id}`}></Link>
           </div>
-        )
-      }
+          )
+        }
+        */
     ],
     []
   )
@@ -70,13 +72,11 @@ export default function EnterprisePage() {
 
   const getCompanies = async () => {
     await axios
-      .get(`http://localhost:5000/api/get-companys`)
-      .then(res => setCompanies(res.data))
+      .get(`${process.env.NEXT_PUBLIC_API + 'get-companys'}`)
+      .then(async res => {
+        setCompanies(res.data)
+      })
   }
-
-  useEffect(() => {
-    console.log(companies)
-  }, [companies])
 
   useEffect(() => {
     getCompanies()
@@ -118,13 +118,12 @@ export default function EnterprisePage() {
   // Genera botones para cada número de página
   for (let page = 0; page < totalPages; page++) {
     const isCurrentPage = page === currentPage
-
     pageButtons.push(
       <li key={page}>
         <button
           onClick={() => table.setPageIndex(page)}
           className={`flex items-center gap-1 px-3 py-2 leading-tight rounded-l-lg rounded-r-lg border-2  border-[--main-yellow] text-black bg-[--main-yellow] m-0.5 ${
-            isCurrentPage ? 'bg-amber-50' : ''
+            isCurrentPage && 'bg-amber-50'
           }`}
         >
           {page + 1}
@@ -134,15 +133,15 @@ export default function EnterprisePage() {
   }
 
   return (
-    <main className='items-center w-full h-full '>
-      <div className='p-1 h-[10%]  justify-center items-center'>
+    <main className='items-center w-full h-full'>
+      <div className='p-1 h-[10%] justify-center items-center'>
         <FiltersAdmin />
       </div>
 
-      <div className='h-[70%] max-h-[67%] overflow-x-auto overflow-y-auto'>
+      <div className='  w-full h-[90%] p-0 items-center justify-center overflow-y-auto overflow-x-auto'>
         <div className='relative'>
-          <table className='text-sm text-center text-black '>
-            <thead className='text-x bg-gray-50 '>
+          <table className='w-full text-sm text-center'>
+            <thead className='text-xs  bg-gray-50 text-black '>
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
@@ -156,17 +155,16 @@ export default function EnterprisePage() {
                 </tr>
               ))}
             </thead>
-
             <tbody>
               {table.getRowModel().rows.map(row => (
                 <tr
                   key={row.id}
-                  className='bg-white border-b hover:bg-gray-50 '
+                  className='text-black bg-white border- hover:bg-gray-50'
                 >
                   {row.getVisibleCells().map(cell => (
                     <td
                       key={cell.id}
-                      className='px-2 py-2 w-full font-medium text-gray-900 whitespace-nowrap '
+                      className='px-2 py-2 font-medium  whitespace-nowrap'
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

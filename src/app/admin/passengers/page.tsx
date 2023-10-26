@@ -128,7 +128,6 @@ const PassengersPage: FC = () => {
   })
 
   const totalPages = table.getPageCount()
-  console.log(totalPages)
   const currentPage = table.getState().pagination.pageIndex
 
   const pageButtons = []

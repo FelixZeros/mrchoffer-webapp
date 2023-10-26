@@ -10,6 +10,10 @@ export const InputFilters = () => {
           className='rounded-lg bg-white shadow p-2'
           placeholder='Buscar...'
         />
+                <input
+          type='text'
+          className='rounded-lg bg-white shadow p-2'
+        />
       </div>
 
       <div className='flex gap-3'>
