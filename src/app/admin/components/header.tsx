@@ -1,18 +1,33 @@
 'use client'
 
-import { AuthContext } from "@/auth/Auth-context"
-import { AvatarIcon } from "@/components/icons/avatar"
-import { useContext, useState } from "react"
+import { AuthContext } from '@/auth/Auth-context'
+import { AvatarIcon } from '@/components/icons/avatar'
+import Image from 'next/image'
+import { useContext } from 'react'
 
 export const HeaderAdmin = () => {
+  const { user } = useContext(AuthContext)
 
-    const [companyName, setCompanyName] = useState<string>('Company')
+  return (
+    <div className='h-[60px] mb-4 rounded flex justify-end font-bold items-center gap-2 shadow bg-white text-black px-10'>
+      {user?.type === "company" && user.company.name}
+      {user?.type === "admin" && user.admin.name}
 
-    return <div className="h-[60px] mb-4 rounded flex justify-end font-bold items-center gap-2 shadow bg-white text-black px-10">
-        {companyName}
-        <div className="border bg-[--main-yellow] w-10 h-10 grid place-content-center rounded-full">
-            <AvatarIcon />
-        </div>
-
+      <div className='border bg-[--main-yellow] w-10 h-10 grid place-content-center rounded-full'>
+        <AvatarIcon />
+        {/*
+        {!user?.company.photo ? (
+          <AvatarIcon />
+        ) : (
+          <Image
+            width={300}
+            height={300}
+            alt={`Logo de ${user.company.name}`}
+            src={user.company.photo}
+          />
+        )}
+        */}
+      </div>
     </div>
+  )
 }

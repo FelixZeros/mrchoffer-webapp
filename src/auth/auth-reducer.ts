@@ -1,7 +1,7 @@
 'use client'
 import { IUserSession } from './Auth-context'
 
-export type AuthActionType = { type: string; payload: IUserSession}
+export type AuthActionType = { type: string; payload?: IUserSession}
 
 export interface AuthState {
   isLoggedIn: boolean

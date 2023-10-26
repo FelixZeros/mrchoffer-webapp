@@ -1,6 +1,5 @@
 'use client'
 
-import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import {
   type FC,
@@ -42,7 +41,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <div className='flex justify-end'>
-      {isLoggedIn && user?.type === 'company' && (
+      {isLoggedIn && (
         <>
           <div>
             <div
