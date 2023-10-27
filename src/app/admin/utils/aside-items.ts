@@ -2,6 +2,8 @@ import { AvatarIcon } from "@/components/icons/avatar";
 import { BillIcon } from "@/components/icons/bill";
 import { GroupIcon } from "@/components/icons/group";
 import { DocumentCheckIcon } from "@/components/icons/document-check";
+import { CompanyIcon } from "@/components/icons/company";
+import { CashIcon } from "@/components/icons/cash";
 
 
 
@@ -26,10 +28,17 @@ export const Routes: Route[] = [
         name: 'Conductores',
         Icon: GroupIcon
     },
-    {
-        href: 'admin/facturacion',
-        name: 'Facturacion',
-        Icon: BillIcon,
-    },
 ]
 
+export const routes_admin: Route[] = [
+    {
+        href: 'admin/empresas',
+        name: 'Empresas',
+        Icon: CompanyIcon
+    },
+    {
+        href: 'admin/facturacion',
+        name: 'Facturación',
+        Icon: CashIcon
+    },
+]
