@@ -12,9 +12,11 @@ import {
 } from '@tanstack/react-table'
 import axios from 'axios'
 import NextLink from 'next/link'
-import React, { useMemo, useState, type FC } from 'react'
+import React, { useMemo, useState, type FC, useEffect } from 'react'
 import { FiltersPassengers } from './components/filters'
 import { Pagination } from '@/components/pagination/pagination'
+import { PhoneIcon } from '@/components/icons/phone'
+import { EyeIcon } from '@/components/icons/eye'
 
 const PassengersPage: FC = () => {
   const columns = useMemo<Array<ColumnDef<Passenger>>>(
@@ -25,34 +27,14 @@ const PassengersPage: FC = () => {
         cell: info => info.getValue()
       },
       {
-        header: 'Fecha de creación',
-        accessorKey: 'created_at',
-        cell: info =>
-          Intl.DateTimeFormat('es-CO', {
-            dateStyle: 'short',
-            timeStyle: 'short',
-            timeZone: 'America/Bogota'
-          }).format(new Date(info.getValue() as string))
-      },
-      {
-        header: 'Nombre',
-        accessorKey: 'name',
+        header: 'Whatsapp',
+        accessorKey: 'phoneNumber',
         cell: info => info.getValue()
       },
       {
         header: 'Genero',
         accessorKey: 'gender',
         cell: info => (info.getValue() === 'Male' ? 'Hombre' : 'Mujer')
-      },
-      {
-        header: 'Celular',
-        accessorKey: 'phone',
-        cell: info => info.getValue()
-      },
-      {
-        header: 'Email',
-        accessorKey: 'email',
-        cell: info => info.getValue()
       },
       {
         header: 'Número de carreras',
@@ -62,10 +44,28 @@ const PassengersPage: FC = () => {
       {
         header: 'Acciones',
         cell: info => (
-          <div className='flex items-center space-x-3'>
-            <NextLink
-              href={`/admin/passengers/${info.row.original.id}`}
-            ></NextLink>
+          <div className='flex items-center justify-center space-x-3'>
+            <a
+              href={`https://wa.me/+57${info.row.original.phone}`}
+              target='_blank'
+              className='px-2 py-1 text-sm font-medium leading-5 text-white hover:bg-slate-100 rounded-md'
+              rel='noreferrer'
+            >
+              <WhatsappIcon />
+            </a>
+
+            <a
+              href={`tel:${info.row.original.phone}`}
+              target='_blank'
+              className='px-2 py-1 text-sm font-medium leading-5 text-white hover:bg-slate-100 rounded-md'
+              rel='noreferrer'
+            >
+              <PhoneIcon />
+            </a>
+
+            <NextLink href={`/admin/passengers/${info.row.original.id}`}>
+              <EyeIcon />
+            </NextLink>
           </div>
         )
       }
@@ -112,8 +112,24 @@ const PassengersPage: FC = () => {
     [pageIndex, pageSize]
   )
 
+  const [passengers, setPassenger] = useState<any>([])
+
+  const getPassengers = async () => {
+    await axios
+      .get(`${process.env.NEXT_PUBLIC_API + 'get-trips'}`)
+      .then(response => setPassenger(response.data))
+  }
+
+  useEffect(() => {
+    console.log(passengers)
+  }, [passengers])
+
+  useEffect(() => {
+    getPassengers()
+    setInterval(() => getPassengers(), 4000)
+  }, [])
   const table = useReactTable({
-    data: dataQuery.data?.passengers ?? defaultData,
+    data: passengers ?? defaultData,
     columns,
     state: {
       pagination,
@@ -132,7 +148,6 @@ const PassengersPage: FC = () => {
 
   const pageButtons = []
 
-  // Genera botones para cada número de página
   for (let page = 0; page < totalPages; page++) {
     const isCurrentPage = page === currentPage
 
