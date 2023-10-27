@@ -1,13 +1,11 @@
 'use client'
 
-import { type Driver } from '@/types'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import { useEffect, type FC } from 'react'
 import WhatsappIcon from '@/components/icons/whatsapp'
 import Image from 'next/image'
 import { StarIcon } from '@/components/icons/star'
 import { ImageIcon } from '@/components/icons/image'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 type Props = {
   params: {
@@ -15,18 +13,31 @@ type Props = {
   }
 }
 
+export const DriverPage = ({ params }: Props) => {
+  const isLoading = false
+  const [driver, setDriver] = useState<any>(null)
+  const getDriver = async () => {
+    await axios
+      .get(`${process.env.NEXT_PUBLIC_API + 'drivers/' + params.id}`)
+      .then(response => setDriver(response.data))
+  }
+
+  useEffect(() => {
+    getDriver()
+  }, [])
+
+  useEffect(() => {
+    if (driver) console.log(driver)
+  }, [driver])
+
   return (
     <section>
-      <span className='text-black text-[40px] font-bold leading-loose'>
-        Andrés parra
-      </span>
-
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2  lg:grid-cols-4 '>
         <div className='col-span-2 h-full w-full '>
           <div className='bg-white overflow-hidden h-full shadow rounded-xl border'>
             <div className='px-4 py-5 sm:p-6 bg-gray-300'>
               <h3 className='text-lg leading-6 font-medium text-gray-900'>
-                Datos básicos
+                {driver?.name}
               </h3>
             </div>
 
@@ -39,7 +50,7 @@ type Props = {
                 <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                   <dt className='text-sm font-bold text-black'>Cédula</dt>
                   <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                    {}
+                    {driver?.identification}
                   </dd>
                 </div>
               </dl>
@@ -49,7 +60,9 @@ type Props = {
               <dl>
                 <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                   <dt className='text-sm font-bold text-black'>Nombre</dt>
-                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'></dd>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {driver?.name}
+                  </dd>
                 </div>
               </dl>
             </div>
@@ -58,7 +71,9 @@ type Props = {
               <dl>
                 <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                   <dt className='text-sm font-bold text-black'>Ciudad</dt>
-                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'></dd>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {driver?.city}
+                  </dd>
                 </div>
               </dl>
             </div>
@@ -85,7 +100,11 @@ type Props = {
                     <div className='flex justify-center'>
                       <ImageIcon />
                     </div>
-                    <a href={''} target='_blank' rel='noreferrer'>
+                    <a
+                      href={driver?.photoIdentificationFront}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
                       Ver foto de cédula (Frente)
                     </a>
                   </div>
@@ -94,7 +113,11 @@ type Props = {
                     <div className='flex justify-center'>
                       <ImageIcon />
                     </div>
-                    <a href={''} target='_blank' rel='noreferrer'>
+                    <a
+                      href={driver?.photoIdentificationBack}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
                       Ver foto de cédula (Atras)
                     </a>
                   </div>
@@ -103,7 +126,11 @@ type Props = {
                     <div className='flex justify-center'>
                       <ImageIcon />
                     </div>
-                    <a href={''} target='_blank' rel='noreferrer'>
+                    <a
+                      href={driver?.photoDriverLicenseFront}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
                       Ver foto de licencia (Frente)
                     </a>
                   </div>
@@ -112,7 +139,11 @@ type Props = {
                     <div className='flex justify-center'>
                       <ImageIcon />
                     </div>
-                    <a href={''} target='_blank' rel='noreferrer'>
+                    <a
+                      href={driver?.photoDriverLicenseBack}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
                       Ver foto de licencia (Atras)
                     </a>
                   </div>
@@ -136,7 +167,7 @@ type Props = {
                   N° Tarjeta de propiedad
                 </dt>
                 <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                  {}
+                  {driver?.vehicle.numberPropertyCard}
                 </dd>
               </div>
             </dl>
@@ -149,7 +180,7 @@ type Props = {
                   Tipo de vehículo
                 </dt>
                 <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                  {}
+                  {driver?.vehicle.typeVehicle}
                 </dd>
               </div>
             </dl>
@@ -160,7 +191,7 @@ type Props = {
               <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                 <dt className='text-sm font-bold text-black'>Marca</dt>
                 <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                  {}
+                  {driver?.vehicle.brand}
                 </dd>
               </div>
             </dl>
@@ -171,7 +202,7 @@ type Props = {
               <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                 <dt className='text-sm font-bold text-black'>Linea</dt>
                 <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                  {}
+                  {driver?.vehicle.line}
                 </dd>
               </div>
             </dl>
@@ -182,7 +213,7 @@ type Props = {
               <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                 <dt className='text-sm font-bold text-black'>Modelo</dt>
                 <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                  {}
+                  {driver?.vehicle.model}
                 </dd>
               </div>
             </dl>
@@ -193,7 +224,7 @@ type Props = {
               <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                 <dt className='text-sm font-bold text-black'>Color</dt>
                 <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                  {}
+                  {driver?.vehicle.color}
                 </dd>
               </div>
             </dl>
@@ -204,7 +235,11 @@ type Props = {
               <div className='flex justify-center'>
                 <ImageIcon />
               </div>
-              <a href={''} target='_blank' rel='noreferrer'>
+              <a
+                href={driver?.vehicle.photoPropertyCardFront}
+                target='_blank'
+                rel='noreferrer'
+              >
                 Ver tarjeta de propiedad <br /> Parte Frontal
               </a>
             </div>
@@ -213,7 +248,11 @@ type Props = {
               <div className='flex justify-center'>
                 <ImageIcon />
               </div>
-              <a href={''} target='_blank' rel='noreferrer'>
+              <a
+                href={driver?.vehicle.photoPropertyCardBack}
+                target='_blank'
+                rel='noreferrer'
+              >
                 Ver tarjeta de propiedad <br /> Parte trasera
               </a>
             </div>
