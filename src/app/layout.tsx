@@ -47,7 +47,7 @@ const Layout = ({
   children?: React.ReactNode
 }) => {
   const { isLoggedIn } = useContext(AuthContext)
-  return !isLoggedIn 
+  return !isLoggedIn && location.pathname !== '/carrera'
   ? <div className='grid grid-cols-2'>
       <div className='grid-cols-1'>
         <HeroImage />

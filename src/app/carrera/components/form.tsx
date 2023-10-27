@@ -88,12 +88,12 @@ export const RequestRideForm = () => {
       .finally(() => {
         setLoading(false)
         control._reset()
-        setPosition({ origin: '', destination: ''})
+        setPosition({ origin: '', destination: '' })
       })
   }
 
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       setRequestMade(false)
     }, 10000)
   }, [requestMade])
@@ -140,7 +140,7 @@ export const RequestRideForm = () => {
                           )}
                         </div>
                       </div>
-                      <div className='flex gap-3'>
+                      <div className='flex gap-3 mx-10'>
                         <Autocomplete>
                           <input
                             {...control}
@@ -187,7 +187,7 @@ export const RequestRideForm = () => {
                           {!position?.destination && <div>Destino</div>}
                         </div>
                       </div>
-                      <div className='flex gap-3'>
+                      <div className='flex gap-3 mx-10'>
                         <Autocomplete>
                           <input
                             {...control}
@@ -288,7 +288,7 @@ export const RequestRideForm = () => {
               </div>
               <div
                 onClick={() => setSelectDestination(true)}
-                className='py-3 cursor-pointer  rounded-xl w-full bg-white border shadow-lg borde px-3 flex gap-3 truncate '
+                className='py-3 cursor-pointer rounded-xl w-full bg-white border shadow-lg borde px-3 flex gap-3 truncate '
               >
                 <SearchIcon />{' '}
                 {!position?.destination ? 'Destino' : position.destination}
