@@ -70,7 +70,7 @@ export const RequestRideForm = () => {
   async function onSubmit(values: z.infer<typeof schema>) {
     setLoading(true)
     await axios
-      .post<RequestRide>(process.env.NEXT_PUBLIC_API + '/api/request-trip', {
+      .post<RequestRide>(process.env.NEXT_PUBLIC_API + 'request-trip', {
         date: new Date(),
         status: 1,
         origin: values.pickUpLocation,
