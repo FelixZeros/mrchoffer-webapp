@@ -1,6 +1,5 @@
 'use client'
-import { Company, Passenger, RideHistory } from '@/types'
-import { useQuery } from '@tanstack/react-query'
+import { Company } from '@/types'
 import {
   ColumnDef,
   PaginationState,
@@ -9,14 +8,11 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import axios from 'axios'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { FiltersAdmin } from './components/filters'
 
 export default function EnterprisePage() {
-  const router = useRouter()
-
   const columns = useMemo<Array<ColumnDef<Company>>>(
     () => [
       {
@@ -84,6 +80,8 @@ export default function EnterprisePage() {
       getCompanies()
     }, 10000)
   }, [])
+
+  console.log( companies )
 
   const pagination = useMemo(
     () => ({

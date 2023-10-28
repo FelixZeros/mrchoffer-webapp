@@ -8,36 +8,54 @@ import * as z from 'zod'
 export default function CreateCompanyPage() {
   const validationSchema = z
     .object({
-      name: z.string(),
-      department: z.string(),
-      phone: z.string(),
-      NIT: z.string(),
-      city: z.string(),
-      whatsapp: z.string(),
-      email: z.string().email(),
-      password: z.string(),
-      confirm_password: z.string()
+      name: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      }),
+      department: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      }),
+      phone: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      }),
+      NIT: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      }),
+      city: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      }),
+      whatsapp: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      }),
+      email: z
+        .string()
+        .email('Ingrese un correo válido')
+        .refine(value => value.trim() !== '', {
+          message: 'Este campo es requerido'
+        }),
+      password: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      }),
+      confirm_password: z.string().refine(value => value.trim() !== '', {
+        message: 'Este campo es requerido'
+      })
     })
-    .superRefine(({ confirm_password, password }, ctx) => {
-      if (confirm_password !== password) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'The passwords did not match'
-        })
-      }
+    .refine(data => data.password === data.confirm_password, {
+      message: 'Las contraseñas no coinciden',
+      path: ['confirm_password']
     })
 
   type schema = z.infer<typeof validationSchema>
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<schema>({
     resolver: zodResolver(validationSchema)
   })
 
   const [userCreated, setUserCreated] = useState<any>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<any>()
 
   const onSubmit: SubmitHandler<schema> = async data => {
     setIsLoading(true)
@@ -59,11 +77,15 @@ export default function CreateCompanyPage() {
         setUserCreated(response.data.user)
         setIsLoading(false)
       })
-      .catch(error => console.log(error))
+      .catch(error => setError(error))
+      .finally(() => setIsLoading(false))
   }
 
   useEffect(() => {
-    setTimeout(() => setUserCreated(null), 6000)
+    setTimeout(() => {
+      setUserCreated(null)
+      setError(null)
+    }, 6000)
   }, [userCreated])
 
   const isDisable = isLoading || !!userCreated
@@ -74,64 +96,125 @@ export default function CreateCompanyPage() {
         <div className='grid justify-center'>
           <div className='grid grid-cols-2 gap-6'>
             <div className='col-span-1 grid gap-11'>
-              <input
-                {...register('name')}
-                type='text'
-                className='w-full rounded-lg bg-white shadow p-2'
-                placeholder='Nombre'
-              />
-              <select
-                {...register('department')}
-                className='w-full shadow p-2 rounded-lg bg-white text-black'
-              >
-                <option value=''>Departamento</option>
-                <option value='cesar'>Cesar</option>
-              </select>
-              <input
-                {...register('phone')}
-                type='text'
-                className='w-full rounded-lg bg-white shadow p-2'
-                placeholder='Teléfono'
-              />
-              <input
-                {...register('email')}
-                type='text'
-                className='w-full rounded-lg bg-white shadow p-2'
-                placeholder='Correo'
-              />
+              <div className='flex gap-2'>
+                <input
+                  {...register('name')}
+                  type='text'
+                  className='w-full rounded-lg bg-white shadow p-2'
+                  placeholder='Nombre'
+                />
+                {errors.name !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+              <div className='flex gap-2'>
+                <select
+                  {...register('department')}
+                  className='w-full shadow p-2 rounded-lg bg-white text-black'
+                >
+                  <option value=''>Departamento</option>
+                  <option value='cesar'>Cesar</option>
+                </select>
+                {errors.department !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.department.message}
+                  </p>
+                )}
+              </div>
+              <div className='flex gap-2'>
+                <input
+                  {...register('phone')}
+                  type='text'
+                  className='w-full rounded-lg bg-white shadow p-2'
+                  placeholder='Teléfono'
+                />
+                {errors.phone !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.phone.message}
+                  </p>
+                )}
+              </div>
+              <div className='flex gap-2'>
+                <input
+                  {...register('email')}
+                  type='text'
+                  className='w-full rounded-lg bg-white shadow p-2'
+                  placeholder='Correo'
+                />
+                {errors.email !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
             </div>
             <div className='col-span-1 grid gap-10'>
-              <input
-                {...register('NIT')}
-                type='text'
-                className='w-full rounded-lg bg-white shadow p-2'
-                placeholder='NIT'
-              />
-              <select
-                {...register('city')}
-                className='w-full shadow p-2 rounded-lg bg-white text-black'
-              >
-                <option value=''>Ciudad</option>
-                <option value='valledupar'>valledupar</option>
-              </select>
-              <input
-                {...register('whatsapp')}
-                type='text'
-                className='w-full rounded-lg bg-white shadow p-2'
-                placeholder='Whatsapp'
-              />
-              <input
-                {...register('password')}
-                type='password'
-                className='w-full rounded-lg bg-white shadow p-2'
-                placeholder='Contraseña'
-              />
-              <input
-                {...register('confirm_password')}
-                type='password'
-                className='w-full rounded-lg bg-white shadow p-2'
-                placeholder='Confirmar contraseña'
-              />
+              <div className='flex gap-2'>
+                <input
+                  {...register('NIT')}
+                  type='text'
+                  className='w-full rounded-lg bg-white shadow p-2'
+                  placeholder='NIT'
+                />
+                {errors.NIT !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.NIT.message}
+                  </p>
+                )}
+              </div>
+              <div className='flex gap-2'>
+                <select
+                  {...register('city')}
+                  className='w-full shadow p-2 rounded-lg bg-white text-black'
+                >
+                  <option value=''>Ciudad</option>
+                  <option value='valledupar'>valledupar</option>
+                </select>
+                {errors.city !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.city.message}
+                  </p>
+                )}
+                <input
+                  {...register('whatsapp')}
+                  type='text'
+                  className='w-full rounded-lg bg-white shadow p-2'
+                  placeholder='Whatsapp'
+                />
+                {errors.whatsapp !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.whatsapp.message}
+                  </p>
+                )}
+              </div>
+              <div className='flex gap-2'>
+                <input
+                  {...register('password')}
+                  type='password'
+                  className='w-full rounded-lg bg-white shadow p-2'
+                  placeholder='Contraseña'
+                />
+                {errors.password !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+              <div className='flex gap-2'>
+                <input
+                  {...register('confirm_password')}
+                  type='password'
+                  className='w-full rounded-lg bg-white shadow p-2'
+                  placeholder='Confirmar contraseña'
+                />
+                {errors.confirm_password !== undefined && (
+                  <p className='text-red-700 font-medium mt-2'>
+                    {errors.confirm_password.message}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -157,8 +240,13 @@ export default function CreateCompanyPage() {
       </form>
 
       {userCreated && (
-        <div className='p-5 rounded-lg bg-white shadow-lg'>
+        <div className='p-5 my-1 rounded-lg bg-white shadow-lg'>
           Usuario creado con exito!
+        </div>
+      )}
+      {error && (
+        <div className='p-5 my-1 rounded-lg bg-white shadow-lg'>
+          {JSON.stringify(error.message)}
         </div>
       )}
     </main>
