@@ -139,7 +139,9 @@ export const RequestRideForm = () => {
                               })
                             }}
                             ref={inputOriginRef}
-                            placeholder={!position?.origin ? 'Origen' : position.origin}
+                            placeholder={
+                              !position?.origin ? 'Origen' : position.origin
+                            }
                             className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
                           />
                         </Autocomplete>
@@ -185,8 +187,11 @@ export const RequestRideForm = () => {
                               })
                             }}
                             ref={inputDestinationRef}
-                            placeholder={!position?.destination ? 'Destino' : position.destination}
-
+                            placeholder={
+                              !position?.destination
+                                ? 'Destino'
+                                : position.destination
+                            }
                             className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
                           />
                         </Autocomplete>
@@ -276,7 +281,8 @@ export const RequestRideForm = () => {
                 onClick={() => setSelectDestination(true)}
                 className='py-3 cursor-pointer z-50 rounded-xl w-full bg-white border shadow-lg borde px-3 flex gap-3 truncate '
               >
-                <SearchIcon /> {!position?.destination ? 'Destino' : position.destination}
+                <SearchIcon />{' '}
+                {!position?.destination ? 'Destino' : position.destination}
               </div>
 
               <select

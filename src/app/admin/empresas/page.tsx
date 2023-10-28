@@ -10,6 +10,8 @@ import {
 import axios from 'axios'
 import { useEffect, useMemo, useState } from 'react'
 import { FiltersAdmin } from './components/filters'
+import Link from 'next/link'
+import { EyeIcon } from '@/components/icons/eye'
 
 export default function EnterprisePage() {
   const columns = useMemo<Array<ColumnDef<Company>>>(
@@ -43,17 +45,17 @@ export default function EnterprisePage() {
         header: 'Conductores',
         accessorKey: 'drivers',
         cell: info => info.getValue()
-      }
-      /*
+      },
       {
         header: 'Acciones',
         cell: info => (
-          <div className='flex items-center space-x-3'>
-          <Link href={`/admin/company/${info.row.original.id}`}></Link>
+          <div className='flex items-center justify-center space-x-3'>
+            <div className='cursor-pointer'>
+              <EyeIcon />
+            </div>
           </div>
-          )
-        }
-        */
+        )
+      }
     ],
     []
   )
