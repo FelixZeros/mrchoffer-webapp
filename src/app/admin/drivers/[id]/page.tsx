@@ -4,8 +4,9 @@ import WhatsappIcon from '@/components/icons/whatsapp'
 import Image from 'next/image'
 import { StarIcon } from '@/components/icons/star'
 import { ImageIcon } from '@/components/icons/image'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
+import { AuthContext } from '@/auth/Auth-context'
 
 type Props = {
   params: {
@@ -14,12 +15,29 @@ type Props = {
 }
 
 export const DriverPage = ({ params }: Props) => {
-  const isLoading = false
+
   const [driver, setDriver] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { user } = useContext(AuthContext)
+
   const getDriver = async () => {
     await axios
       .get(`${process.env.NEXT_PUBLIC_API + 'drivers/' + params.id}`)
       .then(response => setDriver(response.data))
+  }
+
+  const handleResponse = async (value: number) => {
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_API + 'request-driver-company'}`,
+      {
+        id: params.id,
+        companyId: user?.company.id,
+        driverId: params.id,
+        response: true,
+        status: value,
+        comment: 'Se validó y aceptó la información'
+      }
+    )
   }
 
   useEffect(() => {
@@ -260,12 +278,14 @@ export const DriverPage = ({ params }: Props) => {
           <div className='border-t border-gray-200'>
             <div className='px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
               <button
+                onClick={() => handleResponse(2)}
                 disabled={isLoading}
                 className='px-3 py-2 text-sm font-medium mt-2 rounded-lg bg-[--main-yellow] text-white outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
               >
                 Aceptar
               </button>
               <button
+                onClick={() => handleResponse(3)}
                 disabled={isLoading}
                 className='px-3 py-2 text-sm font-medium mt-2 rounded-lg bg-red-600 text-white outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
               >

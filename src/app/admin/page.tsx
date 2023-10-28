@@ -5,8 +5,6 @@ import { PhoneIcon } from '@/components/icons/phone'
 import WhatsappIcon from '@/components/icons/whatsapp'
 import { type Driver, DriverStatus } from '@/types'
 import { Tab } from '@headlessui/react'
-import { Inter } from '@next/font/google'
-import { useQuery } from '@tanstack/react-query'
 import {
   type ColumnDef,
   flexRender,
@@ -87,12 +85,38 @@ const AdminPage = () => {
     pageSize: 10
   })
 
-  const fetchDataOptions = {
-    pageIndex,
-    pageSize
+  interface Driver {
+    id: number
+    companyId: number
+    driverId: number
+    status: number
+    comment: string
+    createdAt: string
+    updatedAt: string
+    company: {
+      id: number
+      userId: number
+      name: string
+      address: string
+      city: string
+      phone: string
+      photo: string
+    }
+    driver: {
+      id: 1
+      userId: 2
+      identification: string
+      name: string
+      gender: string
+      photoDriverLicenseBack: string
+      photoDriverLicenseFront: string
+      photoIdentificationBack: string
+      photoIdentificationFront: string
+      city: string
+      phone: string
+      photo: null
+    }
   }
-
-  const [drivers, setDrivers] = useState<any>([])
 
   const router = useRouter()
   const { user } = useContext(AuthContext)
@@ -100,6 +124,24 @@ const AdminPage = () => {
   useEffect(() => {
     if (user?.type === 'admin') router.replace('admin/empresas')
   }, [user])
+
+  const [drivers, setDrivers] = useState<Driver[]>([])
+  const defaultData = useMemo(() => drivers, [drivers])
+
+
+  const handleFilters = (filter: string) => {
+    switch (filter) {
+      case 'requests':
+        getDrivers()
+        break
+      case 'actives':
+        setDrivers(defaultData.filter(driver => driver.status === 1))
+        break
+      case 'refused':
+        setDrivers(defaultData.filter(driver => driver.status === 2))
+        break
+    }
+  }
 
   const getDrivers = async () => {
     if (user?.company)
@@ -133,7 +175,7 @@ const AdminPage = () => {
   )
 
   const table = useReactTable({
-    data: drivers,
+    data: drivers ?? defaultData,
     columns,
     state: {
       pagination,
@@ -174,7 +216,7 @@ const AdminPage = () => {
           <Tab.List className='text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
             <Tab
               onClick={() => {
-                setFilter(DriverStatus.pending)
+                handleFilters('requests')
               }}
               className={({ selected }) =>
                 classNames(
@@ -188,7 +230,7 @@ const AdminPage = () => {
             </Tab>
             <Tab
               onClick={() => {
-                setFilter(DriverStatus.accepted)
+                handleFilters('actives')
               }}
               className={({ selected }) =>
                 classNames(

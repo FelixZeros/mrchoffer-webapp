@@ -16,13 +16,31 @@ import React, { useMemo, useState, type FC, useContext, useEffect } from 'react'
 import { Pagination } from '@/components/pagination/pagination'
 import { AuthContext } from '@/auth/Auth-context'
 import { FiltersGenerics, BlockedFilters } from '../components/filters'
+import { EyeIcon } from '@/components/icons/eye'
+
+export interface Trip {
+  id: number
+  driverId: null
+  phoneNumber: string
+  date: string
+  status: number
+  origin: string
+  destination: string
+  distance: string
+  price: number
+  genderPassenger: string
+  comment: string
+  paymentMethod: string
+  startTime: string
+  endTime: null
+}
 
 const RidesPage: FC = () => {
   const router = useRouter()
   function classNames(...classes: Array<string | boolean>) {
     return classes.filter(Boolean).join(' ')
   }
-  const columns = useMemo<Array<ColumnDef<RideHistory>>>(
+  const columns = useMemo<Array<ColumnDef<Trip>>>(
     () => [
       {
         header: 'Id',
@@ -31,22 +49,17 @@ const RidesPage: FC = () => {
       },
       {
         header: 'Hora de solicitud',
-        accessorKey: 'request_time',
-        cell: info =>
-          Intl.DateTimeFormat('es-CO', {
-            dateStyle: 'short',
-            timeStyle: 'short',
-            timeZone: 'America/Bogota'
-          }).format(new Date(info.getValue() as string))
+        accessorKey: 'startTime',
+        cell: info => info.getValue()
       },
       {
         header: 'Pasajero',
-        accessorKey: 'passengers.name',
+        accessorKey: 'name',
         cell: info => info.getValue()
       },
       {
         header: 'Conductor',
-        accessorKey: 'drivers.name',
+        accessorKey: 'driverId',
         cell: info => info.getValue() ?? 'No disponible'
       },
       {
@@ -63,9 +76,8 @@ const RidesPage: FC = () => {
               e.stopPropagation()
               router.push(`/admin/rides/${info.row.original.id}`)
             }}
-            className='text-blue-500 hover:text-blue-700'
           >
-            Ver
+            <EyeIcon />
           </button>
         )
       }
@@ -142,7 +154,7 @@ const RidesPage: FC = () => {
   }, [])
 
   const table = useReactTable({
-    data: trips?? defaultData,
+    data: trips,
     columns,
     state: {
       pagination,
@@ -290,56 +302,53 @@ const RidesPage: FC = () => {
             <BlockedFilters />
           </Tab.Panel>
         </Tab.Panels>
-        {isLoading && <div>Cargando...</div>}
-        {!isLoading && data !== undefined && (
-          <>
-            <div className='relative overflow-x-auto rounded-xl shadow'>
-              <table className='w-full text-sm text-center '>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map(header => (
-                        <th scope='col' className='px-6 py-3' key={header.id}>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody>
-                  {table.getRowModel().rows.map(row => (
-                    <tr
-                      key={row.id}
-                      className='bg-white border- hover:bg-gray-50'
-                    >
-                      {row.getVisibleCells().map(cell => (
-                        <td
-                          key={cell.id}
-                          className='px-4 py-2 font-medium text-gray-900 whitespace-nowrap'
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        <>
+          <div className='relative overflow-x-auto rounded-xl shadow'>
+            <table className='w-full text-sm text-center '>
+              <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                      <th scope='col' className='px-6 py-3' key={header.id}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map(row => (
+                  <tr
+                    key={row.id}
+                    className='bg-white border- hover:bg-gray-50'
+                  >
+                    {row.getVisibleCells().map(cell => (
+                      <td
+                        key={cell.id}
+                        className='px-4 py-2 font-medium text-gray-900 whitespace-nowrap'
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-            <div className='h-2' />
-            <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              table={table}
-            />
-          </>
-        )}
+          <div className='h-2' />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            table={table}
+          />
+        </>
       </Tab.Group>
     </main>
   )

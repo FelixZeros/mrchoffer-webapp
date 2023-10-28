@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import axios from 'axios'
 import {
   useJsApiLoader,
   GoogleMap,
@@ -13,9 +12,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRoute } from '../hooks/useRoute'
 import { useRequestTravel } from '@/hooks/useRequestTravel'
 import { z } from 'zod'
-import { RequestRide } from '@/types'
 import { SearchIcon } from '@/components/icons/magnifyng-glass'
 import { CheckIcon } from '@/components/icons/check'
+import { CreateTrip } from '@/services/create-ride.service'
+
 const schema = z.object({
   name: z.string(),
   cellphone: z.string(),
@@ -48,7 +48,7 @@ export const RequestRideForm = () => {
   const [latitude, setLatitude] = useState<any>()
   const [longitude, setLongitude] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [errors, setErrors] = useState<boolean>(false)
+  const [errors, setErrors] = useState<Error | unknown | null>()
   const [requestMade, setRequestMade] = useState<boolean>(false)
   const center = { lat: latitude || null, lng: longitude || null }
   const [selectOrigin, setSelectOrigin] = useState<boolean>(false)
@@ -56,7 +56,7 @@ export const RequestRideForm = () => {
   const inputOriginRef = useRef<HTMLInputElement | null>(null)
   const inputDestinationRef = useRef<HTMLInputElement | null>(null)
 
-  const { directionResponse, distance, duration, error } = useRoute({
+  const { directionResponse, distance } = useRoute({
     origin: position?.origin,
     destination: position?.destination
   })
@@ -68,31 +68,20 @@ export const RequestRideForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof schema>) {
-    setLoading(true)
-    await axios
-      .post<RequestRide>(process.env.NEXT_PUBLIC_API + 'request-trip', {
-        date: new Date(),
-        status: 1,
-        origin: values.pickUpLocation,
-        destination: values.destinationLocation,
-        distance: distance || 0,
-        phoneNumber: values.cellphone,
-        price: Number(values.offeredPrice),
-        genderPassenger: values.gender,
-        comment: values.comments,
-        paymentMethod: values.paymentMethod,
-        startTime: '14:19:53'
-      })
-      .then(res => res.statusText === 'OK' && setRequestMade(true))
-      .catch(err => setErrors(err))
-      .finally(() => {
-        setLoading(false)
-        control._reset()
-        setPosition({ origin: '', destination: '' })
-      })
+    await CreateTrip({
+      values: {
+        ...values,
+        distance
+      },
+      setErrors,
+      setLoading,
+      setRequestMade
+    })
   }
 
   useEffect(() => {
+    control._reset()
+    setPosition({ origin: '', destination: '' })
     setTimeout(() => {
       setRequestMade(false)
     }, 10000)

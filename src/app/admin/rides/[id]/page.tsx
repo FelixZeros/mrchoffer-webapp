@@ -1,11 +1,8 @@
 'use client'
 
 import { type RideHistory } from '@/types'
-import { Inter } from '@next/font/google'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-
-const inter = Inter({ subsets: ['latin'] })
 
 type Props = {
   params: {
@@ -14,8 +11,8 @@ type Props = {
 }
 
 const RideDetails = (props: Props) => {
+  
   const { id } = props.params
-
   const { data, isLoading } = useQuery(['ride', id], async () => {
     const { data } = await axios.get<RideHistory>(`/api/rides/${id}`)
     return data
@@ -36,126 +33,109 @@ const RideDetails = (props: Props) => {
   const rideTimeHours = Math.floor(rideTimeMinutes / 60)
 
   return (
-    <main className={inter.className}>
-      <h1 className='text-4xl font-bold text-black mb-10'>
-        Solicitud #{id}
-      </h1>
-      {isLoading
-        ? (
-          <p>Cargando...</p>
-          )
-        : (
-          <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-            <div className='col-span-2 h-full w-full'>
-              <div
-                className='bg-white overflow-hidden shadow rounded-3xl border drop-shadow'>
-                <div className='px-4 py-5 sm:p-6 bg-gray-300'>
-                  <h3 className='text-lg leading-6 font-medium text-black'>
-                    <strong>INFORMACIÓN GENERAL</strong>
-                  </h3>
-                </div>
+    <main>
+      <h1 className='text-4xl font-bold text-black mb-10'>Solicitud #{id}</h1>
+      {isLoading ? (
+        <p>Cargando...</p>
+      ) : (
+        <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+          <div className='col-span-2 h-full w-full'>
+            <div className='bg-white overflow-hidden shadow rounded-3xl border drop-shadow'>
+              <div className='px-4 py-5 sm:p-6 bg-gray-300'>
+                <h3 className='text-lg leading-6 font-medium text-black'>
+                  <strong>INFORMACIÓN GENERAL</strong>
+                </h3>
+              </div>
 
-                <div className='border-t border-gray-200'>
-                  <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 '>
-                      <dt className='text-sm font-medium text-black'>
-                        <strong>PASAJERO</strong>
-                      </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        {data?.passengers?.name ?? 'No disponible'} (
-                        {(data?.gender === 'Male' ? 'Hombre' : 'Mujer') ??
-                          'No disponible'}
-                        )
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-
-                <div className='border-t border-gray-200'>
-                  <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-black'>
-                        <strong>ORIGEN</strong>
-                      </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        {data?.pickup_location ?? 'No disponible'}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-
-                <div className='border-t border-gray-200'>
-                  <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-black'>
-                        <strong>DESTINO</strong>
-                      </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        {data?.destination ?? 'No disponible'}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-
-                <div className='border-t border-gray-200'>
-                  <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-black'>
-                        <strong>VALOR</strong>
-                      </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        {Intl.NumberFormat('es-CO', {
-                          style: 'currency',
-                          currency: 'COP'
-                        }).format(data?.final_price ?? 0)}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-
-                {data?.comments !== null && (
-                  <div className='border-t border-gray-200'>
-                    <dl>
-                      <div
-                        className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                        <dt className='text-sm font-medium text-black'>
-                          <strong>COMENTARIO</strong>
-                        </dt>
-                        <dd
-                          className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                          {data?.comments ?? 'No disponible'}
-                        </dd>
-                      </div>
-                    </dl>
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 '>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>PASAJERO</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      {data?.passengers?.name ?? 'No disponible'} (
+                      {(data?.gender === 'Male' ? 'Hombre' : 'Mujer') ??
+                        'No disponible'}
+                      )
+                    </dd>
                   </div>
-                )}
+                </dl>
+              </div>
 
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>ORIGEN</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      {data?.pickup_location ?? 'No disponible'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>DESTINO</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      {data?.destination ?? 'No disponible'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>VALOR</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      {Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP'
+                      }).format(data?.final_price ?? 0)}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              {data?.comments !== null && (
                 <div className='border-t border-gray-200'>
                   <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
                       <dt className='text-sm font-medium text-black'>
-                        <strong>ACCIONES</strong>
+                        <strong>COMENTARIO</strong>
                       </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        <div className='flex flex-row space-x-4'>
-                          <a
-                            href={`https://wa.me/+57${
-                              data?.passengers?.phone ?? ''
-                            }`}
-                            target='_blank'
-                            rel='noreferrer'
-                            className='px-3 py-2 text-sm font-medium'
-                          >
+                      <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                        {data?.comments ?? 'No disponible'}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              )}
+
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>ACCIONES</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      <div className='flex flex-row space-x-4'>
+                        <a
+                          href={`https://wa.me/+57${
+                            data?.passengers?.phone ?? ''
+                          }`}
+                          target='_blank'
+                          rel='noreferrer'
+                          className='px-3 py-2 text-sm font-medium'
+                        >
                           <span>
                             <svg
                               width='24px'
@@ -209,12 +189,12 @@ const RideDetails = (props: Props) => {
                               </g>
                             </svg>
                           </span>
-                          </a>
+                        </a>
 
-                          <a
-                            href={`tel:${data?.passengers?.phone ?? ''}`}
-                            className='mt-2'
-                          >
+                        <a
+                          href={`tel:${data?.passengers?.phone ?? ''}`}
+                          className='mt-2'
+                        >
                           <span className='text-gray-900 dark:text-gray-200'>
                             <svg
                               width='30px'
@@ -222,82 +202,74 @@ const RideDetails = (props: Props) => {
                               className='fill-current'
                               viewBox='0 96 960 960'
                             >
-                              <path
-                                d='M795 936q-122 0-242.5-60T336 720q-96-96-156-216.5T120 261q0-19 13-32t32-13h140q14 0 24.5 9.5T343 251l27 126q2 14-.5 25.5T359 422L259 523q56 93 125.5 162T542 802l95-98q10-11 23-15.5t26-1.5l119 26q15 3 25 15t10 28v135q0 19-13 32t-32 13Z'></path>
+                              <path d='M795 936q-122 0-242.5-60T336 720q-96-96-156-216.5T120 261q0-19 13-32t32-13h140q14 0 24.5 9.5T343 251l27 126q2 14-.5 25.5T359 422L259 523q56 93 125.5 162T542 802l95-98q10-11 23-15.5t26-1.5l119 26q15 3 25 15t10 28v135q0 19-13 32t-32 13Z'></path>
                             </svg>
                           </span>
-                          </a>
-                        </div>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
+                        </a>
+                      </div>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+
+            <div className='bg-white overflow-hidden shadow rounded-3xl border mt-3 drop-shadow'>
+              <div className='px-4 py-5 sm:p-6 bg-gray-300 '>
+                <h3 className='text-lg leading-6 font-medium text-black'>
+                  <strong>INFORMACIÓN CONDUCTOR</strong>
+                </h3>
               </div>
 
-              <div
-                className='bg-white overflow-hidden shadow rounded-3xl border mt-3 drop-shadow'>
-                <div className='px-4 py-5 sm:p-6 bg-gray-300 '>
-                  <h3 className='text-lg leading-6 font-medium text-black'>
-                    <strong>INFORMACIÓN CONDUCTOR</strong>
-                  </h3>
-                </div>
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>NOMBRE</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      {data?.drivers?.name ?? 'No disponible'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
 
-                <div className='border-t border-gray-200'>
-                  <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-black'>
-                        <strong>NOMBRE</strong>
-                      </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        {data?.drivers?.name ?? 'No disponible'}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-
-                <div className='border-t border-gray-200'>
-                  <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-black'>
-                        <strong>VEHICULO</strong>
-                      </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        {data?.drivers?.vehicles !== null
-                          ? `(${data?.drivers?.vehicles.license_plate ?? ''}), (${
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>VEHICULO</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      {data?.drivers?.vehicles !== null
+                        ? `(${data?.drivers?.vehicles.license_plate ?? ''}), (${
                             data?.drivers?.vehicles.brand ?? ''
                           }) (${data?.drivers?.vehicles.line ?? ''}) (${
                             data?.drivers?.vehicles.model ?? ''
                           }) - CC (${
                             data?.drivers?.vehicles.engine_displacement ?? ''
                           })`
-                          : 'No disponible'}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
+                        : 'No disponible'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
 
-                <div className='border-t border-gray-200'>
-                  <dl>
-                    <div
-                      className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                      <dt className='text-sm font-medium text-black'>
-                        <strong>ACCIONES</strong>
-                      </dt>
-                      <dd
-                        className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                        <div className='flex flex-row space-x-4'>
-                          <a
-                            href={`https://wa.me/+57${
-                              data?.drivers?.phone ?? ''
-                            }`}
-                            target='_blank'
-                            rel='noreferrer'
-                            className='px-3 py-2 text-sm font-medium'
-                          >
+              <div className='border-t border-gray-200'>
+                <dl>
+                  <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                    <dt className='text-sm font-medium text-black'>
+                      <strong>ACCIONES</strong>
+                    </dt>
+                    <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                      <div className='flex flex-row space-x-4'>
+                        <a
+                          href={`https://wa.me/+57${
+                            data?.drivers?.phone ?? ''
+                          }`}
+                          target='_blank'
+                          rel='noreferrer'
+                          className='px-3 py-2 text-sm font-medium'
+                        >
                           <span>
                             <svg
                               width='24px'
@@ -351,12 +323,12 @@ const RideDetails = (props: Props) => {
                               </g>
                             </svg>
                           </span>
-                          </a>
+                        </a>
 
-                          <a
-                            href={`tel:${data?.drivers?.phone ?? ''}`}
-                            className='mt-2'
-                          >
+                        <a
+                          href={`tel:${data?.drivers?.phone ?? ''}`}
+                          className='mt-2'
+                        >
                           <span className='text-gray-900 dark:text-gray-200'>
                             <svg
                               width='30px'
@@ -364,161 +336,144 @@ const RideDetails = (props: Props) => {
                               className='fill-current'
                               viewBox='0 96 960 960'
                             >
-                              <path
-                                d='M795 936q-122 0-242.5-60T336 720q-96-96-156-216.5T120 261q0-19 13-32t32-13h140q14 0 24.5 9.5T343 251l27 126q2 14-.5 25.5T359 422L259 523q56 93 125.5 162T542 802l95-98q10-11 23-15.5t26-1.5l119 26q15 3 25 15t10 28v135q0 19-13 32t-32 13Z'></path>
+                              <path d='M795 936q-122 0-242.5-60T336 720q-96-96-156-216.5T120 261q0-19 13-32t32-13h140q14 0 24.5 9.5T343 251l27 126q2 14-.5 25.5T359 422L259 523q56 93 125.5 162T542 802l95-98q10-11 23-15.5t26-1.5l119 26q15 3 25 15t10 28v135q0 19-13 32t-32 13Z'></path>
                             </svg>
                           </span>
-                          </a>
-                        </div>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              </div>
-            </div>
-            <div
-              className='bg-white overflow-hidden shadow rounded-3xl col-span-2 border h-full w-full drop-shadow'>
-              <div className='px-4 py-5 sm:p-6 bg-gray-300'>
-                <h3 className='text-lg leading-6 font-medium text-black'>
-                  <strong>INFORMACIÓN DEL VIAJE</strong>
-                </h3>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-gray-500'><strong>#</strong></dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {id}
+                        </a>
+                      </div>
                     </dd>
                   </div>
                 </dl>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-black'>
-                      <strong>HORA DE SOLICITUD</strong>
-                    </dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-black'>
-                      <strong>ESTADO</strong>
-                    </dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {data?.status !== null ? data?.status : 'No disponible'}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-black'>
-                      <strong>ALIADO</strong>
-                    </dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {data?.affiliate_id !== null ? 'Si' : 'No'}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-black'>
-                      <strong>TIEMPO DE ESPERA</strong>
-                    </dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {waitingTimeMinutes > 0
-                        ? `${waitingTimeHours}h ${waitingTimeMinutes}m`
-                        : 'No disponible'}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-black'>
-                      <strong>DURACION DE VIAJE</strong>
-                    </dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {data?.status !== null
-                        ? `${rideTimeHours}h ${rideTimeMinutes}m`
-                        : 'No disponible'}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-black'>
-                      <strong>PUNTUACION DE VIAJE</strong>
-                    </dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {
-                        (data !== undefined && data.rides?.driver_ratings?.length > 0) ? data.rides.driver_ratings[0].rating : 'No disponible'
-                      }
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div className='border-t border-gray-200'>
-                <dl>
-                  <div
-                    className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-                    <dt className='text-sm font-medium text-black'>
-                      <strong>VALOR DE VIAJE</strong>
-                    </dt>
-                    <dd
-                      className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-                      {
-                        Intl.NumberFormat('es-CO', {
-                          style: 'currency',
-                          currency: 'COP'
-                        }).format(data?.final_price ?? 0)
-                      }
-                    </dd>
-
-                  </div>
-                </dl>
-              </div>
-              <div className='flex h-12 w-2/5 text-center m-3'>
-              <button className=' bg-yellow-400 rounded-xl p-1 text-xs'> <strong>VER RECORRIDO</strong> </button>
               </div>
             </div>
           </div>
-          )}
+          <div className='bg-white overflow-hidden shadow rounded-3xl col-span-2 border h-full w-full drop-shadow'>
+            <div className='px-4 py-5 sm:p-6 bg-gray-300'>
+              <h3 className='text-lg leading-6 font-medium text-black'>
+                <strong>INFORMACIÓN DEL VIAJE</strong>
+              </h3>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-gray-500'>
+                    <strong>#</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {id}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-black'>
+                    <strong>HORA DE SOLICITUD</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'></dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-black'>
+                    <strong>ESTADO</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {data?.status !== null ? data?.status : 'No disponible'}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-black'>
+                    <strong>ALIADO</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {data?.affiliate_id !== null ? 'Si' : 'No'}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-black'>
+                    <strong>TIEMPO DE ESPERA</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {waitingTimeMinutes > 0
+                      ? `${waitingTimeHours}h ${waitingTimeMinutes}m`
+                      : 'No disponible'}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-black'>
+                    <strong>DURACION DE VIAJE</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {data?.status !== null
+                      ? `${rideTimeHours}h ${rideTimeMinutes}m`
+                      : 'No disponible'}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-black'>
+                    <strong>PUNTUACION DE VIAJE</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {data !== undefined &&
+                    data.rides?.driver_ratings?.length > 0
+                      ? data.rides.driver_ratings[0].rating
+                      : 'No disponible'}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className='border-t border-gray-200'>
+              <dl>
+                <div className='bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
+                  <dt className='text-sm font-medium text-black'>
+                    <strong>VALOR DE VIAJE</strong>
+                  </dt>
+                  <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
+                    {Intl.NumberFormat('es-CO', {
+                      style: 'currency',
+                      currency: 'COP'
+                    }).format(data?.final_price ?? 0)}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div className='flex h-12 w-2/5 text-center m-3'>
+              <button className=' bg-yellow-400 rounded-xl p-1 text-xs'>
+                {' '}
+                <strong>VER RECORRIDO</strong>{' '}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

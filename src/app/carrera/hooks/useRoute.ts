@@ -28,7 +28,7 @@ export const useRoute = ({ origin, destination }: useRouteProps) => {
       .then(result => {
         setDirectionResponse(result)
         setDistance(result.routes[0].legs[0].distance?.value)
-        setDuration(result.routes[0].legs[0].duration?.text)
+        setDuration(result.routes[0].legs[0].duration?.value)
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
