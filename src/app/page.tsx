@@ -54,7 +54,7 @@ const HomePage: FC = () => {
     }
   }
   useEffect(() => {
-    setTimeout(()=>setError(null), 5000)
+    setTimeout(() => setError(null), 5000)
   }, [error])
 
   const isDisabled = isSubmitting || isLoading
@@ -64,7 +64,7 @@ const HomePage: FC = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex h-screen w-full justify-center'
-        >
+      >
         <div className='w-2/3 flex flex-col justify-center '>
           <div className='mb-4'>
             <div className='flex justify-center mb-11'>
@@ -74,45 +74,49 @@ const HomePage: FC = () => {
               <strong>INICIAR SESION</strong>
             </h1>
             <div className='text-center mb-3'>
-            {error !== null && <span className='text-red-600'>{error}</span>}
+              {error !== null && <span className='text-red-600'>{error}</span>}
             </div>
-            <input
-              type='text'
-              className='w-full px-4 py-2 border rounded-xl drop-shadow outline-none text-xl'
-              {...register('email')}
-              disabled={isDisabled}
-              placeholder='EMAIL'
-            />
-            {errors.email !== undefined && (
-              <p className='text-red-700 font-medium mt-2'>
-                {errors.email.message}
-              </p>
-            )}
+
+            <div>
+              <input
+                type='text'
+                className='w-full px-4 py-2 border rounded-xl drop-shadow outline-none text-xl'
+                {...register('email')}
+                disabled={isDisabled}
+                placeholder='EMAIL'
+              />
+              {errors.email !== undefined && (
+                <p className='text-red-700 font-medium mt-2'>
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className='mb-4 relative flex'>
-            <span className='block font-medium'></span>
-            <input
-              className='w-full pr-12 pl-3 py-2 border rounded-xl drop-shadow outline-none text-lg'
-              {...register('password')}
-              disabled={isDisabled}
-              placeholder='CONTRASEÑA'
-              type={showPassword ? 'text' : 'password'}
-              id='password'
-            />
-            <button
-              type='button'
-              className='absolute inset-y-0 right-0 px-3 py-2 h-11 bg-transparent border-l border-gray-300 border-none '
-              onClick={handleTogglePasswordVisibility}
-            >
-              {showPassword ? <Eyes /> : <CloseEye />}
-            </button>
-            {errors.password !== undefined && (
-              <p className='text-red-700 font-medium mt-2'>
-                {errors.password.message}
-              </p>
-            )}
+            <div className='w-full'>
+              <input
+                className=' pr-12 pl-3 w-full py-2 border  rounded-xl drop-shadow outline-none text-lg'
+                {...register('password')}
+                disabled={isDisabled}
+                placeholder='CONTRASEÑA'
+                type={showPassword ? 'text' : 'password'}
+                id='password'
+              />
+              <button
+                type='button'
+                className='absolute right-0 px-3 py-2 h-11 bg-transparent border-l border-gray-300 border-none '
+                onClick={handleTogglePasswordVisibility}
+              >
+                {showPassword ? <Eyes /> : <CloseEye />}
+              </button>
+            </div>
           </div>
+          {errors.password !== undefined && (
+            <p className='text-red-700 font-medium mt-2'>
+              {errors.password.message}
+            </p>
+          )}
           <div className='mb-5'>
             <Link href='password-reset'>
               <strong>

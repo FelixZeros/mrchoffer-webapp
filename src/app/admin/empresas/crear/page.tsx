@@ -88,7 +88,13 @@ export default function CreateCompanyPage() {
     }, 6000)
   }, [userCreated])
 
-  const isDisable = isLoading || !!userCreated
+  useEffect(() => {
+    setTimeout(() => {
+      setError(null)
+    }, 6000)
+  }, [error])
+
+  const isDisable = isLoading || !!userCreated 
 
   return (
     <main>

@@ -16,14 +16,13 @@ import { AuthContext } from '@/auth/Auth-context'
 import './globals.css'
 
 const queryClient = new QueryClient()
-const inter = Inter({ subsets: ['latin'] })
 
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <html lang='en'>
       <head />
       <body>
-        <main className={inter.className}>
+        <main>
           <AuthProvider>
             <QueryClientProvider client={queryClient}>
               <Layout children={children}/>
