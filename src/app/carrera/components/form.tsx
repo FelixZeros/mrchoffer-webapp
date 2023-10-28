@@ -124,12 +124,9 @@ export const RequestRideForm = () => {
                       <div className='absolute h-full grid place-content-center'>
                         <div className='flex items-center gap-2 pl-[10px]'>
                           <SearchIcon />
-                          {!position?.origin && (
-                            <div className='pointer-events-none'>Origen</div>
-                          )}
                         </div>
                       </div>
-                      <div className='flex gap-3 mx-10'>
+                      <div className='flex gap-3'>
                         <Autocomplete>
                           <input
                             {...control}
@@ -142,7 +139,7 @@ export const RequestRideForm = () => {
                               })
                             }}
                             ref={inputOriginRef}
-                            placeholder=''
+                            placeholder={!position?.origin ? 'Origen' : position.origin}
                             className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
                           />
                         </Autocomplete>
@@ -173,10 +170,9 @@ export const RequestRideForm = () => {
                       <div className='absolute h-full grid place-content-center'>
                         <div className='flex items-center pl-[10px]'>
                           <SearchIcon />
-                          {!position?.destination && <div>Destino</div>}
                         </div>
                       </div>
-                      <div className='flex gap-3 mx-10'>
+                      <div className='flex gap-3'>
                         <Autocomplete>
                           <input
                             {...control}
@@ -189,7 +185,8 @@ export const RequestRideForm = () => {
                               })
                             }}
                             ref={inputDestinationRef}
-                            placeholder=''
+                            placeholder={!position?.destination ? 'Destino' : position.destination}
+
                             className='py-3 rounded-xl bg-white shadow-lg border pl-[34px]'
                           />
                         </Autocomplete>
@@ -277,10 +274,9 @@ export const RequestRideForm = () => {
               </div>
               <div
                 onClick={() => setSelectDestination(true)}
-                className='py-3 cursor-pointer rounded-xl w-full bg-white border shadow-lg borde px-3 flex gap-3 truncate '
+                className='py-3 cursor-pointer z-50 rounded-xl w-full bg-white border shadow-lg borde px-3 flex gap-3 truncate '
               >
-                <SearchIcon />{' '}
-                {!position?.destination ? 'Destino' : position.destination}
+                <SearchIcon /> {!position?.destination ? 'Destino' : position.destination}
               </div>
 
               <select

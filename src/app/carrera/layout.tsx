@@ -4,7 +4,7 @@ import { Footer } from './components/footer'
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <main className='absolute left-0 top-0 w-screen bg-white h-fit'>
+    <main className='w-screen h-screen'>
       <HeadBar />
       {children}
       <Footer />
