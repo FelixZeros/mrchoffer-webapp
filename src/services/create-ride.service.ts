@@ -19,6 +19,11 @@ interface Props {
   setRequestMade: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+const ahora = new Date()
+const hora = ahora.getHours()
+const minutos = ahora.getMinutes()
+const segundos = ahora.getSeconds()
+
 export const CreateTrip = async ({
   values,
   setErrors,
@@ -39,10 +44,10 @@ export const CreateTrip = async ({
       genderPassenger: values.gender,
       comment: values.comments,
       paymentMethod: values.paymentMethod,
-      startTime: '14:19:53'
+      startTime: `${hora}:${minutos}:${segundos}`
     })
     .then(res => {
-        if(res.status) setRequestMade(true) 
+      if (res.status) setRequestMade(true)
     })
     .catch(err => setErrors(err))
     .finally(() => {

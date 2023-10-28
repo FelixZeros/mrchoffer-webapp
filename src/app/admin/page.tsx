@@ -86,8 +86,6 @@ const AdminPage = () => {
     pageSize: 10
   })
 
-
-
   const router = useRouter()
   const { user } = useContext(AuthContext)
 
@@ -122,11 +120,10 @@ const AdminPage = () => {
             user?.company.id
           }`
         )
-        .then(res =>
-          res.data.forEach((user: any) => {
-            setDrivers((prevdata: any) => [...prevdata, {...user.driver, rating: 0, rides: 0}])
-          })
-        )
+        .then(res => {
+          setDrivers([])
+          res.data.forEach((user:any) => setDrivers(prev => [...prev, user.driver]))
+        })
   }
 
   useEffect(() => {

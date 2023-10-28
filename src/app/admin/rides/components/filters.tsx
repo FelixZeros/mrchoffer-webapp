@@ -10,10 +10,6 @@ export const InputFilters = () => {
           className='rounded-lg bg-white shadow p-2'
           placeholder='Buscar...'
         />
-                <input
-          type='text'
-          className='rounded-lg bg-white shadow p-2'
-        />
       </div>
 
       <div className='flex gap-3'>
@@ -29,7 +25,7 @@ export const InputFilters = () => {
   )
 }
 
-export const ClosedFilters = ({ carrers = 0 }: { carrers: number }) => {
+export const ClosedFilters = () => {
   return (
     <div className='flex justify-between my-4'>
       <div className='flex gap-3'>
@@ -41,7 +37,6 @@ export const ClosedFilters = ({ carrers = 0 }: { carrers: number }) => {
         <div className='flex gap-3 rounded-lg shadow px-5 items-center justify-center'>
           <CarIcon />
           <p className=''>Carreras: </p>
-          {carrers}
         </div>
       </div>
 
@@ -51,7 +46,7 @@ export const ClosedFilters = ({ carrers = 0 }: { carrers: number }) => {
         </div>
         <div className='bg-gray-300 rounded-lg px-3 mx-16'>Hoy</div>
         <div>
-          <CloseIcon/>
+          <CloseIcon />
         </div>
       </div>
 
@@ -84,7 +79,7 @@ export const HistoryFilters = () => {
       </div>
 
       <div className='flex gap-3'>
-      <select className=' shadow p-2 rounded-lg bg-white text-black'>
+        <select className=' shadow p-2 rounded-lg bg-white text-black'>
           <option value=''>Calificación</option>
         </select>
         <select className=' shadow p-2 rounded-lg bg-white text-black'>

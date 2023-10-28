@@ -17,6 +17,11 @@ import { Pagination } from '@/components/pagination/pagination'
 import { AuthContext } from '@/auth/Auth-context'
 import { FiltersGenerics, BlockedFilters } from '../components/filters'
 import { EyeIcon } from '@/components/icons/eye'
+import {
+  ClosedFilters,
+  HistoryFilters,
+  InputFilters
+} from './components/filters'
 
 export interface Trip {
   id: number
@@ -84,53 +89,17 @@ const RidesPage: FC = () => {
     ],
     []
   )
+  useEffect(() => {
+    if (user?.type === 'admin') router.replace('admin/empresas')
+  }, [])
+
+const [filter, setFilter] = useState<DriverStatus>(DriverStatus.pending)
+const [trips, setTrips] = useState<any>([])
 
   const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
   })
-
-  const fetchDataOptions = {
-    pageIndex,
-    pageSize
-  }
-
-  const fetchDrivers = async (
-    filter: DriverStatus,
-    options: {
-      pageIndex: number
-      pageSize: number
-    }
-  ) => {
-    const { data } = await axios.get<Driver[]>(
-      `/api/drivers?status=${filter}&page=${options.pageIndex}&pageSize=${options.pageSize}`
-    )
-
-    /*
-    const transformedData = data.map(driver => {
-       const { data: photoUrl } = supabase.storage 
-      .from('avatars')
-      .getPublicUrl(driver.photo_url)
-      return {
-          ...driver,
-          photo_url: photoUrl.publicUrl
-        }
-    })
-    
-    return transformedData
-    */
-  }
-
-  const [filter, setFilter] = useState<DriverStatus>(DriverStatus.pending)
-  const { data, isLoading } = useQuery(
-    ['drivers', filter, fetchDataOptions],
-    async () => await fetchDrivers(filter, fetchDataOptions),
-    {
-      keepPreviousData: true
-    }
-  )
-
-  const defaultData = useMemo(() => [], [])
 
   const pagination = useMemo(
     () => ({
@@ -140,7 +109,6 @@ const RidesPage: FC = () => {
     [pageIndex, pageSize]
   )
 
-  const [trips, setTrips] = useState<any>([])
   const getTrips = async () => {
     await axios
       .get(`${process.env.NEXT_PUBLIC_API + 'get-trips'}`)
@@ -168,14 +136,10 @@ const RidesPage: FC = () => {
     debugTable: true
   })
 
-  const totalPages = table.getPageCount() // Obtiene el número total de páginas
-  const currentPage = table.getState().pagination.pageIndex // Obtiene la página actual
-
+  const totalPages = table.getPageCount()
+  const currentPage = table.getState().pagination.pageIndex
   const pageButtons = []
   const { user } = useContext(AuthContext)
-  useEffect(() => {
-    if (user?.type === 'admin') router.replace('admin/empresas')
-  }, [])
 
   for (let page = 0; page < totalPages; page++) {
     const isCurrentPage = page === currentPage
@@ -198,9 +162,6 @@ const RidesPage: FC = () => {
       <Tab.Group>
         <Tab.List className='text-sm border justify-self-center shadow rounded-lg w-fit space-x-12 px-16 font-medium text-center text-black bg-white'>
           <Tab
-            onClick={() => {
-              setFilter(DriverStatus.pending)
-            }}
             className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
@@ -209,12 +170,9 @@ const RidesPage: FC = () => {
               )
             }
           >
-            Solicitudes
+            Activas
           </Tab>
           <Tab
-            onClick={() => {
-              setFilter(DriverStatus.accepted)
-            }}
             className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
@@ -223,12 +181,9 @@ const RidesPage: FC = () => {
               )
             }
           >
-            Activos
+            Cerradas
           </Tab>
           <Tab
-            onClick={() => {
-              setFilter(DriverStatus.rejected)
-            }}
             className={({ selected }) =>
               classNames(
                 'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
@@ -237,73 +192,22 @@ const RidesPage: FC = () => {
               )
             }
           >
-            Rechazados
-          </Tab>
-          <Tab
-            onClick={() => {
-              setFilter(DriverStatus.archived)
-            }}
-            className={({ selected }) =>
-              classNames(
-                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
-                selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
-              )
-            }
-          >
-            Archivados
-          </Tab>
-          <Tab
-            onClick={() => {
-              setFilter(DriverStatus.archived)
-            }}
-            className={({ selected }) =>
-              classNames(
-                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
-                selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
-              )
-            }
-          >
-            Inhabilitados
-          </Tab>
-          <Tab
-            onClick={() => {
-              setFilter(DriverStatus.archived)
-            }}
-            className={({ selected }) =>
-              classNames(
-                'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
-                selected &&
-                  'text-[--main-yellow] border-[--main-yellow] border-b-3'
-              )
-            }
-          >
-            Bloqueados
+            Historial
           </Tab>
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel className='p-3'>
-            <FiltersGenerics />
+            <InputFilters />
           </Tab.Panel>
           <Tab.Panel className='p-3'>
-            <FiltersGenerics />
+            <ClosedFilters />
           </Tab.Panel>
           <Tab.Panel className='p-3'>
-            <FiltersGenerics />
-          </Tab.Panel>
-          <Tab.Panel className='p-3'>
-            <FiltersGenerics />
-          </Tab.Panel>
-          <Tab.Panel className='p-3'>
-            <FiltersGenerics />
-          </Tab.Panel>
-          <Tab.Panel className='p-3'>
-            <BlockedFilters />
+            <HistoryFilters />
           </Tab.Panel>
         </Tab.Panels>
         <>
-          <div className='relative overflow-x-auto rounded-xl shadow'>
+          <div className='relative overflow-x-auto rounded-xl shadow '>
             <table className='w-full text-sm text-center '>
               <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
                 {table.getHeaderGroups().map(headerGroup => (
