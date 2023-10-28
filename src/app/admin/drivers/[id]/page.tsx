@@ -7,6 +7,8 @@ import { ImageIcon } from '@/components/icons/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import { AuthContext } from '@/auth/Auth-context'
+import { AvatarIcon } from '@/components/icons/avatar'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   params: {
@@ -15,11 +17,11 @@ type Props = {
 }
 
 export const DriverPage = ({ params }: Props) => {
-
+  const router = useRouter()
   const [driver, setDriver] = useState<any>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { user } = useContext(AuthContext)
-
+  const [response, setResponse] = useState<any>()
   const getDriver = async () => {
     await axios
       .get(`${process.env.NEXT_PUBLIC_API + 'drivers/' + params.id}`)
@@ -27,17 +29,26 @@ export const DriverPage = ({ params }: Props) => {
   }
 
   const handleResponse = async (value: number) => {
-    await axios.put(
-      `${process.env.NEXT_PUBLIC_API + 'request-driver-company'}`,
-      {
+    setIsLoading(true)
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_API + 'request-driver-company'}`, {
         id: params.id,
         companyId: user?.company.id,
         driverId: params.id,
         response: true,
         status: value,
         comment: 'Se validó y aceptó la información'
-      }
-    )
+      })
+      .then(res => {
+        if (value === 2) setResponse('Conductor aceptado con éxito')
+        if (value === 3) setResponse('Conductor rechazado')
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   useEffect(() => {
@@ -48,19 +59,30 @@ export const DriverPage = ({ params }: Props) => {
     if (driver) console.log(driver)
   }, [driver])
 
+  useEffect(() => {
+    setTimeout(() => setResponse(false), 5000)
+  }, [response])
+
   return (
     <section>
+      {response && (
+        <div className='w-full h-[20px] shadow text-center rounded'>
+          {response}
+        </div>
+      )}
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2  lg:grid-cols-4 '>
         <div className='col-span-2 h-full w-full '>
           <div className='bg-white overflow-hidden h-full shadow rounded-xl border'>
             <div className='px-4 py-5 sm:p-6 bg-gray-300'>
-              <h3 className='text-lg leading-6 font-medium text-gray-900'>
+              <h3 className='text-lg leading-6 font-medium text-gray-900 '>
                 {driver?.name}
               </h3>
             </div>
 
-            <div className='border-t border-gray-200 items-center flex justify-center py-2'>
-              <Image src={''} alt='Avatar' className='w-24 h-24 rounded-full' />
+            <div className='border-t border-gray-200 items-center flex justify-center py-2 '>
+              <div className='h-16 w-16 flex items-center justify-center rounded-full bg-[--main-yellow]'>
+                <AvatarIcon />
+              </div>
             </div>
 
             <div className='border-t border-gray-200'>
@@ -282,14 +304,14 @@ export const DriverPage = ({ params }: Props) => {
                 disabled={isLoading}
                 className='px-3 py-2 text-sm font-medium mt-2 rounded-lg bg-[--main-yellow] text-white outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
               >
-                Aceptar
+                {!isLoading ? 'Aceptar' : 'Cargando...'}
               </button>
               <button
                 onClick={() => handleResponse(3)}
                 disabled={isLoading}
                 className='px-3 py-2 text-sm font-medium mt-2 rounded-lg bg-red-600 text-white outline-none w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed'
               >
-                Rechazar
+                {!isLoading ? 'Rechazar' : 'Cargando...'}
               </button>
               <button
                 disabled={isLoading}

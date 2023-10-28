@@ -3,7 +3,7 @@
 import { EyeIcon } from '@/components/icons/eye'
 import { PhoneIcon } from '@/components/icons/phone'
 import WhatsappIcon from '@/components/icons/whatsapp'
-import { type Driver, DriverStatus } from '@/types'
+import { DriverStatus } from '@/types'
 import { Tab } from '@headlessui/react'
 import {
   type ColumnDef,
@@ -19,6 +19,7 @@ import { type FC, useMemo, useState, useEffect, useContext } from 'react'
 import { BlockedFilters, FiltersGenerics } from './components/filters'
 import { Pagination } from '@/components/pagination/pagination'
 import { AuthContext } from '@/auth/Auth-context'
+import { Driver } from '@/interfaces/output'
 
 function classNames(...classes: Array<string | boolean>) {
   return classes.filter(Boolean).join(' ')
@@ -85,38 +86,7 @@ const AdminPage = () => {
     pageSize: 10
   })
 
-  interface Driver {
-    id: number
-    companyId: number
-    driverId: number
-    status: number
-    comment: string
-    createdAt: string
-    updatedAt: string
-    company: {
-      id: number
-      userId: number
-      name: string
-      address: string
-      city: string
-      phone: string
-      photo: string
-    }
-    driver: {
-      id: 1
-      userId: 2
-      identification: string
-      name: string
-      gender: string
-      photoDriverLicenseBack: string
-      photoDriverLicenseFront: string
-      photoIdentificationBack: string
-      photoIdentificationFront: string
-      city: string
-      phone: string
-      photo: null
-    }
-  }
+
 
   const router = useRouter()
   const { user } = useContext(AuthContext)
@@ -127,7 +97,6 @@ const AdminPage = () => {
 
   const [drivers, setDrivers] = useState<Driver[]>([])
   const defaultData = useMemo(() => drivers, [drivers])
-
 
   const handleFilters = (filter: string) => {
     switch (filter) {
@@ -155,7 +124,7 @@ const AdminPage = () => {
         )
         .then(res =>
           res.data.forEach((user: any) => {
-            setDrivers((prevdata: any) => [...prevdata, user.driver])
+            setDrivers((prevdata: any) => [...prevdata, {...user.driver, rating: 0, rides: 0}])
           })
         )
   }
