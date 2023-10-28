@@ -8,7 +8,6 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { FiltersAdmin } from './components/filters'
 
@@ -70,7 +69,10 @@ export default function EnterprisePage() {
     await axios
       .get(`${process.env.NEXT_PUBLIC_API + 'get-companys'}`)
       .then(async res => {
-        setCompanies(res.data)
+        const companies = res.data.map((company: any) => {
+          return { ...company, departament: 'cesar', drivers: 0 }
+        })
+        setCompanies(companies)
       })
   }
 
@@ -80,8 +82,6 @@ export default function EnterprisePage() {
       getCompanies()
     }, 10000)
   }, [])
-
-  console.log( companies )
 
   const pagination = useMemo(
     () => ({
@@ -103,10 +103,6 @@ export default function EnterprisePage() {
     manualPagination: true,
     debugTable: true
   })
-
-  function classNames(...classes: Array<string | boolean>) {
-    return classes.filter(Boolean).join(' ')
-  }
 
   const totalPages = table.getPageCount() // Obtiene el número total de páginas
   const currentPage = table.getState().pagination.pageIndex // Obtiene la página actual
