@@ -1,7 +1,7 @@
 'use State'
 import { PowerIcon } from '@/components/icons/power'
 import NextLink from 'next/link'
-import { Route, Routes, routes_admin } from '../utils/aside-items'
+import { Route, routes, routes_admin } from '../utils/aside-items'
 import Image from 'next/image'
 import Logo from '../../../../public/logo.svg'
 import {
@@ -86,7 +86,7 @@ export const AsideBar = ({}) => {
         <div className='h-full px-3 py-4'>
           <div className='flex-col text-center font-medium my-2 h-fit'>
             {user?.type === 'company'
-              ? Routes.map(route => <NavLink route={route} />)
+              ? routes.map(route => <NavLink route={route} />)
               : routes_admin.map(route => <NavLink route={route} />)}
           </div>
 

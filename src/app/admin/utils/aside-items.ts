@@ -10,7 +10,7 @@ export interface Route {
     name: string,
     Icon: () => JSX.Element;
 }
-export const Routes: Route[] = [
+export const routes: Route[] = [
     {
         href: 'admin/rides',
         name: 'solicitudes',
@@ -25,6 +25,11 @@ export const Routes: Route[] = [
         href: 'admin/',
         name: 'Conductores',
         Icon: GroupIcon
+    },
+    {
+        href: 'admin/facturacion',
+        name: 'Facturación',
+        Icon: BillIcon
     },
 ]
 
