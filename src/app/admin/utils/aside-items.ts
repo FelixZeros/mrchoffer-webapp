@@ -4,6 +4,7 @@ import { GroupIcon } from "@/components/icons/group";
 import { DocumentCheckIcon } from "@/components/icons/document-check";
 import { CompanyIcon } from "@/components/icons/company";
 import { CashIcon } from "@/components/icons/cash";
+import { CreditCardIcon } from "@/components/icons/credit-card";
 
 export interface Route {
     href: string,
@@ -30,6 +31,11 @@ export const routes: Route[] = [
         href: 'admin/facturacion',
         name: 'Facturación',
         Icon: BillIcon
+    },
+    {
+        href: 'admin/recargas',
+        name: 'Recargas',
+        Icon: CreditCardIcon
     },
 ]
 
