@@ -1,7 +1,6 @@
 'use client'
 
 import WhatsappIcon from '@/components/icons/whatsapp'
-import Image from 'next/image'
 import { StarIcon } from '@/components/icons/star'
 import { ImageIcon } from '@/components/icons/image'
 import { useContext, useEffect, useMemo, useState } from 'react'

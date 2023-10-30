@@ -16,7 +16,11 @@ import axios from 'axios'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FC, useMemo, useState, useEffect, useContext } from 'react'
-import { BlockedFilters, FiltersGenerics } from './components/filters'
+import {
+  BlockedFilters,
+  FiltersGenerics,
+  FiltersRequest
+} from './components/filters'
 import { Pagination } from '@/components/pagination/pagination'
 import { AuthContext } from '@/auth/Auth-context'
 import { Driver } from '@/interfaces/output'
@@ -122,7 +126,9 @@ const AdminPage = () => {
         )
         .then(res => {
           setDrivers([])
-          res.data.forEach((user:any) => setDrivers(prev => [...prev, user.driver]))
+          res.data.forEach((user: any) =>
+            setDrivers(prev => [...prev, user.driver])
+          )
         })
   }
 
@@ -234,20 +240,6 @@ const AdminPage = () => {
                 )
               }
             >
-              Archivados
-            </Tab>
-            <Tab
-              onClick={() => {
-                setFilter(DriverStatus.archived)
-              }}
-              className={({ selected }) =>
-                classNames(
-                  'inline-block p-4 border-b-2 outline-none font-bold border-transparent rounded-t-lg hover:text-[--main-yellow] hover:border-[--main-yellow]',
-                  selected &&
-                    'text-[--main-yellow] border-[--main-yellow] border-b-3'
-                )
-              }
-            >
               Inhabilitados
             </Tab>
             <Tab
@@ -267,16 +259,13 @@ const AdminPage = () => {
           </Tab.List>
           <Tab.Panels>
             <Tab.Panel className='p-3'>
-              <FiltersGenerics />
+              <FiltersRequest />
             </Tab.Panel>
             <Tab.Panel className='p-3'>
               <FiltersGenerics />
             </Tab.Panel>
             <Tab.Panel className='p-3'>
-              <FiltersGenerics />
-            </Tab.Panel>
-            <Tab.Panel className='p-3'>
-              <FiltersGenerics />
+              <FiltersRequest />
             </Tab.Panel>
             <Tab.Panel className='p-3'>
               <FiltersGenerics />
