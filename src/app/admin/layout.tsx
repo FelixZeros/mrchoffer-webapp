@@ -26,79 +26,22 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
     return
   }, [isLoggedIn])
 
-  useEffect(() => {
-    router.refresh()
-  }, [])
-
-  const [asideBarState, setAsideBarState] = useState('')
-  const toggleState = (literal: string) => {
-    setAsideBarState(literal)
-  }
-
-  const toggleAside = () => {
-    setIsVisible(!isVisible)
-  }
-
   return (
     <div className='flex justify-end'>
       {isLoggedIn && (
         <>
-          <div>
-            <div
-              className={
-                isVisible
-                  ? ' fixed w-[20vw] h-screen transform -translate-x-full transition-transform duration-500 ease-in-out'
-                  : 'fixed w-[20vw] h-screen transform -translate-x-full transition-transform duration-500 ease-in-out'
-              }
-            >
-              <AsideBar
-                asideBarState={asideBarState}
-                setAsideBarState={toggleState}
-              />
-            </div>
-            <button
-              className={`transition-all w-6 h-1/5 bg-[#181818] rounded-tr-full fixed rounded-br-full  bottom-1/2 ${
-                isVisible
-                  ? '  self-center transition-transform duration-500 ease-in-out'
-                  : ' transform  transition-transform duration-500 ease-in-out'
-              }`}
-              onClick={() => {
-                setIsVisible(!isVisible)
-              }}
-            >
-              <div
-                className={
-                  isVisible
-                    ? 'rotate-0 transition-all duration-500 text-white'
-                    : `text-white rotate-180 transition-all duration-500`
-                }
-              >
-                <Arow />
-              </div>
-            </button>
-          </div>
-
+          <AsideBar />
           <div
-            className={`${
-              isVisible
-                ? ' w-[80vw] transform-origin: right duration-500 ease-in-out '
-                : 'w-full transform-origin: left duration-500 ease-in-out '
-            }`}
+            className={`w-[85vw] transform-origin: right duration-500 ease-in-out'`}
           >
-            <section className='w-full h-full'>
+            <section className='flex-1 w-full h-full'>
               <div className='p-4 pl-8 '>
                 <HeaderAdmin />
-                <div className='w-full max-h-[80vh] p-4 shadow rounded-lg flex items-center justify-center overflow-auto'>
+                <div className='w-full flex-1 p-4 shadow rounded-lg flex items-center justify-center overflow-auto'>
                   {children}
                 </div>
               </div>
-              <Footer
-                width={`${
-                  isVisible
-                    ? 'w-[80vw] transition-all'
-                    : 'w-full transition-all'
-                }`}
-              ></Footer>
+              <Footer></Footer>
             </section>
           </div>
         </>

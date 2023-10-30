@@ -5,9 +5,7 @@ import { DocumentCheckIcon } from "@/components/icons/document-check";
 import { CompanyIcon } from "@/components/icons/company";
 import { CashIcon } from "@/components/icons/cash";
 
-
-
-interface Route {
+export interface Route {
     href: string,
     name: string,
     Icon: () => JSX.Element;
