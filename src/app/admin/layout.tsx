@@ -10,14 +10,11 @@ import {
 } from 'react'
 import { AsideBar } from './components/asidebar'
 import { HeaderAdmin } from './components/header'
-import { Arow } from '@/components/icons/arow'
 import Footer from '@/app/admin/components/footer'
 import { AuthContext } from '@/auth/Auth-context'
 
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
-  const [isVisible, setIsVisible] = useState(true)
-
   const { isLoggedIn, user } = useContext(AuthContext)
 
   useEffect(() => {

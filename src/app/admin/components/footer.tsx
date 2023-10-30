@@ -7,7 +7,7 @@ interface Props {
 const Footer = () => {
   return (
     <div
-      className={`bg-[--main-yellow] text-center fixed bottom-0 text-black py-1`}>
+      className={`bg-[--main-yellow] text-center fixed bottom-0 w-screen left-0 z-50 text-black py-1`}>
       <p className="text-xs">2023 TODOS LOS DERECHOS RESERVADOS</p>
     </div>
   );

@@ -1,15 +1,19 @@
 import { CarIcon } from '@/components/icons/car'
+import { SearchIcon } from '@/components/icons/magnifyng-glass'
 import { CloseIcon } from '@/components/icons/x-mark'
 
 export const InputFilters = () => {
   return (
     <div className='flex justify-between my-4'>
-      <div>
+<div className='flex items-center relative'>
         <input
           type='text'
           className='rounded-lg bg-white shadow p-2'
           placeholder='Buscar...'
         />
+        <div className='aboslute -translate-x-full px-2'>
+          <SearchIcon />
+        </div>
       </div>
 
       <div className='flex gap-3'>
@@ -29,11 +33,16 @@ export const ClosedFilters = () => {
   return (
     <div className='flex justify-between my-4'>
       <div className='flex gap-3'>
-        <input
-          type='text'
-          className='rounded-lg bg-white shadow p-2'
-          placeholder='Buscar...'
-        />
+        <div className='flex items-center relative'>
+          <input
+            type='text'
+            className='rounded-lg bg-white shadow p-2'
+            placeholder='Buscar...'
+          />
+          <div className='aboslute -translate-x-full px-2'>
+            <SearchIcon />
+          </div>
+        </div>
         <div className='flex gap-3 rounded-lg shadow px-5 items-center justify-center'>
           <CarIcon />
           <p className=''>Carreras: </p>
@@ -70,12 +79,15 @@ export const ClosedFilters = () => {
 export const HistoryFilters = () => {
   return (
     <div className='flex justify-between my-4'>
-      <div>
+      <div className='flex items-center relative'>
         <input
           type='text'
           className='rounded-lg bg-white shadow p-2'
           placeholder='Buscar...'
         />
+        <div className='aboslute -translate-x-full px-2'>
+          <SearchIcon />
+        </div>
       </div>
 
       <div className='flex gap-3'>

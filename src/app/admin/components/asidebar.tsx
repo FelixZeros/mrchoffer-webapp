@@ -58,12 +58,12 @@ export const AsideBar = ({}) => {
       <aside
         className={`${
           !isOpen && '-translate-x-1/2'
-        } w-[15vw] transition-all h-screen bg-[#181818] relative`}
+        } w-[15vw] transition-all h-screen bg-[#181818] fixed left-0`}
         aria-label='Sidebar'
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`absolute text-white top-0 bottom-0 my-auto right-0 translate-x-full bg-[#181818] rounded-r-full h-1/5 z-50 hover:text-[--main-yellow]`}
+          className={`absolute text-white top-0 bottom-0 my-auto right-0 translate-x-full bg-[#181818] rounded-r-2xl h-fit py-6 pr-2 z-50 hover:text-[--main-yellow]`}
         >
           <div
             className={`${
@@ -74,7 +74,11 @@ export const AsideBar = ({}) => {
           </div>
         </button>
 
-        <div className={`w-full flex items-center  pt-5 ${isOpen ? 'justify-center' : 'justify-end pr-[12%]'} `}>
+        <div
+          className={`w-full flex items-center  pt-5 ${
+            isOpen ? 'justify-center' : 'justify-end pr-[12%]'
+          } `}
+        >
           <div className={`${!isOpen && 'scale-75'}`}>
             <Image width={100} src={Logo} alt='Logo de Mr.Choffer' />
           </div>
