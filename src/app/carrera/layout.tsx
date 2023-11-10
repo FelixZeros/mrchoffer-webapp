@@ -1,14 +1,15 @@
-import { FC, PropsWithChildren } from 'react'
+import type { FC, PropsWithChildren } from 'react'
 import { HeadBar } from './components/head'
-import { Footer } from './components/footer'
+import TripProvider from '@/context/TripState'
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <main className='w-screen h-screen'>
-      <HeadBar />
-      {children}
-      <Footer />
-    </main>
+    <TripProvider>
+      <main className='w-screen h-screen'>
+        <HeadBar />
+        {children}
+      </main>
+    </TripProvider>
   )
 }
 

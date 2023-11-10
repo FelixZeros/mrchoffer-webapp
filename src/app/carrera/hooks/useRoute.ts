@@ -6,8 +6,7 @@ interface useRouteProps {
 }
 
 export const useRoute = ({ origin, destination }: useRouteProps) => {
-  const [directionResponse, setDirectionResponse] =
-    useState<google.maps.DirectionsResult | null>(null)
+  const [directionResponse, setDirectionResponse] = useState<any>(null)
   const [distance, setDistance] = useState<any>(null)
   const [duration, setDuration] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)

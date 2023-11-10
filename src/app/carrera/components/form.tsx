@@ -10,7 +10,6 @@ import {
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRoute } from '../hooks/useRoute'
-import { useRequestTravel } from '@/hooks/useRequestTravel'
 import { z } from 'zod'
 import { SearchIcon } from '@/components/icons/magnifyng-glass'
 import { CheckIcon } from '@/components/icons/check'
@@ -27,14 +26,19 @@ const schema = z.object({
   comments: z.string()
 })
 
-export const RequestRideForm = () => {
-  const { geoLocation } = useRequestTravel()
-  useEffect(() => {
-    if (!geoLocation) return
-    setLatitude(geoLocation.latitude)
-    setLongitude(geoLocation.longitude)
-  }, [geoLocation])
+type props = {
+  socket: any
+  handleSuggestionChangePrice: (trip: any) => void
+  statePrice: boolean
+  stateEnd: boolean
+}
 
+export const RequestRideForm = ({
+  socket,
+  handleSuggestionChangePrice,
+  statePrice,
+  stateEnd
+}: props) => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
     libraries: ['places']
@@ -68,15 +72,25 @@ export const RequestRideForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof schema>) {
-    await CreateTrip({
-      values: {
-        ...values,
-        distance
-      },
-      setErrors,
-      setLoading,
-      setRequestMade
-    })
+    // await CreateTrip({
+    //   values: {
+    //     ...values,
+    //     distance
+    //   },
+    //   setErrors,
+    //   setLoading,
+    //   setRequestMade
+    // })
+    // setLoading(true)
+    // if (!statePrice) {
+    //   setTimeout(() => {
+    //     setLoading(false)
+    //   }, 30000)
+    // }
+    // handleSuggestionChangePrice({
+    //   ...values,
+    //   distance
+    // })
   }
 
   useEffect(() => {
@@ -86,6 +100,18 @@ export const RequestRideForm = () => {
       setRequestMade(false)
     }, 10000)
   }, [requestMade])
+
+  console.log(stateEnd)
+  if (stateEnd) {
+    return (
+      <>
+        <p className='mt-40 text-center'>
+          No han aceptado tu solicitud, presiona el botón para solicitar otra.
+        </p>
+        <button>Solicitar carrera</button>
+      </>
+    )
+  }
 
   return (
     <>
@@ -227,7 +253,7 @@ export const RequestRideForm = () => {
         >
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className='flex flex-col pt-4 gap-4 text-black text-center justify-center items-center  z-50 mb-10 max-w-[95vw]'
+            className='flex flex-col pt-4 gap-4 text-black text-center justify-center items-center z-50 mb-10 max-w-[95vw]'
           >
             <h1 className='font-bold text-2xl'> Solicitar conductor </h1>
 
@@ -294,7 +320,9 @@ export const RequestRideForm = () => {
                 <option value='nequi'>Nequi</option>
                 <option value='daviplata'>Daviplata</option>
               </select>
-
+              {statePrice && (
+                <p>Tal vez deberías subir el valor de la carrera</p>
+              )}
               <input
                 required
                 {...register('offeredPrice')}
