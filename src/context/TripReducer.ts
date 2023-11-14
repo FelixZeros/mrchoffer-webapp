@@ -60,6 +60,21 @@ export default (state: any, action: { type: string; payload: any }) => {
         ...state,
         socket: action.payload
       }
+    case 'SET_COMPANY_ID':
+      return {
+        ...state,
+        companyId: action.payload
+      }
+    case 'SET_DISTANCE':
+      return {
+        ...state,
+        distance: action.payload
+      }
+    case 'SET_AMOUNT_PASSANGER':
+      return {
+        ...state,
+        amountPassanger: action.payload
+      }
     default:
       return state
   }

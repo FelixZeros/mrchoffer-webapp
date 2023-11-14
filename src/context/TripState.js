@@ -4,11 +4,11 @@ import TripContext from './TripContext'
 import TripReducer from './TripReducer'
 import toast from 'react-hot-toast'
 import io from 'socket.io-client'
-
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_KEY)
+import { randomUUID } from 'crypto'
 
 const TripState = ({ children }) => {
   const initialState = {
+    companyId: '',
     name: '',
     phone: '',
     gender: '',
@@ -16,12 +16,20 @@ const TripState = ({ children }) => {
     destination: '',
     paymentMethod: '',
     comment: '',
+    socket: null,
     price: 0,
     priceModified: false,
+    distance: null,
+    amountPassanger: null,
     originCoords: null,
     destinationCoords: null,
     selected: null
   }
+
+  useEffect(() => {
+    const socket = io(process.env.NEXT_PUBLIC_SOCKET_KEY)
+    setSocket(socket)
+  }, [])
 
   const [state, dispatch] = useReducer(TripReducer, initialState)
 
@@ -32,6 +40,12 @@ const TripState = ({ children }) => {
     })
   }
 
+  const setSocket = socket => {
+    dispatch({
+      type: 'SET_SOCKET',
+      payload: socket
+    })
+  }
   const setPhone = phone => {
     dispatch({
       type: 'SET_PHONE',
@@ -106,6 +120,27 @@ const TripState = ({ children }) => {
     })
   }
 
+  const setCompanyId = companyId => {
+    dispatch({
+      type: 'SET_COMPANY_ID',
+      payload: companyId
+    })
+  }
+
+  const setDistance = distance => {
+    dispatch({
+      type: 'SET_DISTANCE',
+      payload: distance
+    })
+  }
+
+  const setAmountPassanger = amountPassanger => {
+    dispatch({
+      type: 'SET_AMOUNT_PASSANGER',
+      payload: amountPassanger
+    })
+  }
+
   const sendRequest = async () => {
     if (state.name === '' || state.origin === '' || state.price === 0) {
       toast.error(
@@ -114,18 +149,21 @@ const TripState = ({ children }) => {
     } else {
       const newTrip = {
         date: new Date().toLocaleDateString(),
+        idFront: self.crypto.randomUUID(),
         status: 1,
-        name: state.name,
+        name: state.name.trim().toUpperCase(),
+        companyId: state.companyId,
         textOrigin: state.origin,
         latitudeOrigin: state.originCoords.latitude,
         longitudeOrigin: state.originCoords.longitude,
         textDestination: state.destination,
         latitudeDestination: state.destinationCoords.latitude,
         longitudeDestination: state.destinationCoords.longitude,
-        distance: '1 Km', // de momento no se usa
+        distance: state.distance,
         price: state.price,
         paymentMethod: state.paymentMethod,
         genderPassenger: state.gender,
+        amountPassanger: state.amountPassanger,
         comment: state.comment,
         phoneNumber: state.phone,
         startTime: new Date().toLocaleTimeString(),
@@ -139,10 +177,11 @@ const TripState = ({ children }) => {
             duration: 60 * 1000 * 5
           }
         )
-        socket.emit('client:request-trip', newTrip)
+        console.log(newTrip)
+        state.socket.emit('client:request-trip', newTrip)
         setTimeout(() => {
           setStatePrice(true)
-          socket.emit('client:request-trip', {
+          state.socket.emit('client:request-trip', {
             ...newTrip,
             attempt: 2
           })
@@ -156,17 +195,21 @@ const TripState = ({ children }) => {
     <TripContext.Provider
       value={{
         name: state.name,
+        amountPassanger: state.amountPassanger,
         phone: state.phone,
         gender: state.gender,
         origin: state.origin,
         destination: state.destination,
         originCoords: state.originCoords,
+        distance: state.distance,
         destinationCoords: state.destinationCoords,
         selected: state.selected,
         paymentMethod: state.paymentMethod,
         comment: state.comment,
         price: state.price,
+        socket: state.socket,
         setName,
+        setAmountPassanger,
         setPhone,
         setGender,
         setOrigin,
@@ -177,6 +220,8 @@ const TripState = ({ children }) => {
         setComment,
         setPrice,
         sendRequest,
+        setDistance,
+        setCompanyId,
         setSelected
       }}
     >

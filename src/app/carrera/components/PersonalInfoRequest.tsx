@@ -9,8 +9,18 @@ type RenderProps = {
   handleRender: any
 }
 export const PersonalInfoRequest = ({ handleRender }: RenderProps) => {
-  const { name, setName, phone, setPhone, gender, setGender } =
-    useContext(TripContext)
+  const {
+    name,
+    setName,
+    phone,
+    setPhone,
+    gender,
+    setGender,
+    amountPassanger,
+    setAmountPassanger
+  } = useContext(TripContext)
+
+  console.log(gender)
 
   const handleOk = () => {
     if (name === '' || phone === '' || gender === '') {
@@ -48,19 +58,34 @@ export const PersonalInfoRequest = ({ handleRender }: RenderProps) => {
       </div>
       <div className='flex items-center gap-8 justify-center py-4'>
         <button
-          className='flex items-center justify-center min-w-[62px] min-h-[48px] bg-[#D9D9D9] p-2 rounded-lg shadow-sm'
+          className={`
+          ${gender === 'Masculino' ? 'bg-[#FFB800]' : 'bg-[#D9D9D9]'}
+          flex items-center justify-center min-w-[62px] min-h-[48px] p-2 rounded-lg shadow-sm`}
           onClick={() => setGender('Masculino')}
         >
-          <Image src='/images/fem.png' width={30} height={31} alt='masculino' />
+          <Image src='/images/fem.png' width={40} height={40} alt='masculino' />
         </button>
         <button
           onClick={() => setGender('Femenino')}
-          className='flex items-center justify-center min-w-[62px] min-h-[48px] bg-[#FFB800] p-2 rounded-lg shadow-sm'
+          className={`${gender === 'Femenino' ? 'bg-[#FFB800]' : 'bg-[#D9D9D9]'}
+                'flex items-center justify-center min-w-[62px] min-h-[48px] pl-3 py-2 rounded-lg shadow-sm`}
         >
-          <Image src='/images/masc.png' width={22} height={34} alt='femenino' />
+          <Image src='/images/masc.png' width={40} height={40} alt='femenino' />
         </button>
       </div>
-      <div className='flex flex-row w-full justify-between' onClick={handleOk}>
+      {gender !== '' && (
+        <Input
+          placeholder='Cantidad de pasajeros'
+          className='placeholder:font-medium uppercase placeholder:text-black p-2 shadow-sm'
+          value={amountPassanger === '' ? '' : amountPassanger}
+          onChange={e => setAmountPassanger(e.target.value)}
+          type='number'
+        />
+      )}
+      <div
+        className='flex flex-row w-full justify-between pt-4'
+        onClick={handleOk}
+      >
         <button className='uppercase bg-[#FFB800] p-2 rounded-lg font-bold w-full text-xl shadow-sm'>
           Confirmar
         </button>
