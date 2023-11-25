@@ -1,7 +1,7 @@
 'use client'
 import { IUserSession } from './Auth-context'
 
-export type AuthActionType = { type: string; payload?: IUserSession}
+export type AuthActionType = { type: string; payload?: IUserSession }
 
 export interface AuthState {
   isLoggedIn: boolean
@@ -17,7 +17,14 @@ export const authReducer = (
       return {
         ...state,
         user: action.payload,
-        isLoggedIn: true,
+        isLoggedIn: true
+      }
+    }
+    case 'SET_USER': {
+      return {
+        ...state,
+        user: action.payload,
+        isLoggedIn: true
       }
     }
     case '[Auth] - Logout': {

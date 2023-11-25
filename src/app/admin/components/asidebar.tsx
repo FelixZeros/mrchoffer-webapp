@@ -22,23 +22,35 @@ interface AsideContextProps {
 const AsideContext = createContext({} as AsideContextProps)
 const { Provider } = AsideContext
 
-const NavLink = ({ route }: { route: Route }) => {
+const NavLink = ({ route, activeRoute, setActiveRoute }: any) => {
   const { isOpen } = useContext(AsideContext)
-
   const { Icon, href, name } = route
 
+  const isActive = activeRoute === href // Comprueba si la ruta actual es la activa
+
+  const handleClick = () => {
+    setActiveRoute(href) // Actualiza la ruta activa al hacer clic en la ruta
+  }
   return (
     <div
-      className={` rounded-lg text-white hover:text-black my-1 transition-all cursor-pointer hover:bg-[--main-yellow]`}
+      className={`rounded-lg text-white hover:text-black my-1 transition-all cursor-pointer ${
+        isActive ? 'bg-[--main-yellow] ' : 'hover:bg-[--main-yellow]'
+      }`}
     >
-      <NextLink
-        href={href}
-        className={`flex py-5  ${
-          isOpen ? 'justify-center' : 'justify-end pr-[17%]'
-        } w-full h-full items-center gap-1`}
-      >
-        <Icon />
-        {isOpen && name}
+      <NextLink href={href} passHref>
+        <div
+          className={`flex py-5 2xl:px-10 ${
+            isOpen ? 'gap-4 px-5' : 'justify-end pr-[17%]'
+          } w-full h-full items-center gap-1`}
+          onClick={handleClick} // Manejar el clic en la ruta
+        >
+          <div className={isActive ? 'text-black' : 'text-white'}>
+            <Icon />
+          </div>
+          <p className={isActive ? 'text-black' : 'text-white'}>
+            {isOpen && name}
+          </p>
+        </div>
       </NextLink>
     </div>
   )
@@ -47,6 +59,7 @@ const NavLink = ({ route }: { route: Route }) => {
 export const AsideBar = ({}) => {
   const { user, logout } = useContext(AuthContext)
   const [isOpen, setIsOpen] = useState<boolean>(true)
+  const [activeRoute, setActiveRoute] = useState<string>('admin/empresas') // Estado para la ruta activa
 
   return (
     <Provider
@@ -58,7 +71,7 @@ export const AsideBar = ({}) => {
       <aside
         className={`${
           !isOpen && '-translate-x-1/2'
-        } w-[15vw] transition-all h-screen bg-[#181818] fixed left-0`}
+        } w-[15vw] transition-all h-screen bg-[#181818] fixed left-0 uppercase`}
         aria-label='Sidebar'
       >
         <button
@@ -84,10 +97,24 @@ export const AsideBar = ({}) => {
           </div>
         </div>
         <div className='h-full px-3 py-4'>
-          <div className='flex-col text-center font-medium my-2 h-fit'>
+          <div className='flex-col text-center font-bold my-2 h-fit'>
             {user?.type === 'company'
-              ? routes.map(route => <NavLink route={route} />)
-              : routes_admin.map(route => <NavLink route={route} />)}
+              ? routes.map(route => (
+                  <NavLink
+                    key={route.href}
+                    route={route}
+                    activeRoute={activeRoute}
+                    setActiveRoute={setActiveRoute}
+                  />
+                ))
+              : routes_admin.map(route => (
+                  <NavLink
+                    key={route.href}
+                    route={route}
+                    activeRoute={activeRoute}
+                    setActiveRoute={setActiveRoute}
+                  />
+                ))}
           </div>
 
           <div
@@ -99,7 +126,7 @@ export const AsideBar = ({}) => {
             <div className='flex justify-center'>
               <PowerIcon />
             </div>
-            {isOpen && 'Cerrar sesión'}
+            {isOpen && <span className='text-xs'>Cerrar sesión</span>}
           </div>
         </div>
       </aside>

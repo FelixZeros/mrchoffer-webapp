@@ -1,260 +1,298 @@
 'use client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import * as z from 'zod'
-export default function CreateCompanyPage() {
-  const validationSchema = z
-    .object({
-      name: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      }),
-      department: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      }),
-      phone: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      }),
-      NIT: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      }),
-      city: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      }),
-      whatsapp: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      }),
-      email: z
-        .string()
-        .email('Ingrese un correo válido')
-        .refine(value => value.trim() !== '', {
-          message: 'Este campo es requerido'
-        }),
-      password: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      }),
-      confirm_password: z.string().refine(value => value.trim() !== '', {
-        message: 'Este campo es requerido'
-      })
-    })
-    .refine(data => data.password === data.confirm_password, {
-      message: 'Las contraseñas no coinciden',
-      path: ['confirm_password']
-    })
-
-  type schema = z.infer<typeof validationSchema>
+import React, { useState } from 'react'
+import { Input, Modal, Select } from 'antd'
+import { Slide } from 'react-awesome-reveal'
+import useRegister from './useRegister'
+import { useRouter } from 'next/navigation'
+const CreateCompany = () => {
+  const router = useRouter()
   const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<schema>({
-    resolver: zodResolver(validationSchema)
-  })
-
-  const [userCreated, setUserCreated] = useState<any>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [error, setError] = useState<any>()
-
-  const onSubmit: SubmitHandler<schema> = async data => {
-    setIsLoading(true)
-    await axios
-      .post(`${process.env.NEXT_PUBLIC_API + 'create-user'}`, {
-        email: data.email,
-        password: data.password,
-        type: 'company',
-        name: data.name,
-        address: 'TV 27 # 19 A 60',
-        city: 'Valledupar',
-        phone: data.phone,
-        photo:
-          'https://cu.epm.com.co/Portals/institucional/EasyDNNnews/105/img-ejercicio9.jpg'
-      })
-      .then(response => {
-        if (!response.data.isOk) return
-        console.log(response.data)
-        setUserCreated(response.data.user)
-        setIsLoading(false)
-      })
-      .catch(error => setError(error))
-      .finally(() => setIsLoading(false))
-  }
-
-  useEffect(() => {
-    setTimeout(() => {
-      setUserCreated(null)
-      setError(null)
-    }, 6000)
-  }, [userCreated])
-
-  useEffect(() => {
-    setTimeout(() => {
-      setError(null)
-    }, 6000)
-  }, [error])
-
-  const isDisable = isLoading || !!userCreated 
+    step,
+    setStep,
+    handleForms,
+    name,
+    setName,
+    setUsername,
+    setPhone,
+    setAddress,
+    setDepartment,
+    setCity,
+    setPhoto,
+    setEmail,
+    password,
+    setPassword,
+    setConfirmPassword,
+    error,
+    setError,
+    visible,
+    setVisible,
+    visibleError,
+    setDocument,
+    setTypeDocument,
+    setTypePerson,
+    setVisibleError
+  } = useRegister()
 
   return (
-    <main>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='grid justify-center'>
-          <div className='grid grid-cols-2 gap-6'>
-            <div className='col-span-1 grid gap-11'>
-              <div className='flex gap-2'>
-                <input
-                  {...register('name')}
-                  type='text'
-                  className='w-full rounded-lg bg-white shadow p-2'
-                  placeholder='Nombre'
-                />
-                {errors.name !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-              <div className='flex gap-2'>
-                <select
-                  {...register('department')}
-                  className='w-full shadow p-2 rounded-lg bg-white text-black'
-                >
-                  <option value=''>Departamento</option>
-                  <option value='cesar'>Cesar</option>
-                </select>
-                {errors.department !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.department.message}
-                  </p>
-                )}
-              </div>
-              <div className='flex gap-2'>
-                <input
-                  {...register('phone')}
-                  type='text'
-                  className='w-full rounded-lg bg-white shadow p-2'
-                  placeholder='Teléfono'
-                />
-                {errors.phone !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-              <div className='flex gap-2'>
-                <input
-                  {...register('email')}
-                  type='text'
-                  className='w-full rounded-lg bg-white shadow p-2'
-                  placeholder='Correo'
-                />
-                {errors.email !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className='col-span-1 grid gap-10'>
-              <div className='flex gap-2'>
-                <input
-                  {...register('NIT')}
-                  type='text'
-                  className='w-full rounded-lg bg-white shadow p-2'
-                  placeholder='NIT'
-                />
-                {errors.NIT !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.NIT.message}
-                  </p>
-                )}
-              </div>
-              <div className='flex gap-2'>
-                <select
-                  {...register('city')}
-                  className='w-full shadow p-2 rounded-lg bg-white text-black'
-                >
-                  <option value=''>Ciudad</option>
-                  <option value='valledupar'>valledupar</option>
-                </select>
-                {errors.city !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.city.message}
-                  </p>
-                )}
-                <input
-                  {...register('whatsapp')}
-                  type='text'
-                  className='w-full rounded-lg bg-white shadow p-2'
-                  placeholder='Whatsapp'
-                />
-                {errors.whatsapp !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.whatsapp.message}
-                  </p>
-                )}
-              </div>
-              <div className='flex gap-2'>
-                <input
-                  {...register('password')}
-                  type='password'
-                  className='w-full rounded-lg bg-white shadow p-2'
-                  placeholder='Contraseña'
-                />
-                {errors.password !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-              <div className='flex gap-2'>
-                <input
-                  {...register('confirm_password')}
-                  type='password'
-                  className='w-full rounded-lg bg-white shadow p-2'
-                  placeholder='Confirmar contraseña'
-                />
-                {errors.confirm_password !== undefined && (
-                  <p className='text-red-700 font-medium mt-2'>
-                    {errors.confirm_password.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
+    <>
+      <Modal
+        visible={visible}
+        onCancel={() => {
+          setVisible(false)
+          router.push('/admin/empresas')
+        }}
+        footer={null}
+      >
+        <div className='flex flex-col justify-center items-center'>
+          <h2 className='text-2xl font-bold'>Creación Exitosa</h2>
+          <p className='text-lg mt-5'>
+            La empresa {name} ha sido creada exitosamente
+          </p>
+          <button
+            className='bg-[#FFB800] uppercase font-bold px-5 py-2 rounded-lg shadow-md mt-5'
+            onClick={() => {
+              setVisible(false)
+              router.push('/admin/empresas')
+            }}
+          >
+            <p>Continuar</p>
+          </button>
+        </div>
+      </Modal>
 
-          <div className='flex justify-center gap-2 my-5'>
-            <Link href={'admin/empresas'}>
-              <button
-                type='button'
-                className='bg-gray-300 px-5 py-2 py rounded-lg font-bold shadow text-black'
-              >
-                Cancelar
-              </button>
-            </Link>
+      <Modal
+        visible={visibleError}
+        onCancel={() => {
+          setVisibleError(false)
+          router.push('/admin/empresas')
+        }}
+        footer={null}
+      >
+        <div className='flex flex-col justify-center items-center'>
+          <h2 className='text-2xl font-bold'>¡Ha ocurrido un error!</h2>
+          <p className='text-lg mt-5'>
+            La empresa {name} no ha sido creada, por favor intente de nuevo
+          </p>
+          <button
+            className='bg-[#FFB800] uppercase font-bold px-5 py-2 rounded-lg shadow-md mt-5'
+            onClick={() => {
+              setVisibleError(false)
+              router.push('/admin/empresas')
+            }}
+          >
+            <p>Continuar</p>
+          </button>
+        </div>
+      </Modal>
 
-            <button
-              disabled={isDisable}
-              type='submit'
-              className='bg-[--main-yellow] disabled:bg-gray-400 px-5 py-2 py rounded-lg font-bold shadow text-black'
+      <section>
+        <h1 className='text-2xl font-bold uppercase mt-14'>Crear empresa</h1>
+        {step === 1 && (
+          <Slide direction='right'>
+            <form
+              className='flex flex-col'
+              onSubmit={e => {
+                handleForms(e, 1)
+              }}
             >
-              {!isLoading ? 'Continuar' : 'Creando...'}
-            </button>
-          </div>
-        </div>
-      </form>
-
-      {userCreated && (
-        <div className='p-5 my-1 rounded-lg bg-white shadow-lg'>
-          Usuario creado con exito!
-        </div>
-      )}
-      {error && (
-        <div className='p-5 my-1 rounded-lg bg-white shadow-lg'>
-          {JSON.stringify(error.message)}
-        </div>
-      )}
-    </main>
+              <div className='flex flex-row mt-14 justify-center gap-32'>
+                <div className='flex flex-col w-1/3 gap-4'>
+                  <Input
+                    placeholder='Nombre'
+                    className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                    size='large'
+                    onChange={(e: any) => {
+                      setName(e.target.value)
+                    }}
+                    required
+                  />
+                  <Input
+                    placeholder='Link de carreras'
+                    className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                    size='large'
+                    onChange={(e: any) => {
+                      setUsername(e.target.value)
+                    }}
+                    required
+                  />
+                  <Input
+                    placeholder='WhatsApp'
+                    className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                    size='large'
+                    type='number'
+                    onChange={(e: any) => {
+                      setPhone(e.target.value)
+                    }}
+                    required
+                  />
+                  <Input
+                    placeholder='Dirección'
+                    className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                    size='large'
+                    onChange={(e: any) => {
+                      setAddress(e.target.value)
+                    }}
+                    required
+                  />
+                  <Input
+                    size='large'
+                    placeholder='URL Foto de Perfil'
+                    onChange={(e: any) => {
+                      setPhoto(e.target.value)
+                    }}
+                    required
+                    className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                  />
+                </div>
+                <div className='flex flex-col w-1/3 gap-4'>
+                  <Select
+                    placeholder='Departamento'
+                    className='w-full uppercase font-bold shadow-md'
+                    size='large'
+                    onChange={(e: any) => {
+                      setDepartment(e)
+                    }}
+                    options={[
+                      { label: 'Cesar', value: 'Cesar' },
+                      { label: 'Guajira', value: 'Guajira' }
+                    ]}
+                  />
+                  <Select
+                    placeholder='Tipo de persona'
+                    className='w-full uppercase font-bold shadow-md'
+                    size='large'
+                    onChange={(e: any) => {
+                      setTypePerson(e)
+                    }}
+                    options={[
+                      { label: 'Natural', value: 'Natural' },
+                      { label: 'Juridica', value: 'Juridica' }
+                    ]}
+                  />
+                  <Select
+                    placeholder='Ciudad'
+                    size='large'
+                    className='w-full uppercase font-bold shadow-md'
+                    onChange={(e: any) => {
+                      setCity(e)
+                    }}
+                    options={[
+                      { label: 'Valledupar', value: 'Valledupar' },
+                      { label: 'La Jagua', value: 'La Jagua' }
+                    ]}
+                  />
+                  <Select
+                    placeholder='Tipo de documento'
+                    className='w-full uppercase font-bold shadow-md'
+                    size='large'
+                    onChange={(e: any) => {
+                      setTypeDocument(e)
+                    }}
+                    options={[
+                      { label: 'Cédula', value: 'Cédula' },
+                      { label: 'Nit', value: 'Nit' },
+                      {
+                        label: 'Cedúla de extranjería',
+                        value: 'Cedúla de extranjería'
+                      }
+                    ]}
+                  />
+                  <Input
+                    size='large'
+                    placeholder='N° de documento'
+                    onChange={(e: any) => {
+                      setDocument(e.target.value)
+                    }}
+                    required
+                    className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                  />
+                </div>
+              </div>
+              <div className='flex flex-row justify-center gap-24 items-center mt-10'>
+                <button
+                  className='bg-[#D9D9D9] uppercase font-bold px-5 py-2 rounded-lg shadow-md'
+                  onClick={(e: any) => {
+                    e.preventDefault()
+                    router.push('/admin/empresas')
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button className='bg-[#FFB800] uppercase font-bold px-5 py-2 rounded-lg shadow-md'>
+                  <p>Siguiente</p>
+                </button>
+              </div>
+            </form>
+          </Slide>
+        )}
+        {step === 2 && (
+          <Slide direction='right'>
+            <div className='w-full flex justify-center'>
+              <form
+                className='flex flex-col w-1/2  mt-14 justify-center gap-4'
+                onSubmit={e => {
+                  handleForms(e, 2)
+                }}
+              >
+                <Input
+                  placeholder='CORREO ELECTRÓNICO'
+                  className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                  size='large'
+                  onChange={(e: any) => {
+                    setEmail(e.target.value)
+                  }}
+                  required
+                />
+                <Input
+                  placeholder='CONTRASEÑA'
+                  size='large'
+                  className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                  type='password'
+                  onChange={(e: any) => {
+                    setPassword(e.target.value)
+                  }}
+                  required
+                />
+                {error && (
+                  <p className='text-red-500'>
+                    Las contraseñas no coinciden, por favor verifique
+                  </p>
+                )}
+                <Input
+                  placeholder='CONFIRMAR CONTRASEÑA'
+                  size='large'
+                  className='w-full uppercase font-bold shadow-md placeholder:text-black'
+                  type='password'
+                  onChange={(e: any) => {
+                    setConfirmPassword(e.target.value)
+                    if (e.target.value !== password) {
+                      setError(true)
+                    } else {
+                      setError(false)
+                    }
+                  }}
+                  required
+                />
+                <div className='flex flex-row justify-center gap-10 items-center mt-10'>
+                  <button
+                    className='bg-[#D9D9D9] uppercase font-bold px-7 py-2 rounded-lg shadow-md'
+                    onClick={() => {
+                      setStep(1)
+                    }}
+                  >
+                    Atrás
+                  </button>
+                  <button className='bg-[#FFB800] uppercase font-bold px-7 py-2 rounded-lg shadow-md'>
+                    <p>Crear</p>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </Slide>
+        )}
+      </section>
+    </>
   )
 }
+
+export default CreateCompany

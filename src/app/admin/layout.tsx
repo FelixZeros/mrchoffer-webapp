@@ -32,13 +32,13 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
             className={`w-[85vw] transform-origin: right duration-500 ease-in-out'`}
           >
             <section className='flex-1 w-full h-full'>
-              <div className='p-4 pl-8 '>
-                <HeaderAdmin />
-                <div className='w-full flex-1 p-4 shadow rounded-lg flex items-center justify-center overflow-auto'>
-                  {children}
-                </div>
+              <div className='py-6 px-11'>
+                {/* <HeaderAdmin /> */}
+                {/* <div className='w-full flex-1 p-4 shadow rounded-lg flex items-center justify-center overflow-auto'> */}
+                {children}
+                {/* </div> */}
               </div>
-              <Footer></Footer>
+              {/* <Footer></Footer> */}
             </section>
           </div>
         </>

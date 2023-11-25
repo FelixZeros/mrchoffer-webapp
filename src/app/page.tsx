@@ -46,7 +46,14 @@ const HomePage: FC = () => {
         setError('Correo y/o contraseña incorrectos')
         return
       }
-      router.replace('/admin')
+      if (IsValidLogin.isLogged) {
+        if (IsValidLogin.userSave.type === 'company') {
+          router.push('/company/solicitudes')
+        }
+        if (IsValidLogin.userSave.type === 'admin') {
+          router.push('/admin/empresas')
+        }
+      }
     } catch (err) {
       setError(err)
     } finally {
@@ -60,12 +67,19 @@ const HomePage: FC = () => {
   const isDisabled = isSubmitting || isLoading
 
   return (
-    <>
+    <main className='h-screen p-0 m-0'>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='flex h-screen w-full justify-center'
+        className='flex w-full justify-center h-full'
       >
-        <div className='w-2/3 flex flex-col justify-center '>
+        <Image
+          src='/images/hero-img.png'
+          alt='hero'
+          className='object-cover w-1/2'
+          width={600}
+          height={600}
+        />
+        <div className='w-1/2 flex flex-col justify-center px-28 xl:px-44'>
           <div className='mb-4'>
             <div className='flex justify-center mb-11'>
               <Image src={logo} alt='logo' />
@@ -135,7 +149,7 @@ const HomePage: FC = () => {
           </div>
         </div>
       </form>
-    </>
+    </main>
   )
 }
 

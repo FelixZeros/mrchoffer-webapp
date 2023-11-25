@@ -87,7 +87,7 @@ export const RequestDriver = ({ handleRender }: RenderProps) => {
       </div>
       <div className='flex flex-row w-full justify-between'>
         <button
-          // disabled={state}
+          disabled={state}
           className='disabled:cursor-not-allowed disabled:bg-[#ceb576] uppercase bg-[#FFB800] p-2 rounded-lg font-bold w-[73%] shadow-sm'
           onClick={() => {
             setState(true)

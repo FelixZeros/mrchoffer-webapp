@@ -14,16 +14,14 @@ export const PersonalInfoRequest = ({ handleRender }: RenderProps) => {
     setName,
     phone,
     setPhone,
-    gender,
-    setGender,
-    amountPassanger,
-    setAmountPassanger
+    setAmountFemale,
+    setAmountMale,
+    amountFemale,
+    amountMale
   } = useContext(TripContext)
 
-  console.log(gender)
-
   const handleOk = () => {
-    if (name === '' || phone === '' || gender === '') {
+    if (name === '' || phone === '') {
       toast.error('Parece que has olvidado un campo.', {
         duration: 5000,
         style: {
@@ -57,31 +55,41 @@ export const PersonalInfoRequest = ({ handleRender }: RenderProps) => {
         />
       </div>
       <div className='flex items-center gap-8 justify-center py-4'>
-        <button
-          className={`
-          ${gender === 'Masculino' ? 'bg-[#FFB800]' : 'bg-[#D9D9D9]'}
-          flex items-center justify-center min-w-[62px] min-h-[48px] p-2 rounded-lg shadow-sm`}
-          onClick={() => setGender('Masculino')}
-        >
-          <Image src='/images/fem.png' width={40} height={40} alt='masculino' />
-        </button>
-        <button
-          onClick={() => setGender('Femenino')}
-          className={`${gender === 'Femenino' ? 'bg-[#FFB800]' : 'bg-[#D9D9D9]'}
-                'flex items-center justify-center min-w-[62px] min-h-[48px] pl-3 py-2 rounded-lg shadow-sm`}
-        >
-          <Image src='/images/masc.png' width={40} height={40} alt='femenino' />
-        </button>
+        <div className='bg-[#D9D9D9] flex flex-row-reverse rounded-lg w-[145px] h-16'>
+          <div className='flex items-center'>
+            <Image
+              src='/images/fem.png'
+              width={40}
+              height={40}
+              alt='masculino'
+            />
+          </div>
+          <Input
+            placeholder='Masculino'
+            className='placeholder:font-medium uppercase placeholder:text-black p-2 shadow-sm text-base font-semibold text-center'
+            value={amountMale === '' ? '' : amountMale}
+            onChange={e => setAmountMale(e.target.value)}
+            type='number'
+          />
+        </div>
+        <div className='bg-[#D9D9D9] flex flex-row rounded-lg w-[121px] h-16'>
+          <div className='flex items-center'>
+            <Image
+              src='/images/masc.png'
+              width={40}
+              height={40}
+              alt='femenino'
+            />
+          </div>
+          <Input
+            placeholder='Mujeres'
+            className='placeholder:font-medium uppercase placeholder:text-black p-2 shadow-sm text-base font-semibold text-center'
+            value={amountFemale === '' ? '' : amountFemale}
+            onChange={e => setAmountFemale(e.target.value)}
+            type='number'
+          />
+        </div>
       </div>
-      {gender !== '' && (
-        <Input
-          placeholder='Cantidad de pasajeros'
-          className='placeholder:font-medium uppercase placeholder:text-black p-2 shadow-sm'
-          value={amountPassanger === '' ? '' : amountPassanger}
-          onChange={e => setAmountPassanger(e.target.value)}
-          type='number'
-        />
-      )}
       <div
         className='flex flex-row w-full justify-between pt-4'
         onClick={handleOk}

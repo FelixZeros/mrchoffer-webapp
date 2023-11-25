@@ -20,7 +20,8 @@ const TripState = ({ children }) => {
     price: 0,
     priceModified: false,
     distance: null,
-    amountPassanger: null,
+    amountMale: 0,
+    amountFemale: 0,
     originCoords: null,
     destinationCoords: null,
     selected: null
@@ -134,10 +135,17 @@ const TripState = ({ children }) => {
     })
   }
 
-  const setAmountPassanger = amountPassanger => {
+  const setAmountMale = amountMale => {
     dispatch({
-      type: 'SET_AMOUNT_PASSANGER',
-      payload: amountPassanger
+      type: 'SET_MALE',
+      payload: amountMale
+    })
+  }
+
+  const setAmountFemale = amountFemale => {
+    dispatch({
+      type: 'SET_FEMALE',
+      payload: amountFemale
     })
   }
 
@@ -162,8 +170,14 @@ const TripState = ({ children }) => {
         distance: state.distance,
         price: state.price,
         paymentMethod: state.paymentMethod,
-        genderPassenger: state.gender,
-        amountPassanger: state.amountPassanger,
+        amountMale:
+          state.amountMale === '' || state.amountMale === 0
+            ? 0
+            : state.amountMale,
+        amountFemale:
+          state.amountFemale === '' || state.amountFemale === 0
+            ? 0
+            : state.amountFemale,
         comment: state.comment,
         phoneNumber: state.phone,
         startTime: new Date().toLocaleTimeString(),
@@ -177,7 +191,6 @@ const TripState = ({ children }) => {
             duration: 60 * 1000 * 5
           }
         )
-        console.log(newTrip)
         state.socket.emit('client:request-trip', newTrip)
         setTimeout(() => {
           setStatePrice(true)
@@ -199,6 +212,8 @@ const TripState = ({ children }) => {
         phone: state.phone,
         gender: state.gender,
         origin: state.origin,
+        amountMale: state.amountMale,
+        amountFemale: state.amountFemale,
         destination: state.destination,
         originCoords: state.originCoords,
         distance: state.distance,
@@ -209,7 +224,8 @@ const TripState = ({ children }) => {
         price: state.price,
         socket: state.socket,
         setName,
-        setAmountPassanger,
+        setAmountMale,
+        setAmountFemale,
         setPhone,
         setGender,
         setOrigin,

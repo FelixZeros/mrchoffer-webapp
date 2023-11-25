@@ -1,86 +1,156 @@
-import { BillIcon } from '@/components/icons/bill'
-import { CreditCardIcon } from '@/components/icons/credit-card'
-import { HouseIcon } from '@/components/icons/house'
-import { SearchBar } from '../components/search-bar'
-import { AvatarIcon } from '@/components/icons/avatar'
-import { StarIcon } from '@/components/icons/star'
+'use client'
+import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { EyeIconClassname } from '@/components/icons/eye'
+import { useRouter } from 'next/navigation'
+import { ModalRecharge } from '@/components/Modals/ModalRecharge'
+import { ModalNice, ModalError } from '@/components/Modals/Modals'
 
-const RechargeCard = () => {
+const RechargePage = () => {
+  const router = useRouter()
+  const [cash, setCash] = useState<any>([])
+  const [data, setData] = useState<any>([])
+  const [initialData, setInitialData] = useState<any>([])
+  const [companys, setCompanys] = useState<any>(null)
+  const [selectedCompany, setSelectedCompany] = useState<any>(null)
+  const [selectedType, setSelectedType] = useState<any>('Efectivo')
+  const [visible, setVisible] = useState<any>(false)
+  const [nice, setNice] = useState<any>(false)
+  const [error, setError] = useState<any>(false)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        (process.env.NEXT_PUBLIC_API as string) + 'get-facturations'
+      )
+      const responseCompany = await fetch(
+        (process.env.NEXT_PUBLIC_API as string) + 'get-companys'
+      )
+      const { amountTotalAdmin, getBalanceCompany } = await response.json()
+      const dataCompany = await responseCompany.json()
+      setCash(amountTotalAdmin)
+      setCompanys(dataCompany)
+      setInitialData(getBalanceCompany)
+      setData(getBalanceCompany)
+    }
+    fetchData()
+  }, [])
+
+  const handleRecharge = () => {
+    if (selectedCompany === null) return
+    if (selectedCompany && selectedType) {
+      setVisible(true)
+    }
+  }
+
   return (
-    <div className='m-5 p-5 shadow rounded-xl grid hover:-translate-y-1 hover:shadow-xl focus:shadow-xl transition-all cursor-pointer border border-transparent hover:border-blue-600 focus:border-blue-600'>
-      <div className='flex items-center gap-2 font-bold'>
-        <div className='text-[--main-yellow]'>
-          <BillIcon />
-        </div>
-        Recargas
-      </div>
-      <input
-        type='number'
-        className='my-4 focus:outline-transparent p-3 shadow rounded-md border-none outline-none'
-        placeholder='Ingrese un valor'
+    <section className='flex flex-row justify-center gap-20 min-h-screen mt-20'>
+      <ModalRecharge
+        visible={visible}
+        setVisible={setVisible}
+        selectedCompany={selectedCompany}
+        selectedType={selectedType}
+        setNice={setNice}
+        setError={setError}
       />
-      <div className='flex justify-between gap-2 mt-5'>
-        <div className='flex-col justify-center'>
-          <div className='flex justify-center'>
-            <div className='p-4 rounded-md bg-[--main-yellow] my-2 shadow'>
-              <HouseIcon />
-            </div>
-          </div>
-          <strong>Punto físico</strong>
-        </div>
+      <ModalNice nice={nice} setNice={setNice} />
+      <ModalError error={error} setError={setError} />
 
-        <div className='flex-col justify-center'>
-          <div className='flex justify-center'>
-            <div className='p-4 rounded-md bg-gray-600 my-2 shadow'>
-              <CreditCardIcon />
-            </div>
+      <div className='flex flex-col gap-4 items-center'>
+        <div className='rounded-xl shadow-md py-4 px-14 flex flex-col gap-4'>
+          <div className='flex flex-row gap-3 items-center'>
+            <Image src='/images/money.png' width={36} height={36} alt='money' />
+            <h2 className='font-semibold text-xl'>Mis Ingresos</h2>
           </div>
-          <strong>Transferencia</strong>
+          <p className='font-bold text-4xl'>COP {cash}</p>
         </div>
+        <div className='flex flex-row justify-center items-center gap-14'>
+          <div className='flex flex-col items-center justify-center gap-3 cursor-pointer'>
+            <div
+              className={
+                selectedType === 'Efectivo'
+                  ? 'bg-[#FFB800] px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#181818] ring-2 ring-[#181818] transition-all'
+                  : 'bg-[#FFB800] px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#181818] transition-all'
+              }
+              onClick={() => {
+                setSelectedType('Efectivo')
+              }}
+            >
+              <Image
+                src='/images/cash-flow.png'
+                width={38}
+                height={24}
+                alt='money'
+                className='object-cover ml-0.5'
+              />
+            </div>
+            <p className='font-bold text-lg'>Efectivo</p>
+          </div>
+          <div className='flex flex-col items-center justify-center gap-2 cursor-pointer'>
+            <div
+              className={
+                selectedType === 'Transferencia'
+                  ? 'bg-white px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#FFB800] ring-2 ring-[#FFB800] transition-all'
+                  : 'bg-white px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#FFB800] transition-all'
+              }
+              onClick={() => {
+                setSelectedType('Transferencia')
+              }}
+            >
+              <Image
+                src='/images/transfer.png'
+                width={38}
+                height={24}
+                alt='money'
+                className='object-cover ml-0.5'
+              />
+            </div>
+            <p className='font-bold text-lg'>Transferencia</p>
+          </div>
+        </div>
+        <button
+          disabled={cash === 0}
+          className='bg-[#FFB800] px-4 py-3 rounded-xl shadow-lg w-[70%] font-bold disabled:cursor-not-allowed disabled:bg-[#D9D9D9]'
+          onClick={handleRecharge}
+        >
+          Recargar
+        </button>
       </div>
-    </div>
-  )
-}
-
-const CardDriver = () => {
-  return (
-    <div className='m-5 p-5 shadow rounded-xl grid hover:-translate-y-1 hover:shadow-xl transition-all cursor-pointer border border-transparent hover:border-[--main-yellow]'>
-      <span className='font-bold text-4xl my-3 flex items-center gap-2'>
-        <figure className='grid gap-2'>
-          <div className='flex justify-center'>
-            <div className='p-5 rounded-full bg-[--main-yellow] w-fit'>
-              <AvatarIcon fill='white' />
-            </div>
-          </div>
-          <span className='text-sm text-center'>3.2</span>
-          <div className='flex gap-1 justify-center'>
-            <StarIcon />
-            <StarIcon />
-            <StarIcon />
-            <StarIcon />
-            <StarIcon />
-          </div>
-        </figure>
-        <div className='grid flex-1 text-center'>
-          <span className='font-light'>Jairo Mendoza</span>
-          <strong>COP $2.000</strong>
-        </div>
-      </span>
-    </div>
-  )
-}
-
-export default function RechargePage() {
-  return (
-    <section className=' w-full h-full grid grid-cols-3'>
-      <div className='col-span-1 grid'>
-        <SearchBar />
-        <RechargeCard />
-      </div>
-      <div className='col-span-2'>
-        <CardDriver />
-        <CardDriver />
+      <div className='flex flex-col w-[60%] gap-5'>
+        {companys?.length > 0 &&
+          companys?.map((company: any, index: number) => (
+            <>
+              <div
+                className={
+                  selectedCompany?.id === company?.id
+                    ? 'shadow-lg py-4 px-[51px] flex flex-row rounded-2xl uppercase items-center justify-between  transition-all hover:ring-2 hover:ring-[#FFB800] ring-2 ring-[#FFB800]'
+                    : 'shadow-lg py-4 px-[51px] flex flex-row rounded-2xl uppercase items-center justify-between transition-all hover:ring-2 hover:ring-[#FFB800]'
+                }
+                onClick={() => {
+                  setSelectedCompany(company)
+                }}
+              >
+                <img
+                  src={company?.photo}
+                  alt='company'
+                  className='w-[91px] h-[91px] object-cover rounded-full border'
+                />
+                <div className='flex flex-col items-center'>
+                  <h2 className='font-bold text-3xl'>{company?.name}</h2>
+                  <p className='text-sm font-medium'>{company?.city}</p>
+                </div>
+                <EyeIconClassname
+                  classname='w-12 h-12 cursor-pointer'
+                  onClick={() =>
+                    router.push(`/admin/empresas/${company?.username}`)
+                  }
+                />
+              </div>
+            </>
+          ))}
       </div>
     </section>
   )
 }
+
+export default RechargePage

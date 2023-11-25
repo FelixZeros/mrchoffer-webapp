@@ -70,11 +70,17 @@ export default (state: any, action: { type: string; payload: any }) => {
         ...state,
         distance: action.payload
       }
-    case 'SET_AMOUNT_PASSANGER':
+    case 'SET_MALE':
       return {
         ...state,
-        amountPassanger: action.payload
+        amountMale: action.payload
       }
+    case 'SET_FEMALE':
+      return {
+        ...state,
+        amountFemale: action.payload
+      }
+
     default:
       return state
   }

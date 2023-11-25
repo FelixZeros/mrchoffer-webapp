@@ -36,8 +36,9 @@ const requestTravel = () => {
     }
     getCompanyData()
   }, [])
+  console.log(companyData)
 
-  if (companyData === null) {
+  if (companyData === null || companyData.error) {
     return (
       <section className='w-screen h-screen flex flex-col items-center justify-center px-4'>
         <h1 className='text-3xl font-bold'>

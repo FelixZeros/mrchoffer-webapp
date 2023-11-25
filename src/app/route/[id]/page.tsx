@@ -89,7 +89,7 @@ const DriverRealTime = () => {
       </section>
     )
   }
-
+  console.log(tripData)
   return (
     <section className='mt-12 bg-[#292929] min-h-screen'>
       <Modal
@@ -119,6 +119,9 @@ const DriverRealTime = () => {
                 cancelBy: 1,
                 comment
               })
+              setTimeout(() => {
+                window.location.reload()
+              }, 2000)
             }}
           >
             <button className='uppercase bg-[#FFB800] p-2 rounded-lg font-bold w-full text-xl shadow-sm'>
@@ -175,8 +178,8 @@ const DriverRealTime = () => {
       {isLoaded && tripData?.status === 2 && (
         <GoogleMap
           center={{
-            lat: tripData?.origin?.latitude,
-            lng: tripData?.origin?.longitude
+            lat: location?.lat ? location?.lat : tripData?.latitudeOrigin,
+            lng: location?.lng ? location?.lng : tripData?.longitudeOrigin
           }}
           zoom={15}
           mapContainerStyle={{

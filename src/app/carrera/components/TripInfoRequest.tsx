@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { Input } from 'antd'
 import TripContext from '@/context/TripContext'
 import toast from 'react-hot-toast'
@@ -23,6 +23,7 @@ export const TripInfoRequest = ({ handleRender }: RenderProps) => {
 
   const [search, setSearch] = useState<any>(null)
   const [searchTwo, setSearchTwo] = useState<any>(null)
+  const autocompleteRef = useRef(null)
 
   const handleOk = () => {
     if (origin === '' || destination === '') {
@@ -71,24 +72,24 @@ export const TripInfoRequest = ({ handleRender }: RenderProps) => {
     }
   }
 
-  const handleSendMapView = () => {
-    if (selected === null) {
-      toast.error('Tienes que seleccionar el origen o el destino.', {
-        duration: 2000,
-        style: {
-          borderRadius: '50px',
-          marginTop: '50px'
-        }
-      })
+  const handleSendMapView = (selected: any) => {
+    if (selected === 1) {
+      setSelected(1)
+      handleRender('MapInfoRequest')
     } else {
+      setSelected(2)
       handleRender('MapInfoRequest')
     }
   }
 
   return (
     <section className='mt-20 px-8 py-4'>
-      <div className='flex flex-col gap-4'>
-        <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+      <div className='flex flex-col'>
+        <Autocomplete
+          onPlaceChanged={onPlaceChanged}
+          onLoad={onLoad}
+          ref={autocompleteRef}
+        >
           <Input
             placeholder='Origen'
             className='placeholder:font-medium uppercase placeholder:text-black p-2 shadow-sm'
@@ -97,6 +98,22 @@ export const TripInfoRequest = ({ handleRender }: RenderProps) => {
             onClick={() => setSelected(1)}
           />
         </Autocomplete>
+        <div
+          className='py-4 flex items-center gap-3 cursor-pointer w-auto'
+          onClick={() => {
+            handleSendMapView(1)
+          }}
+        >
+          <Image
+            src='/images/ubi-yellow.png'
+            width={12}
+            height={16}
+            alt='ubicacion'
+          />
+          <p className='text-base font-medium text-[#FFB800] '>
+            Seleccionar en el mapa
+          </p>
+        </div>
         <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoadTwo}>
           <Input
             placeholder='Destino'
@@ -110,7 +127,9 @@ export const TripInfoRequest = ({ handleRender }: RenderProps) => {
 
       <div
         className='py-4 flex items-center gap-3 cursor-pointer w-auto'
-        onClick={handleSendMapView}
+        onClick={() => {
+          handleSendMapView(2)
+        }}
       >
         <Image
           src='/images/ubi-yellow.png'
