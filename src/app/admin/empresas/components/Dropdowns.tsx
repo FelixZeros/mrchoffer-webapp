@@ -13,6 +13,16 @@ export const DropdownDepartment = ({ department, setDepartment }: any) => {
       key: '1',
       label: 'Cesar',
       onClick: () => setDepartment('Cesar')
+    },
+    {
+      key: '2',
+      label: 'La Guajira',
+      onClick: () => setDepartment('La Guajira')
+    },
+    {
+      key: '3',
+      label: 'Cordoba',
+      onClick: () => setDepartment('Cordoba')
     }
   ]
 
@@ -51,7 +61,12 @@ export const DropdownReference = ({ reference, setReference }: any) => {
     {
       key: '2',
       label: 'Pago de plan',
-      onClick: () => setReference('Pago de plan')
+      onClick: () => setReference('Plan Postpago')
+    },
+    {
+      key: '2',
+      label: 'Pago de plan',
+      onClick: () => setReference('Plan Prepago')
     }
   ]
 

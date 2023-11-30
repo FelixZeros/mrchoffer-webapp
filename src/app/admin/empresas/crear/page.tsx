@@ -4,6 +4,7 @@ import { Input, Modal, Select } from 'antd'
 import { Slide } from 'react-awesome-reveal'
 import useRegister from './useRegister'
 import { useRouter } from 'next/navigation'
+import { location } from '../../utils/location'
 const CreateCompany = () => {
   const router = useRouter()
   const {
@@ -11,6 +12,7 @@ const CreateCompany = () => {
     setStep,
     handleForms,
     name,
+    department,
     setName,
     setUsername,
     setPhone,
@@ -152,10 +154,12 @@ const CreateCompany = () => {
                     onChange={(e: any) => {
                       setDepartment(e)
                     }}
-                    options={[
-                      { label: 'Cesar', value: 'Cesar' },
-                      { label: 'Guajira', value: 'Guajira' }
-                    ]}
+                    options={location?.map((item: any) => {
+                      return {
+                        label: item.name,
+                        value: item.name
+                      }
+                    })}
                   />
                   <Select
                     placeholder='Tipo de persona'
@@ -176,10 +180,14 @@ const CreateCompany = () => {
                     onChange={(e: any) => {
                       setCity(e)
                     }}
-                    options={[
-                      { label: 'Valledupar', value: 'Valledupar' },
-                      { label: 'La Jagua', value: 'La Jagua' }
-                    ]}
+                    options={location
+                      ?.filter((item: any) => item.name === department)[0]
+                      ?.municipios.map((element: any) => {
+                        return {
+                          label: element.name,
+                          value: element.name
+                        }
+                      })}
                   />
                   <Select
                     placeholder='Tipo de documento'

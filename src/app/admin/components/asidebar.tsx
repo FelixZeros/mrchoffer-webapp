@@ -61,6 +61,8 @@ export const AsideBar = ({}) => {
   const [isOpen, setIsOpen] = useState<boolean>(true)
   const [activeRoute, setActiveRoute] = useState<string>('admin/empresas') // Estado para la ruta activa
 
+  console.log(user?.type)
+
   return (
     <Provider
       value={{
@@ -69,9 +71,9 @@ export const AsideBar = ({}) => {
       }}
     >
       <aside
-        className={`${
-          !isOpen && '-translate-x-1/2'
-        } w-[15vw] transition-all h-screen bg-[#181818] fixed left-0 uppercase`}
+        className={`${!isOpen && '-translate-x-1/2'}  transition-all h-screen ${
+          user?.type === 'admin' ? 'w-[15vw]' : 'w-[20vw]'
+        } bg-[#181818] fixed left-0 uppercase`}
         aria-label='Sidebar'
       >
         <button
@@ -119,9 +121,9 @@ export const AsideBar = ({}) => {
 
           <div
             onClick={() => logout()}
-            className={`grid ${
+            className={`flex flex-col items-center justify-center${
               isOpen ? 'justify-center' : 'justify-end pr-[17%]'
-            } hover:text-white text-[--main-yellow] cursor-pointer transition-all left-0 right-0 -bottom-60 relative`}
+            } hover:text-white text-[--main-yellow] cursor-pointer transition-all left-0 right-0 -bottom-10 relative`}
           >
             <div className='flex justify-center'>
               <PowerIcon />

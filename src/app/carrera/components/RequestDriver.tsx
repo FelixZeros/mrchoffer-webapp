@@ -18,6 +18,8 @@ export const RequestDriver = ({ handleRender }: RenderProps) => {
     destination,
     paymentMethod,
     price,
+    amountMale,
+    amountFemale,
     sendRequest
   } = useContext(TripContext)
   const pathName = usePathname()
@@ -31,27 +33,32 @@ export const RequestDriver = ({ handleRender }: RenderProps) => {
       <div className='pb-4'>
         <div
           onClick={() => handleRender('PersonalInfoRequest')}
-          className='flex items-center p-4 w-full border rounded-xl h-11 uppercase font-medium shadow-sm cursor-pointer'
+          className='flex items-center p-4 w-full border rounded-xl h-11 uppercase font-medium shadow-sm cursor-pointer justify-between'
         >
           <p>{name === '' ? 'Identificación' : name + ', ' + phone}</p>
-          {gender === 'Masculino' && (
-            <Image
-              src='/images/fem.png'
-              alt='masculino'
-              width={16}
-              height={26}
-              className='ml-auto'
-            />
-          )}
-          {gender === 'Femenino' && (
-            <Image
-              src='/images/masc.png'
-              alt='femenino'
-              width={16}
-              height={26}
-              className='ml-auto'
-            />
-          )}
+
+          <div className='flex flex-row justify-center gap-4'>
+            <div className='flex flex-row justify-center items-center'>
+              <p>{amountMale}</p>
+              <Image
+                src='/images/fem.png'
+                alt='masculino'
+                width={16}
+                height={26}
+                className='ml-auto'
+              />
+            </div>
+            <div className='flex flex-row justify-center items-center'>
+              <p>{amountFemale}</p>
+              <Image
+                src='/images/masc.png'
+                alt='femenino'
+                width={16}
+                height={26}
+                className='ml-auto'
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div className='pb-4'>

@@ -2,8 +2,10 @@
 import { Table, Rate, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { EyeIcon } from '@/components/icons/eye'
+import { useRouter } from 'next/navigation'
 
 const Page = () => {
+  const router = useRouter()
   const [active, setActive] = useState<string>('Activas')
   const [trips, setTrips] = useState<any>([])
   const [activeTrips, setActiveTrips] = useState<any>([])
@@ -155,9 +157,9 @@ const Page = () => {
             render={(text, record) => (
               <button
                 className='flex flex-row items-center gap-2'
-                // onClick={() => {
-                //   router.push(`/admin/empresas/${record?.username}`)
-                // }}
+                onClick={() => {
+                  router.push(`/company/solicitudes/${record?.id}`)
+                }}
               >
                 <EyeIcon />
               </button>

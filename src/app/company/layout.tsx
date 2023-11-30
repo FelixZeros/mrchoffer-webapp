@@ -21,7 +21,7 @@ const Layout = ({ children }: any) => {
       <div className='flex justify-end'>
         <>
           <AsideBar />
-          <div className='w-[85vw] transform-origin: right duration-500 ease-in-out'>
+          <div className='w-[80vw] transform-origin: right duration-500 ease-in-out'>
             <section className='flex-1 w-full h-full'>
               <div className='py-6 px-11 w-full'>{children}</div>
             </section>

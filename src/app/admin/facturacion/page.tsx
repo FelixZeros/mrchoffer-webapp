@@ -11,7 +11,7 @@ import {
 const FacturationPage = () => {
   const router = useRouter()
   const [data, setData] = useState<any>([])
-  const [cash, setCash] = useState<any>([])
+  const [cash, setCash] = useState<any>(null)
   const [department, setDepartment] = useState<any>(null)
   const [reference, setReference] = useState<any>(null)
   const [initialData, setInitialData] = useState<any>([])
@@ -68,7 +68,7 @@ const FacturationPage = () => {
               />
               <h2 className='font-semibold text-xl'>Mis Ingresos</h2>
             </div>
-            <p className='font-bold text-4xl'>COP {cash}</p>
+            <p className='font-bold text-4xl'>COP {cash ?? 0}</p>
           </div>
           <div>
             <div className='flex flex-row justify-center gap-4'>
@@ -102,7 +102,7 @@ const FacturationPage = () => {
               Historial de facturación
             </h1>
             <div className='p-4 flex flex-col gap-4 uppercase'>
-              {data.length > 0 &&
+              {data?.length > 0 &&
                 data?.map((balance: any) => (
                   <div
                     className='flex flex-col border shadow-md rounded-xl p-4 relative'
@@ -191,7 +191,7 @@ const FacturationPage = () => {
                     </div>
                   </div>
                 ))}
-              {data.length === 0 && (
+              {data?.length === 0 && (
                 <div className='flex flex-col items-center justify-center'>
                   <p className='text-xl font-bold'>No hay facturas</p>
                 </div>

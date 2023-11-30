@@ -7,7 +7,7 @@ const useRegister = () => {
   const [username, setUsername] = useState<any>(null)
   const [phone, setPhone] = useState<any>(null)
   const [address, setAddress] = useState<any>(null)
-  const [department, setDepartment] = useState<any>(null)
+  const [department, setDepartment] = useState<any>('Cesar')
   const [city, setCity] = useState<any>(null)
   const [photo, setPhoto] = useState<any>(null)
   const [email, setEmail] = useState<any>(null)

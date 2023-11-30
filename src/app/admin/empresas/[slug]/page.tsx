@@ -7,6 +7,7 @@ import Link from 'next/link'
 const ShowCompany = () => {
   const [companyInfo, setCompanyInfo] = useState<any>(null)
   const [daysRemaining, setDaysRemaining] = useState<number>(0)
+  const [balance, setBalance] = useState<any>(null)
   const [plan, setPlan] = useState<any>(null)
   const pathname = usePathname()
   const router = useRouter()
@@ -27,6 +28,7 @@ const ShowCompany = () => {
     const activePlan = companies.balance_companies.find(
       (balance: any) => balance.active
     )
+    setBalance(balance)
     setDaysRemaining(daysRemaining)
     setPlan(activePlan ? activePlan.type : 'Sin plan') // Establecer el plan o null si no hay uno activo
     setCompanyInfo(companies)
@@ -35,6 +37,9 @@ const ShowCompany = () => {
   useEffect(() => {
     getCompanies()
   }, [])
+
+  console.log(balance)
+
   return (
     <section>
       <div className='flex flex-row items-center relative '>
@@ -63,11 +68,11 @@ const ShowCompany = () => {
               <p className='mx-4 w-2/5 uppercase font-semibold'>Nombre</p>
               <p>{companyInfo?.name}</p>
             </div>
-            <div className='flex flex-row border-b pb-4'>
-              <p className='mx-4 w-2/5 uppercase font-semibold'>
+            <div className='flex flex-row border-b pb-4 items-center'>
+              <p className='mx-4 w-2/6 uppercase font-semibold'>
                 Link carreras
               </p>
-              <p className='lowercase'>
+              <p className='lowercase text-xs'>
                 {process.env.NEXT_PUBLIC_FRONTEND +
                   'carrera/' +
                   companyInfo?.username}
@@ -103,30 +108,36 @@ const ShowCompany = () => {
               <p className='mx-4 max-w-[40%] min-w-[30%] w-2/5 uppercase font-semibold'>
                 Contacto
               </p>
-              <div className='max-w-[60%] flex flex-row items-center uppercase text-xs'>
-                <Image
-                  src='/images/whatsapp.png'
-                  width={13}
-                  height={14}
-                  alt='phone'
-                  className='object-contain mr-1'
-                />
-                <Link href={('https://wa.me/' + companyInfo?.phone) as string}>
-                  {companyInfo?.phone}
-                </Link>
-                <Image
-                  src='/images/email.png'
-                  width={13}
-                  height={14}
-                  alt='phone'
-                  className='object-contain ml-4 mr-1'
-                />
-                <Link
-                  href={('mailto:' + companyInfo?.user?.email) as string}
-                  className='overflow-hidden'
-                >
-                  {companyInfo?.user?.email}
-                </Link>
+              <div className='max-w-[60%] flex flex-col items-center gap-2 uppercase text-xs'>
+                <div className='flex flex-row items-center'>
+                  <Image
+                    src='/images/whatsapp.png'
+                    width={13}
+                    height={14}
+                    alt='phone'
+                    className='object-contain mr-1'
+                  />
+                  <Link
+                    href={('https://wa.me/' + companyInfo?.phone) as string}
+                  >
+                    {companyInfo?.phone}
+                  </Link>
+                </div>
+                <div className='flex flex-row items-center'>
+                  <Image
+                    src='/images/email.png'
+                    width={13}
+                    height={14}
+                    alt='phone'
+                    className='object-contain ml-4 mr-1'
+                  />
+                  <Link
+                    href={('mailto:' + companyInfo?.user?.email) as string}
+                    className='overflow-hidden'
+                  >
+                    {companyInfo?.user?.email}
+                  </Link>
+                </div>
               </div>
             </div>
             <div className='flex flex-row border-b pb-4'>
@@ -137,6 +148,10 @@ const ShowCompany = () => {
               <p className='mx-4 w-2/5 uppercase font-semibold'>
                 Días restantes
               </p>
+              <p>{daysRemaining ?? 0}</p>
+            </div>
+            <div className='flex flex-row border-b pb-4'>
+              <p className='mx-4 w-2/5 uppercase font-semibold'>Saldo</p>
               <p>{daysRemaining ?? 0}</p>
             </div>
             <div className='flex flex-row'>

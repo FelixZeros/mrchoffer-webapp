@@ -8,7 +8,7 @@ import { ModalNice, ModalError } from '@/components/Modals/Modals'
 
 const RechargePage = () => {
   const router = useRouter()
-  const [cash, setCash] = useState<any>([])
+  const [cash, setCash] = useState<any>(null)
   const [data, setData] = useState<any>([])
   const [initialData, setInitialData] = useState<any>([])
   const [companys, setCompanys] = useState<any>(null)
@@ -62,7 +62,7 @@ const RechargePage = () => {
             <Image src='/images/money.png' width={36} height={36} alt='money' />
             <h2 className='font-semibold text-xl'>Mis Ingresos</h2>
           </div>
-          <p className='font-bold text-4xl'>COP {cash}</p>
+          <p className='font-bold text-4xl'>COP {cash ?? 0}</p>
         </div>
         <div className='flex flex-row justify-center items-center gap-14'>
           <div className='flex flex-col items-center justify-center gap-3 cursor-pointer'>

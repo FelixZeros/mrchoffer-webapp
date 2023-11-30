@@ -206,6 +206,121 @@ const ContentMethodType = ({ setPaymentMethod }: any) => {
     </>
   )
 }
+export const ContentMethodTypes = ({
+  visible,
+  setVisible,
+  setPaymentMethod
+}: any) => {
+  return (
+    <Modal
+      visible={visible}
+      onCancel={() => {
+        setVisible(false)
+      }}
+      footer={null}
+      width={400}
+    >
+      <h1 className='font-bold text-center pb-4 text-2xl uppercase'>
+        Elija el método de pago
+      </h1>
+      {ListPaymentMethods.map((item, index) => {
+        if (item.name === 'Efectivo') return
+        else {
+          return (
+            <div
+              key={index}
+              className='flex items-center p-4 w-full border-b  h-11 uppercase font-medium cursor-pointer'
+              onClick={() => {
+                setPaymentMethod(item.name)
+                setVisible(false)
+              }}
+            >
+              <p>{item.name}</p>
+              {item?.img !== '' && (
+                <Image
+                  src={item.img}
+                  alt={item.name}
+                  width={40}
+                  height={40}
+                  className='ml-auto'
+                />
+              )}
+            </div>
+          )
+        }
+      })}
+    </Modal>
+  )
+}
+
+export const ContentPlanResumes = ({
+  visible,
+  setVisible,
+  driverName,
+  vehicle,
+  amount,
+  paymentMethod,
+  handleSendRecharge
+}: any) => {
+  return (
+    <Modal
+      visible={visible}
+      onCancel={() => {
+        setVisible(false)
+      }}
+      footer={null}
+      width={400}
+    >
+      <div>
+        <h1 className='font-bold text-center pb-4 text-2xl uppercase'>
+          Información de recarga
+        </h1>
+        <div>
+          <h2 className='font-bold text-lg'>Conductor</h2>
+          <p className='text-lg'>{driverName}</p>
+          <h2 className='font-bold text-lg mt-2'>Vehículo</h2>
+          <p className='text-lg'>{vehicle}</p>
+          <h2 className='font-bold text-lg mt-2'>Valor:</h2>
+          <p className='text-lg'>${amount}</p>
+          <h2 className='font-bold text-lg mt-2'>Método de pago:</h2>
+          {paymentMethod !== '' && (
+            <Image
+              src={
+                paymentMethod === 'Nequi'
+                  ? '/images/nequi.png'
+                  : paymentMethod === 'Daviplata'
+                  ? '/images/davivienda.png'
+                  : paymentMethod === 'Bancolombia'
+                  ? '/images/bancolombia.png'
+                  : '/images/efectivo.png'
+              }
+              alt={paymentMethod}
+              width={45}
+              height={46}
+            />
+          )}
+        </div>
+        <div className='flex flex-row justify-center items-center gap-14 mt-10'>
+          <button
+            className='bg-[#D9D9D9] font-bold px-5 py-2 rounded-lg shadow-md'
+            onClick={() => {
+              setVisible(false)
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            className='bg-[#FFB800] font-bold px-5 py-2 rounded-lg shadow-md'
+            onClick={handleSendRecharge}
+          >
+            <p>Continuar</p>
+          </button>
+        </div>
+      </div>
+    </Modal>
+  )
+}
+
 const ContentPlan = ({ plan, setPlan }: any) => {
   return (
     <div className='flex flex-col w-full px-8 py-4 gap-4'>
@@ -244,14 +359,15 @@ const ContentPlan = ({ plan, setPlan }: any) => {
         <label
           className='relative flex cursor-pointer items-center rounded-full p-3'
           data-ripple-dark='true'
-          onClick={() => setPlan('Postpago')}
+          // onClick={() => setPlan('Postpago')}
         >
           <input
             id='html'
             name='type'
             type='radio'
-            checked={plan === 'Postpago'}
-            onChange={() => setPlan('Postpago')}
+            disabled
+            // checked={plan === 'Postpago'}
+            // onChange={() => setPlan('Postpago')}
             className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-[#FFB800] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-[#FFB800] checked:before:bg-[#FFB800] hover:before:opacity-10"
           />
           <div className='pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-[#FFB800] opacity-0 transition-opacity peer-checked:opacity-100'>
