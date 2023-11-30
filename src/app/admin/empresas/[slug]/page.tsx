@@ -19,13 +19,13 @@ const ShowCompany = () => {
     const companies = await response.json()
 
     // Obtener los días restantes
-    const daysRemaining = companies?.balance_companies
+    const daysRemaining = companies?.balance_companies?
       .filter((company: any) => company.active === false)
       .map((company: any) => company.daysRecharge)
       .reduce((acc: any, curr: any) => acc + curr, 0)
 
     // Obtener el plan activo
-    const activePlan = companies.balance_companies.find(
+    const activePlan = companies?.balance_companies?.find(
       (balance: any) => balance.active
     )
     setBalance(balance)
