@@ -24,12 +24,14 @@ const Page = () => {
   useEffect(() => {
     async function getVehicleInfo() {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/drivers/${requestInfo?.driver.id}`
+        `${process.env.NEXT_PUBLIC_API}drivers/${requestInfo?.driver.id}`
       )
       const data = await response.json()
       setVehicleInfo(data)
     }
-    getVehicleInfo()
+    if (requestInfo !== null) {
+      getVehicleInfo()
+    }
   }, [requestInfo])
 
   const handleSendRequest = async (type: number) => {
