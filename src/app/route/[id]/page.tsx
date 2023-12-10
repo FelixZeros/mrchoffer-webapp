@@ -32,7 +32,7 @@ const DriverRealTime = () => {
   useEffect(() => {
     const getTripData = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API as string}get-trip/${
+        `${process.env.NEXT_PUBLIC_API as string}get-trip-byIdFront/${
           pathName?.split('/')[2]
         }`
       )
