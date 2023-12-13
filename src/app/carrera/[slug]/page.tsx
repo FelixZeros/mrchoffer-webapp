@@ -42,7 +42,8 @@ const requestTravel = () => {
     return (
       <section className='w-screen h-screen flex flex-col items-center justify-center px-4'>
         <h1 className='text-3xl font-bold'>
-          La empresa a la que intenta acceder no existe en la aplicación
+          En unos momentos podrá realizar su solicitud, muchas gracias por su
+          espera
         </h1>
       </section>
     )

@@ -161,7 +161,7 @@ const RechargePage = () => {
                 className={
                   selectedType === 'Efectivo'
                     ? 'bg-[#FFB800] px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#181818] ring-2 ring-[#181818] transition-all'
-                    : 'bg-[#FFB800] px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#181818] transition-all'
+                    : 'bg-[#D9D9D9] px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#FFB800] transition-all'
                 }
                 onClick={() => {
                   setSelectedType('Efectivo')
@@ -182,8 +182,8 @@ const RechargePage = () => {
               <div
                 className={
                   selectedType === 'Transferencia'
-                    ? 'bg-white px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#FFB800] ring-2 ring-[#FFB800] transition-all'
-                    : 'bg-white px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#FFB800] transition-all'
+                    ? 'bg-[#FFB800] px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#181818] ring-2 ring-[#181818] transition-all'
+                    : 'bg-[#D9D9D9] px-2 py-4 rounded-md shadow-lg hover:ring-2 hover:ring-[#FFB800] transition-all'
                 }
                 onClick={() => {
                   setSelectedType('Transferencia')
